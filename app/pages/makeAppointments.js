@@ -164,14 +164,16 @@ export default class MakeAppointments extends React.Component {
         // console.log("date time check start" + JSON.stringify(startTime));
         console.log("date time check end" + JSON.stringify(endTime));
         var pushRef = firebase.database().ref('appointments').push();
-        firebase.database().ref('appointments/' + pushRef.key).set({
-          appointmentId : pushRef.key,
+        var key = pushRef.key;
+        console.log("pushRef " + pushRef.key);
+        firebase.database().ref('appointments/' + pushRef.key).update({
+          appointmentId : key,
           studentID: that.state.currentUserID,
           consultantID: that.state.consultantKey,
           summary: that.state.appointmentGoal,
           startTime: startTime,
           endTime: endTime,
-          price : Number(this.state.totalPrice.toFixed(2))
+          price : Number(that.state.totalPrice.toFixed(2))
         });
     //Functions.createCharge(this.state.totalPrice,card token(either from firebase or with create token function))
     //they should be able to select from previously saved cards, or navigate to the card input;

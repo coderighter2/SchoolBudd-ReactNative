@@ -141,8 +141,8 @@ export default class AnswerBlock extends React.Component {
     })
   }
 
-  imageButton(){
-    if(this.props.jedi.profileImage){
+  imageButton() {
+    if (this.props.jedi.profileImage) {
       return(
         <Avatar
           size="large"
