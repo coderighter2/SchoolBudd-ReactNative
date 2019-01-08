@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, SafeAreaView  } from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, AsyncStorage  } from 'react-native';
 import PropTypes from 'prop-types';
 
 import { Button } from 'react-native-elements'
@@ -29,38 +29,27 @@ export default class SelectPortalScreen extends React.Component {
       // selectPortalParent: PropTypes.func.isRequired,
   };
 
-  _selectPortalStudent = () => {
+  _selectPortalStudent = async() => {
     console.log("props " + JSON.stringify(this.props));
     if (this.props.selectPortalStudent) {
       console.log("props " + this.props);
       console.log("select portal working");
       this.props.selectPortalStudent();
+      } else {
+        await AsyncStorage.setItem('portal', 'student');
       }
   }
 
-  _selectPortalConsultant = () => {
+  _selectPortalConsultant = async() => {
     if (this.props.selectPortalConsultant) {
       console.log("props " + this.props);
       console.log("select portal working");
       this.props.selectPortalConsultant();
+      } else {
+        await AsyncStorage.setItem('portal', 'consultant');
       }
   }
 
-  _selectPortalSchool = () => {
-    if (this.props.selectPortalSchool) {
-      console.log("props " + this.props);
-      console.log("select portal working");
-      this.props.selectPortalSchool();
-      }
-  }
-
-  _selectPortalParent = () => {
-    if (this.props.selectPortalParent) {
-      console.log("props " + this.props);
-      console.log("select portal working");
-      this.props.selectPortalParent();
-      }
-  }
 
   render() {
     return (

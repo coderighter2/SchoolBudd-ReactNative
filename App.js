@@ -6,6 +6,7 @@ import * as pages from './app/pages';
 import firebase from 'firebase';
 import Stripe from 'firebase';
 import SelectPortal from './app/pages/selectPortal';
+import Functions from './app/Themes/Functions';
 
 
 var config1 = {
@@ -29,21 +30,13 @@ const MessagesNav = StackNavigator({
 
 const LogoutNav = StackNavigator({
   Logout: { screen: pages.Logout },
-  SelectPortalScreen: { screen: pages.SelectPortal }
+  SelectPortalScreen: { screen: pages.SelectPortal },
+  LoginScreen: {screen: pages.Login}
 }, {
     initialRouteName: 'Logout',
     title: 'Logout',
   });
 
-const HomeNav = TabNavigator({
-  Feedback: { screen: pages.Feedback },
-}, {
-    // Default config for all screens
-    tabBarPosition: 'top',
-    animationEnabled: true,
-    swipeEnabled: true,
-    initialRouteName: 'Feedback',
-  });
 
 const ProfileNavStudent = TabNavigator({
   ProfileCard: { screen: pages.StudentProfileCard },
@@ -70,7 +63,7 @@ const ProfileNavConsultant = TabNavigator({
   });
 
 const HomeStackNav = StackNavigator({
-  Home: { screen: HomeNav },
+  Home: { screen: pages.Feedback },
 }, {
     title: 'Home',
   });

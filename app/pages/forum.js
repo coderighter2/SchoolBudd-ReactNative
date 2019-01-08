@@ -88,11 +88,14 @@ async appendJedis(count, start) {
     if (questionText.includes(searchTextLowercase)) {
     //   &&
     // (this.state.userPortal.toLowerCase() == childData.portalQuestion.toLowerCase() || (this.state.userPortal == 'consultant'))) {
-      if (this.state.currentTopic == "Select a Question Topic" || this.state.currentTopic == "All Topics") {
+      if ((this.state.currentTopic == "Select a Question Topic" || this.state.currentTopic == "All Topics") 
+      && !jedisList.indexOf(childData) > -1) {
         jedisList.push(childData);
-      } else if (childData.topic == this.state.currentTopic) {
+      } else if (childData.topic == this.state.currentTopic && !jedisList.indexOf(childData) > -1) {
         jedisList.push(childData);
       }
+    } else {
+      alert("No Question");
     }
     await this.setState({loading: false, refreshing: false, jedisSectioned: [{title: 'Jedis', data:jedisList}]});
     console.log("loading : " + this.state.loading);
@@ -213,7 +216,6 @@ async appendJedis(count, start) {
 
 
   resetList = async () => {
-    await this.setState({refreshing: true, jedisSectioned: [{title: 'Jedis', data:[]}]});
     this.appendJedis(3,1);
   }
 

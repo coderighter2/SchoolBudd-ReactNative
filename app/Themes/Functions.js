@@ -1,4 +1,5 @@
 import { Permissions, Notifications } from 'expo';
+import { StyleSheet, Text, View, Platform, AsyncStorage, SafeAreaView } from 'react-native';
 import firebase from 'firebase';
 const PUSH_ENDPOINT = 'https://your-server.com/users/push-token/';
 const EXPO_PUSHNOTI_SERVER = 'https://exp.host/--/api/v2/push/'
@@ -301,7 +302,7 @@ const Functions = {
     }).catch((error) => {
       console.error(error);
     });
-  }
+  },
 }
 
 export default Functions
