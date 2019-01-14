@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Image, ActivityIndicator, TouchableOpacity, Asy
 import Metrics from '../Themes/Metrics';
 import Colors from '../Themes/Colors';
 import Images from '../Themes/Images';
-import ReadMore from 'react-native-read-more-text';
+// import ReadMore from 'react-native-read-more-text';
 import { Card, ListItem, Button, Slider, CheckBox, SearchBar, Avatar } from 'react-native-elements'
 import firebase from 'firebase';
 import Modal from 'react-native-modal';
