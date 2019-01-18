@@ -11,6 +11,7 @@ import {Calendar} from 'react-native-calendars';
 import Metrics from '../Themes/Metrics';
 import LoggedOut from '../components/loggedOutScreen';
 import firebase from 'firebase';
+import Colors from '../Themes/Colors'
 
 export default class CalendarScreen extends React.Component {
   constructor(props) {
@@ -32,7 +33,6 @@ export default class CalendarScreen extends React.Component {
     if (loginCheck === "true") {
       await this.setState({ hasLoggedIn: true });
       console.log("hasLoggedIn" + this.state.hasLoggedIn);
-      console.log("metroooooooo");
     }
     const emailVerification = firebase.auth().currentUser.emailVerified;
     if (emailVerification == true) {
@@ -57,23 +57,20 @@ export default class CalendarScreen extends React.Component {
     } else {
     return (
       <View style={styles.container}>
-      <StatusBar barStyle="light-content"/>
-      {/* <View>
-        <TouchableOpacity onPress={() => this._onPressBack() }><Text>Back</Text></TouchableOpacity>
-                    <Text></Text>
-                    <Text></Text>
-      </View> */}
-        <Calendar
-          onDayPress={this.onDayPress}
-          style={styles.calendar}
-          hideExtraDays
-          markedDates={{[this.state.selected]: {selected: true}}}
-          theme={{
-            selectedDayBackgroundColor: 'green',
-            todayTextColor: 'green',
-            arrowColor: 'green',
-          }}
-        />
+        <StatusBar barStyle="light-content"/>
+        <View style = {styles.calendarView}>
+          <Calendar
+            onDayPress={this.onDayPress}
+            style={styles.calendar}
+            minDate={Date()-1}
+            markedDates={{[this.state.selected]: {selected: true}}}
+            theme={{
+              selectedDayBackgroundColor: 'purple',
+              todayTextColor: 'purple',
+              arrowColor: 'purple',
+            }}
+          />
+        </View>
       </View>
     );
   }
@@ -82,13 +79,18 @@ export default class CalendarScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   calendar: {
-    borderTopWidth: 1,
+    borderWidth: 1,
+    borderColor: Colors.lightPurple,
     paddingTop: 5,
-    borderBottomWidth: 1,
-    borderColor: '#c77ce8',
     height: 350
-  }
+  },
+  calendarView: {
+    marginTop: 50,
+    width: Metrics.screenWidth*.9,
+    flex: 1,
+    marginLeft: Metrics.screenWidth*.05
+  },
 });

@@ -16,7 +16,7 @@ import AvailabilityBlock from '../components/availabilityBlock';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import Metrics from '../Themes/Metrics';
 import Modal from "react-native-modal";
-
+import Colors from '../Themes/Colors'
 
 const dataTimes =
 [
@@ -71,7 +71,7 @@ export default class SetAvailabilityScreen extends React.Component {
       <Feather style={styles.icon}
         name="menu"
         size={Metrics.icons.medium}
-        color={'#c77ce8'}
+        color={Colors.lightPurple}
         onPress={() => navigate('DrawerToggle')}
       />
       )
@@ -113,8 +113,6 @@ export default class SetAvailabilityScreen extends React.Component {
       { cancelable: false }
     )
     }
-     //create an alert that allows people to know that pressing a block saves the availibility
-     // this.setState({ bookingDate: this.props.navigation.state.params.bookingDate })
 
    }
 
@@ -138,37 +136,23 @@ export default class SetAvailabilityScreen extends React.Component {
     const {goBack} = this.props.navigation
     goBack()
   }
-  //
-  // _bookSlot(status,key,value) {
-  //   const month = this.state.bookingDate.month
-  //   const date = this.state.bookingDate.day
-  //   const user = firebase.auth().currentUser
-  //   const uid = user.uid
-  //   let userDataJson = {}
-  //   if(status)
-  //   userDataJson[key] = uid
-  //   else
-  //   userDataJson[key] = null
-  //
-  //   firebase.database().ref('users').child(uid).child("availabilities").child(month).child(date).update(userDataJson)
-  // }
+
 
   render() {
-
     return (
       <View style={styles.container}>
-      <StatusBar barStyle="light-content"/>
-      <View>
-        <TouchableOpacity onPress={() => this._onPressBack() }><Text>Back</Text></TouchableOpacity>
-                    <Text>{this.state.bookingDate.dateString}</Text>
-                    <Text></Text>
-      </View>
-        <FlatList
-          data={dataTimes}
-          extraData={this.state}
-          keyExtractor={this._keyExtractor}
-          renderItem={this.listItemRenderer}
-        />
+        <StatusBar barStyle="light-content"/>
+        <View>
+          <TouchableOpacity onPress={() => this._onPressBack() }><Text>Back</Text></TouchableOpacity>
+                      <Text>{this.state.bookingDate.dateString}</Text>
+                      <Text></Text>
+        </View>
+          <FlatList
+            data={dataTimes}
+            extraData={this.state}
+            keyExtractor={this._keyExtractor}
+            renderItem={this.listItemRenderer}
+          />
 
       </View>
     );

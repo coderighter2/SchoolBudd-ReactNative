@@ -14,7 +14,7 @@ import DataTimes from '../Themes/DataTimes'
 import Modal from "react-native-modal";
 import LoggedOut from '../components/loggedOutScreen';
 import AppointmentBlock from '../components/appointmentBlock';
-
+import ConfirmAppointmentModal from '../components/confirmAppointmentModal'
 
 const {width, height} = Dimensions.get('window');
 
@@ -30,7 +30,7 @@ export default class MakeAppointments extends React.Component {
         <Feather style={{ marginRight: 15}}
           name="save"
           size={Metrics.icons.medium}
-          color={'#c77ce8'}
+          color={Colors.lightPurple}
           onPress={params.saveAppointments}
         />
       ),
@@ -201,7 +201,6 @@ export default class MakeAppointments extends React.Component {
     if (loginCheck === "true") {
       await this.setState({hasLoggedIn: true});
       console.log("hasLoggedIn" + this.state.hasLoggedIn);
-      console.log("metroooooooo");
     }
     var user = firebase.auth().currentUser;
     if (user) {
@@ -249,83 +248,48 @@ export default class MakeAppointments extends React.Component {
     if (!this.state.hasLoggedIn) {
         return (<LoggedOut/>);
     } else {
+      return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <SafeAreaView style={styles.container}>
+              <View style={styles.itemList}>
+                <SectionList
+                  sections={this.state.jedisSectioned}
+                  // onEndReached={() => this.loadMore(3,this.state.jedisSectioned[0].data.length+1)}
+                  renderItem={({item}) => this.listItemRenderer(item)}
+                  ItemSeparatorComponent = {() => (<View style={{height: 30}}/>)}
+                  keyExtractor={this._keyExtractor}
+                  contentContainerStyle = {{alignItems: 'center'}}
+                  onRefresh = {() => this.resetList()}
+                  refreshing = {this.state.refreshing}
+                  removeClippedSubviews = {true}
+                  // ListFooterComponent = {<ActivityIndicator />}
+                />
+              </View>
 
-    return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-          <SafeAreaView style={styles.container}>
-                <View style={styles.itemList}>
-                  <SectionList
-                    sections={this.state.jedisSectioned}
-                    // onEndReached={() => this.loadMore(3,this.state.jedisSectioned[0].data.length+1)}
-                    renderItem={({item}) => this.listItemRenderer(item)}
-                    ItemSeparatorComponent = {() => (<View style={{height: 30}}/>)}
-                    keyExtractor={this._keyExtractor}
-                    contentContainerStyle = {{alignItems: 'center'}}
-                    onRefresh = {() => this.resetList()}
-                    refreshing = {this.state.refreshing}
-                    removeClippedSubviews = {true}
-                    // ListFooterComponent = {<ActivityIndicator />}
-                  />
-                </View>
+              <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                <ConfirmAppointmentModal
+                  isVisible={this.state.isAppointmentModalVisible}
+                  onBackdropPress={() => this.setState({ isAppointmentModalVisible: false })}
+                  onChangeText={(text) => this.setState({appointmentGoal: text})}
+                  onSubmitEditing={(text) => this.setState({appointmentGoal: text})}
+                  onPress={() => this.onPressBookAppointments()}
+                  preFeePrice = {this.state.preFeePrice.toFixed(2)}
+                  Fees = {this.state.fees.toFixed(2)}
+                  Total = {this.state.totalPrice.toFixed(2)}
+                />
+              </View>
 
-                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                    <Modal
-                      isVisible={this.state.isAppointmentModalVisible}
-                      onBackdropPress={() => this.setState({ isAppointmentModalVisible: false })}
-                      backdropColor={'black'}>
-                      <View style={styles.modalViewQuestion}>
-                        <Text style={styles.modalText}>
-                          Confirm Appointment!
-                        </Text>
-                        <Text style={{fontSize : 15}}>
-                          Timeslot(s): {this.state.timeslotsArrayString}
-                        </Text>
-                        <Text style={{fontSize : 15}}>
-                          Price: ${this.state.preFeePrice.toFixed(2)}
-                          Fees: ${this.state.fees.toFixed(2)}
-                          Total Price: ${this.state.totalPrice.toFixed(2)} total
-                        </Text>
-                        <Input style={{
-                                width: '100%',
-                                alignContent: "flex-start",
-                                justifyContent: "flex-start",
-                                minHeight: 40,
-                                textAlignVertical: "top",
-                                padding: 10,
-                                fontSize: 14,
-                                textDecorationLine: 'none',
-                                lineHeight: 20,
-                                borderRadius: 10,
-                                borderWidth: 1,
-                                borderColor: '#c77ce8',
-                                backgroundColor: 'white',
-                            }}
-                          placeholder="Goal of Appointment (ex: Essay Editing)"
-                          underlineColorAndroid="transparent"
-                          // value={this.state.appointmentGoal}
-                          onChangeText={(text) => this.setState({appointmentGoal: text})}
-                          onSubmitEditing={(text) => this.setState({appointmentGoal: text})}
-                          />
-                       <Button
-                         buttonStyle={{backgroundColor : '#c77ce8', width : 300, borderColor : 'transparent', borderWidth : 0, borderRadius : 20, margin : 10}}
-                         title='Book'
-                         onPress={() => this.onPressBookAppointments()}/>
-                      </View>
-                  </Modal>
-                </View>
+            </SafeAreaView>
+        </TouchableWithoutFeedback>
+      );
 
-          </SafeAreaView>
-      </TouchableWithoutFeedback>
-    );
-
+    }
   }
-}
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingTop: 40,
     backgroundColor: Colors.snow,
     alignItems: 'center',
     justifyContent: 'center',
@@ -370,16 +334,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     backgroundColor: 'white',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
 
   },
   modalViewQuestion: {
-    // width: Metrics.screenWidth,
     height: Metrics.screenHeight*.3,
-    // flex : 1,
     borderStyle: 'solid',
     borderWidth: .5,
     padding: 15,

@@ -3,12 +3,11 @@ import {
     StyleSheet, Text, View, Image, ActivityIndicator, SectionList, TextInput, KeyboardAvoidingView,
     SafeAreaView, Dimensions, TouchableWithoutFeedback, Keyboard, TouchableOpacity, AsyncStorage
 } from 'react-native';
-
+import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Card, Avatar } from 'react-native-elements'
 import Images from '../Themes/Images';
 import Colors from '../Themes/Colors';
 import firebase from 'firebase';
-import { FontAwesome } from '@expo/vector-icons';
 import UpcomingBlock from '../components/upcomingBlock'
 import Metrics from '../Themes/Metrics';
 import * as Expo from "expo";
@@ -18,6 +17,14 @@ export default class UpcomingScreen extends React.Component {
     static navigationOptions = {
         headerTitle: 'Upcoming Appointments',
         title: 'Upcoming Appointments',
+        headerLeft: (
+            <Feather style={{marginLeft: 15}}
+              name="menu"
+              size={Metrics.icons.medium}
+              color={Colors.lightPurple}
+              onPress={() => navigate('DrawerToggle')}
+            />
+        )
     };
     constructor(props) {
         super(props);
@@ -40,7 +47,6 @@ export default class UpcomingScreen extends React.Component {
             if (user) {
                 console.log(" User is signed in.", that.state.portal);
 
-                // console.log("name " + firebase.database().ref('users').child(userUID).child('name'));
                 await firebase.database().ref('users').child(userUID).on('value', async function (snapshot) {
                     var childKey = snapshot.key;
                     var childData = snapshot.val();
@@ -62,7 +68,6 @@ export default class UpcomingScreen extends React.Component {
             await this.setState({ hasLoggedIn: true });
             await this.setState({ userId: firebase.auth().currentUser.uid })
             console.log("hasLoggedIn" + this.state.hasLoggedIn);
-            console.log("metroooooooo");
         }
     }
 
@@ -88,10 +93,6 @@ export default class UpcomingScreen extends React.Component {
             await this.setState({ loading: false, refreshing: false, upcomingApts: [{ title: 'upcoming', data: upcomingList }] });
         })
 
-        console.log("result " + JSON.stringify(this.state.upcomingApts))
-        console.log("loading : " + this.state.loading);
-
-        // console.log(childData);
     };
 
 
@@ -107,27 +108,11 @@ export default class UpcomingScreen extends React.Component {
                 portal={this.state.portal} />
         );
     }
-    // renderItem = (row) =>{
-    //     return(
-    //         <View style={styles.cardView}>
-    //             <Card>
-    //                 <View style={{flexDirection : 'row'}}>
-    //                     {/* {this.imageButton()} */}
-    //                     <View style={{flexDirection : 'column'}}>
-    //                         <Text style={{fontSize : 15, marginLeft :20, fontWeight : '200'}}>{row.item.profileName}</Text>
-    //                         <Text style={{fontSize : 13, marginLeft :20}}>{row.item.startTime} - {row.item.endTime}</Text>
-    //                     </View>
-    //                 </View>
-    //             </Card>
-    //         </View>
-    //     )
-    // }
-    render() {
 
+    render() {
         if (!this.state.hasLoggedIn) {
             return (<LoggedOut />);
         } else {
-
             return (
                 <View style={styles.container}>
                     <View style={styles.itemList}>

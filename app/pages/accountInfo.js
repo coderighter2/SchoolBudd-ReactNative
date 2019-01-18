@@ -32,7 +32,7 @@ export default class AccountInfo extends React.Component {
         <Feather style={styles.icon}
           name="menu"
           size={Metrics.icons.medium}
-          color={'#c77ce8'}
+          color={Colors.lightPurple}
           onPress={() => navigate('DrawerToggle')}
         />
       )
@@ -91,9 +91,6 @@ export default class AccountInfo extends React.Component {
 
     });
 
-
-
-    //do i need a for loop right here to check to see if there are duplicate values
   }
 
   async componentWillMount() {
@@ -134,7 +131,6 @@ export default class AccountInfo extends React.Component {
       await this.setState({ hasLoggedIn: true });
       await this.setState({ uid: firebase.auth().currentUser.uid })
       console.log("hasLoggedIn" + this.state.hasLoggedIn);
-      console.log("metroooooooo");
     }
     const emailVerification = firebase.auth().currentUser.emailVerified;
     if (emailVerification == true) {
@@ -273,23 +269,6 @@ const styles = StyleSheet.create({
     height: Metrics.screenHeight * .7,
     width: Metrics.screenWidth,
     paddingTop: 10,
-  },
-  modalView: {
-    // width: Metrics.screenWidth,
-    height: Metrics.screenHeight * .6,
-    borderStyle: 'solid',
-    borderWidth: .5,
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    backgroundColor: 'white',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-  },
-  modalText: {
-    fontSize: 24,
-    fontWeight: 'bold',
   },
   icon: {
     marginLeft: 15,

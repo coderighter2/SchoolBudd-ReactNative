@@ -198,102 +198,99 @@ export default class Login extends React.Component {
 
       return (
         <View style={styles.container}>
-              <CheckBox
-                center
-                title="Ask a Question"
-                iconRight
-                iconType='material'
-                checkedIcon='clear'
-                uncheckedIcon='add'
-                checkedColor='red'
-                containerStyle={{width: Metrics.screenWidth*.95}}
-                checked={this.state.checked}
-                onPress={()=> this.onPressAddQuestion()}
-              />
-              <CheckBox
-                center
-                title={this.state.postQuestionTopic}
-                iconRight
-                iconType='material'
-                checkedIcon='clear'
-                uncheckedIcon='add'
-                checkedColor='red'
-                containerStyle={{width: Metrics.screenWidth*.95}}
-                checked={this.state.checked}
-                onPress={()=> this.onPressTopic()}/>
-                
-                <View style={{ alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-                  <Modal
-                      isVisible={this.state.isQuestionModalVisible}
-                      onBackdropPress={() => this.setState({ isQuestionModalVisible: false })}
-                      backdropColor={'black'}
-                      style={{ justifyContent: "flex-start", margin: 0}}>  
-                      <View style={styles.modalViewQuestion}> 
-                  
-                        <View style={{flexDirection : 'row', marginTop : 10}}>
-                          <Ionicons style={{ marginLeft: 15, fontWeight : 'bold'}}
-                            name="ios-close-circle-outline"
-                            size={Metrics.icons.medium}
-                            color={'#c77ce8'}
-                            onPress={() => this.setState({ isQuestionModalVisible: false })}
-                          />
-                          <View style={{flex : 1, alignItems: 'center', width : '100%'}}>
-                            <Text style={styles.modalText}>
-                            Ask a Question!
-                            </Text>
-                          </View>
-                          <FontAwesome style={{ marginRight: 15, fontWeight : 'bold'}}
-                            name="send"
-                            size={Metrics.icons.medium}
-                            color={'#c77ce8'}
-                            onPress={() => this.onPressPostQuestion()}
-                          />
-                        </View>
-                        <View 
-                        // style={styles.modalViewQuestion}
-                          style={{
-                            flex: 1,
-                            justifyContent: "flex-start",
-                            alignItems: "flex-start",
-                            width: "100%"
-                          }}
-                        >
-                        <Input style={{
-                            flex: 1,
-                            width: "100%",
-                            fontSize: 20,
-                            alignContent: "flex-start",
-                            justifyContent: "flex-start",
-                            textAlignVertical: "top",
-                            margin: 12
-                            }}
-                          placeholder="Ex: When are the common app essays released?"
-                          underlineColorAndroid="transparent"
-                          multiline={true}
-                          selectTextOnFocus={true}
-                          spellCheck={true}
-                          onChangeText={(text) => this.setState({question: text})}
-                          onSubmitEditing={(text) => this.setState({question: text})}
-                          />
-                      </View> 
-                      <View style={{flexDirection: "column", margin : 10}}>
-                        <Button
-                          titleStyle={{color : 'white', fontWeight: '700', fontSize: 25}}
-                          buttonStyle={{borderRadius: 20, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :'#c77ce8'}}
-                          title={this.state.postQuestionTopic}
-                          onPress={() => this.onPressTopic()}/>
-                        <Button
-                          titleStyle={{color : 'white', fontWeight: '700', fontSize: 25}}
-                          buttonStyle={{borderRadius: 20, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :'#c77ce8'}}
-                          title="Post Question"
-                          onPress={() => this.onPressPostQuestion()}/>
+          <CheckBox
+            center
+            title="Ask a Question"
+            iconRight
+            iconType='material'
+            checkedIcon='clear'
+            uncheckedIcon='add'
+            checkedColor='red'
+            containerStyle={{width: Metrics.screenWidth*.95}}
+            checked={this.state.checked}
+            onPress={()=> this.onPressAddQuestion()}
+          />
+          <CheckBox
+            center
+            title={this.state.postQuestionTopic}
+            iconRight
+            iconType='material'
+            checkedIcon='clear'
+            uncheckedIcon='add'
+            checkedColor='red'
+            containerStyle={{width: Metrics.screenWidth*.95}}
+            checked={this.state.checked}
+            onPress={()=> this.onPressTopic()}/>
+            
+            <View style={{ alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+              <Modal
+                  isVisible={this.state.isQuestionModalVisible}
+                  onBackdropPress={() => this.setState({ isQuestionModalVisible: false })}
+                  backdropColor={'black'}
+                  style={{ justifyContent: "flex-start", margin: 0}}>  
+                  <View style={styles.modalViewQuestion}> 
+              
+                    <View style={{flexDirection : 'row', marginTop : 10}}>
+                      <Ionicons style={{ marginLeft: 15, fontWeight : 'bold'}}
+                        name="ios-close-circle-outline"
+                        size={Metrics.icons.medium}
+                        color={Colors.lightPurple}
+                        onPress={() => this.setState({ isQuestionModalVisible: false })}
+                      />
+                      <View style={{flex : 1, alignItems: 'center', width : '100%'}}>
+                        <Text style={styles.modalText}>
+                        Ask a Question!
+                        </Text>
                       </View>
+                      <FontAwesome style={{ marginRight: 15, fontWeight : 'bold'}}
+                        name="send"
+                        size={Metrics.icons.medium}
+                        color={Colors.lightPurple}
+                        onPress={() => this.onPressPostQuestion()}
+                      />
                     </View>
-              </Modal>
-              </View>
-            </View>
-
-
+                    <View 
+                      style={{
+                        flex: 1,
+                        justifyContent: "flex-start",
+                        alignItems: "flex-start",
+                        width: "100%"
+                      }}
+                    >
+                    <Input style={{
+                        flex: 1,
+                        width: "100%",
+                        fontSize: 20,
+                        alignContent: "flex-start",
+                        justifyContent: "flex-start",
+                        textAlignVertical: "top",
+                        margin: 12
+                        }}
+                      placeholder="Ex: When are the common app essays released?"
+                      underlineColorAndroid="transparent"
+                      multiline={true}
+                      selectTextOnFocus={true}
+                      spellCheck={true}
+                      onChangeText={(text) => this.setState({question: text})}
+                      onSubmitEditing={(text) => this.setState({question: text})}
+                      />
+                  </View> 
+                  <View style={{flexDirection: "column", margin : 10}}>
+                    <Button
+                      titleStyle={{color : 'white', fontWeight: '700', fontSize: 25}}
+                      buttonStyle={{borderRadius: 20, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor : Colors.lightPurple}}
+                      title={this.state.postQuestionTopic}
+                      onPress={() => this.onPressTopic()}/>
+                    <Button
+                      titleStyle={{color : 'white', fontWeight: '700', fontSize: 25}}
+                      buttonStyle={{borderRadius: 20, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor : Colors.lightPurple}}
+                      title="Post Question"
+                      onPress={() => this.onPressPostQuestion()}/>
+                  </View>
+                </View>
+            </Modal>
+          </View>
+        </View>
       );
     }
   }
@@ -340,34 +337,22 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   modalViewTopic: {
-    // width: Metrics.screenWidth,
     height: Metrics.screenHeight*.6,
     borderStyle: 'solid',
     borderWidth: .5,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
   },
   modalViewQuestion: {
-    // width: Metrics.screenWidth*0.9,
-    // height: Metrics.screenHeight * .3,
     flex: .5,
     borderStyle: 'solid',
     borderWidth: .5,
-    marginTop: 10,
-    // justifyContent: 'flex-end',
-    // backgroundColor: 'white',
     marginTop: Metrics.screenWidth*.1,
     marginLeft: 20,
     marginRight: 20,
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
     backgroundColor: "white",
     padding: 22,
     justifyContent: "center",
@@ -382,7 +367,6 @@ const styles = StyleSheet.create({
   modal: {
     justifyContent: "flex-start",
     position : "absolute",
-    // alignItems: "center",
     zIndex: 4,
     elevation: 4,
     width : Metrics.screenWidth,

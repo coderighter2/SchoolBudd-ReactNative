@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import Metrics from '../Themes/Metrics';
-
+import Colors from '../Themes/Colors'
 
 export default class CalendarScreen extends React.Component {
   constructor(props) {
@@ -38,23 +38,20 @@ export default class CalendarScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-      <StatusBar barStyle="light-content"/>
-      {/* <View>
-        <TouchableOpacity onPress={() => this._onPressBack() }><Text>Back</Text></TouchableOpacity>
-                    <Text></Text>
-                    <Text></Text>
-      </View> */}
-        <Calendar
-          onDayPress={this.onDayPress}
-          style={styles.calendar}
-          minDate={Date()-1}
-          markedDates={{[this.state.selected]: {selected: true}}}
-          theme={{
-            selectedDayBackgroundColor: 'purple',
-            todayTextColor: 'purple',
-            arrowColor: 'purple',
-          }}
-        />
+        <StatusBar barStyle="light-content"/>
+        <View style = {styles.calendarView}>
+          <Calendar
+            onDayPress={this.onDayPress}
+            style={styles.calendar}
+            minDate={Date()-1}
+            markedDates={{[this.state.selected]: {selected: true}}}
+            theme={{
+              selectedDayBackgroundColor: 'purple',
+              todayTextColor: 'purple',
+              arrowColor: 'purple',
+            }}
+          />
+        </View>
       </View>
     );
   }
@@ -63,14 +60,18 @@ export default class CalendarScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
 
   },
   calendar: {
-    borderWidth: 2,
-    borderColor: '#c77ce855',
+    borderWidth: 1,
+    borderColor: Colors.lightPurple,
+    paddingTop: 5,
     height: 350
-  }
+  },
+  calendarView: {
+    marginTop: 50,
+    width: Metrics.screenWidth*.9,
+    flex: 1,
+    marginLeft: Metrics.screenWidth*.05
+  },
 });

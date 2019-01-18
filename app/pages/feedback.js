@@ -5,7 +5,7 @@ import { Button } from 'react-native-elements';
 import Metrics from '../Themes/Metrics';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import Stripe from 'firebase';
-
+import Colors from '../Themes/Colors'
 
 export default class Feedback extends React.Component {
 
@@ -17,7 +17,7 @@ export default class Feedback extends React.Component {
         <Feather style={styles.icon}
           name="menu"
           size={Metrics.icons.medium}
-          color={'#c77ce8'}
+          color={Colors.lightPurple}
           onPress={() => navigate('DrawerToggle')}
         />
       )
@@ -32,25 +32,18 @@ export default class Feedback extends React.Component {
           <Button
             title="Give Feedback"
             onPress={this.handleEmail}
-            backgroundColor="#c77ce8" />
+            backgroundColor={Colors.lightPurple} />
         </View>
       </View>
     )
   }
 
-  // handleEmail = () => {
-  //     const to = ['moveitmoveitco@gmail.com'] // string or array of email addresses
-  //     email(to, {
-  //         subject: 'How to Improve',
-  //         body: 'You guys should...'
-  //     }).catch(console.error)
-  // }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#c77ce855',
+    backgroundColor: Colors.lightPurple,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -62,17 +55,13 @@ const styles = StyleSheet.create({
     padding: 10,
     borderStyle: 'solid',
     borderWidth: 0.5,
-    borderTopLeftRadius: Metrics.screenWidth * .05,
-    borderTopRightRadius: Metrics.screenWidth * .05,
-    borderBottomLeftRadius: Metrics.screenWidth * .05,
-    borderBottomRightRadius: Metrics.screenWidth * .05,
+    borderRadius: Metrics.screenWidth * .05,
     backgroundColor: 'white',
   },
   textStyles: {
     fontStyle: 'italic',
     alignItems: 'center',
     textAlign: 'center',
-    // color: 'white',
   },
   icon: {
     marginLeft: 15,

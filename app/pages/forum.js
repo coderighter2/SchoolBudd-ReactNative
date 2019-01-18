@@ -30,7 +30,7 @@ export default class Forum extends React.Component {
       <Feather style={{ marginLeft: 15}}
         name="menu"
         size={Metrics.icons.medium}
-        color={'#c77ce8'}
+        color={Colors.lightPurple}
         onPress={() => navigate('DrawerToggle')}
       />
     ),
@@ -38,7 +38,7 @@ export default class Forum extends React.Component {
       <Feather style={{ marginRight: 15}}
         name="plus-circle"
         size={Metrics.icons.medium}
-        color={'#c77ce8'} 
+        color={Colors.lightPurple} 
         onPress={params.createQuestion}
       />
     ),
@@ -324,7 +324,7 @@ async appendJedis(count, start) {
                                 <Ionicons style={{ marginLeft: 15, fontWeight : 'bold'}}
                                   name="ios-close-circle-outline"
                                   size={Metrics.icons.medium}
-                                  color={'#c77ce8'}
+                                  color={Colors.lightPurple}
                                   onPress={() => this.setState({ isQuestionModalVisible: false })}
                                 />
                                 <View style={{flex : 1, alignItems: 'center', width : '100%'}}>
@@ -335,7 +335,7 @@ async appendJedis(count, start) {
                                 <FontAwesome style={{ marginRight: 15, fontWeight : 'bold'}}
                                   name="send"
                                   size={Metrics.icons.medium}
-                                  color={'#c77ce8'}
+                                  color={Colors.lightPurple}
                                   onPress={() => this.onPressPostQuestion()}
                                 />
                               </View>
@@ -369,7 +369,7 @@ async appendJedis(count, start) {
                             <View style={{flexDirection: "row", margin : 10}}>
                               <Button
                                 titleStyle={{color : 'white', fontWeight: '700', fontSize: 25}}
-                                buttonStyle={{borderRadius: 20, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :'#c77ce8'}}
+                                buttonStyle={{borderRadius: 20, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor : Colors.lightPurple}}
                                 title={this.state.postQuestionTopic}
                                 onPress={() => this.onPressTopic(1)}/>
                             </View>
@@ -523,7 +523,6 @@ async appendJedis(count, start) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingTop: 40,
     backgroundColor: Colors.snow,
     alignItems: 'center',
     justifyContent: 'center',
@@ -561,17 +560,13 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   modalViewTopic: {
-    // width: Metrics.screenWidth,
     height: Metrics.screenHeight*.6,
     borderStyle: 'solid',
     borderWidth: .5,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
   },
   modalViewQuestion: {
     width: Metrics.screenWidth*0.9,
@@ -581,10 +576,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     backgroundColor: 'white',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
   },
   modalText: {
     fontSize: 25,
@@ -593,7 +585,6 @@ const styles = StyleSheet.create({
   modal: {
     justifyContent: "flex-start",
     position : "absolute",
-    // alignItems: "center",
     zIndex: 4,
     elevation: 4,
     width : Metrics.screenWidth,

@@ -80,7 +80,7 @@ export default class FindConsultant extends React.Component {
         <Feather style={styles.icon}
           name="menu"
           size={Metrics.icons.medium}
-          color={'#c77ce8'}
+          color={Colors.lightPurple}
           onPress={() => navigate('DrawerToggle')}
         />
       )
@@ -130,83 +130,14 @@ export default class FindConsultant extends React.Component {
       var childData = snapshot.val();
       childData.key = childKey;
       console.log("child data pulled" + JSON.stringify(childData));
-      //   console.log("portal " + childData.portal);
-      //   console.log("portal " + typeof childData.portal);
-      //   if (childData.name !== undefined) {
-      //   name = childData.name.toLowerCase();
-      // } else {
-      //   name = 'Placeholder';
-      // }
-      //   searchTextLowercase = this.state.searchText.toLowerCase();
-      //   var specialties1 = childData.specialties;
-      //   var typeConsultant = childData.type;
-      //   console.log("specialties yippee kiyay " + specialties1);
-      //   console.log("selectedItems " + this.state.selectedItems);
-      //   //the next block of code checks for if the consultant fulfills all of the applied filters
-      //   if ((this.state.selectedItems != "") && (childData.portal == "consultant")) {
-      //     // if (this.state.selectedSpecialtiesArray == true) {
-      //     //   await this.setState({ selectedConsultantTypeArray: false });
-      //     // }
-      //     // if (this.state.selectedAvailabilityPreferences == true) {
-      //     //
-      //     // }
-      //     // if (this.state.selectedConsultantType == true) {
-      //     //
-      //     // }
-      //     var comparisonArray = this.state.selectedItemsComparisonArray;
-      //       comparisonArray.push(childData.type);
-      //     if (this.state.selectedSpecialties == true) {
-      //       childData.specialties.forEach(function(element) {
-      //       comparisonArray.push(element.value);
-      //     });
-      //   }
-      //     comparisonArray.push(childData.availabilityPreferences);
-      //     console.log("comparisonArray " + comparisonArray);
-      //     console.log("comparisonArray string" + JSON.stringify(comparisonArray));
-      //     var stringSelections = JSON.stringify(this.state.selectedItems);
-      //             var yes = 0;
-      //             var total = 0;
-      //           this.state.selectedItems.forEach(function(element) {
-      //             total ++;
-      //             console.log("inner if statement selectedItems " + stringSelections);
-      //             console.log("value " + element);
-      //             if (comparisonArray.includes(element)) {
-      //               yes++;
-      //             };
-      //           });
-      //           if (yes == total) {
-      //             filterPass = true;
-      //           }
-      //
-      // } else {
-      //   filterPass = true;
-      // }
-      //   // if ((childData.portal === 'consultant') & itemName.includes(searchTextLowercase)) {
-      //   // console.log("array check " + this.state.selectedConsultantType.includes(childData.type));
-      //   // console.log("select consultant type " + this.state.selectedConsultantType);
-      //   // console.log("childData type" + childData.type);
-      //   //  (this.state.selectedConsultantType.includes(childData.type);
-      //     // specialties1.forEach(function(element) {
-      //     //   console.log(element);
-      //     // });
-      // if ((childData.portal == "consultant") && (name.includes(searchTextLowercase)) && (filterPass == true)) {
-      // console.log("firebase specialties " + specialties);
+     
       jedisList.push(childData);
       console.log("jedis " + JSON.stringify(jedisList));
-      // } else {
-      // console.log(childData.portal);
-      // }
+
       this.setState({ loading: false, refreshing: false, jedisSectioned: [{ title: 'Jedis', data: jedisList }] });
       console.log(childData);
     });
 
-    // var jedisList = this.state.jedisSectioned[0].data.slice();
-    // this.setState({loading: true});
-    // for(i=start; i < count+start; i++) {
-    //   await this.getJedi(i, jedisList);
-    // }
-    // this.setState({loading: false, refreshing: false, jedisSectioned: [{title: 'Jedis', data:jedisList}]});
-    //do i need a for loop right here to check to see if there are duplicate values
   }
 
   onSelectionsChangeSpecialties = (selectedSpecialties) => {
@@ -222,7 +153,6 @@ export default class FindConsultant extends React.Component {
   componentWillMount() {
     this.checkIfUserLoggedIn();
     this.appendJedis(3, 1);
-    // console.log(this.state.jedis);
   }
 
   checkIfUserLoggedIn = async () => {
@@ -230,7 +160,6 @@ export default class FindConsultant extends React.Component {
     if (loginCheck === "true") {
       await this.setState({ hasLoggedIn: true });
       console.log("hasLoggedIn" + this.state.hasLoggedIn);
-      console.log("metroooooooo");
     }
     const emailVerification = firebase.auth().currentUser.emailVerified;
     if (emailVerification == true) {
@@ -318,13 +247,10 @@ export default class FindConsultant extends React.Component {
     if (!this.state.hasLoggedIn || !this.state.emailVerified) {
       return (<LoggedOut />);
     } else {
-
       return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <SafeAreaView style={styles.container}>
-
             <View style={styles.purchaseBox}>
-
               <SearchBar
                 lightTheme
                 round
@@ -339,7 +265,7 @@ export default class FindConsultant extends React.Component {
               <View style={{ height: 120, width: Metrics.screenWidth * .9, justifyContent: 'center' }}>
                 <Slider
                   value={this.state.price}
-                  thumbTintColor='#c77ce8'
+                  thumbTintColor={Colors.lightPurple}
                   minimumValue={5}
                   maximumValue={250}
                   value={140}
@@ -363,7 +289,7 @@ export default class FindConsultant extends React.Component {
                       marginBottom: 15,
                       padding: 20,
                       borderRadius: 10,
-                      backgroundColor: '#c77ce8',
+                      backgroundColor: Colors.lightPurple,
                     }],
                     selectToggleText: globalStyles.btnText,
                   }}
@@ -375,18 +301,6 @@ export default class FindConsultant extends React.Component {
                   showCancelButton={true}
                   showChips={true}
                   onConfirm={() => this.resetList()}
-                  // selectToggleIconComponent={
-                  //   <Icon type="material" name="add" color="white" />
-                    // <CheckBox
-                    //   center
-                    //   // title={"Filter Consultants"}
-                    //   iconRight
-                    //   iconType='material'
-                    //   uncheckedIcon='add'
-                    //   containerStyle={{width: '100%', height: 40, alignSelf: 'center'}}
-                    //   onPress={() => this.SectionedMultiSelect._toggleSelector()}
-                    // />
-                  // }
                 />
               </View>
 
@@ -413,7 +327,6 @@ export default class FindConsultant extends React.Component {
           </SafeAreaView>
         </TouchableWithoutFeedback>
       );
-
     }
   }
 }
@@ -454,17 +367,13 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   modalView: {
-    // width: Metrics.screenWidth,
     height: Metrics.screenHeight * .6,
     borderStyle: 'solid',
     borderWidth: .5,
     alignItems: 'center',
     justifyContent: 'space-around',
     backgroundColor: 'white',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
   },
   modalText: {
     fontSize: 24,

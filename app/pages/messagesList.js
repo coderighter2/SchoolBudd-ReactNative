@@ -19,7 +19,7 @@ export default class MessagesList extends React.Component {
         <Feather style={styles.icon}
           name="menu"
           size={Metrics.icons.medium}
-          color={'#c77ce8'}
+          color={Colors.lightPurple}
           onPress={() => navigate('DrawerToggle')}
         />
         )
@@ -65,7 +65,6 @@ export default class MessagesList extends React.Component {
     if (loginCheck === "true") {
       await this.setState({hasLoggedIn: true});
       console.log("hasLoggedIn" + this.state.hasLoggedIn);
-      console.log("metroooooooo");
     }
    }
 
@@ -137,15 +136,13 @@ export default class MessagesList extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    backgroundColor: '#c77ce8',
+    backgroundColor: Colors.lightPurple,
   },
   messagesContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#c77ce8',
+    backgroundColor: Colors.lightPurple,
   },
   addChatContainer: {
     flexDirection: "row",

@@ -9,12 +9,7 @@ import { WebBrowser } from 'expo';
 import { AppInstalledChecker, CheckPackageInstallation } from 'react-native-check-app-install';
 import metrics from '../Themes/Metrics';
 
-/*
-  Displays a Jedi ID Card
 
-  start at
-  load more
-*/
 export default class SaleBlock extends React.Component {
 
   constructor(props){
@@ -61,20 +56,10 @@ export default class SaleBlock extends React.Component {
   onPressMessageSeller = async () => {
     console.log('testing message seller');
 
-    //if has skype get consultant skype name
-    //else prompt to download skype
     var url;
     if (this.state.skypeUsername !== "") {
       url = 'skype://' + this.state.skypeUsername + '?chat';
-      // console.log("url " + url);
 
-      //actual check for existing url
-      // Linking.canOpenURL(url).then(supported => {
-      // if (!supported) {
-      //   console.log('Can\'t handle url: ' + url);
-      // } else {
-      //   return Linking.openURL(url);
-      // }
       Linking.canOpenURL(url).then(supported => {
       if (supported) {
         alert("Consultant has not set up skype account yet");
@@ -149,12 +134,12 @@ export default class SaleBlock extends React.Component {
               
               <Button
                 icon={{name: 'code'}}
-                buttonStyle={{backgroundColor : '#c77ce8', borderColor : 'transparent', borderWidth : 0, borderRadius : 20, margin : 10}}
+                buttonStyle={{backgroundColor : Colors.lightPurple, borderColor : 'transparent', borderWidth : 0, borderRadius : 20, margin : 10}}
                 title='Book Appointment'
                 onPress={() => this.onPressBookAppointment()}/>
               <Button
                 icon={{name: 'code'}}
-                buttonStyle={{backgroundColor : '#c77ce8', borderColor : 'transparent', borderWidth : 0, borderRadius : 20, margin : 10}}
+                buttonStyle={{backgroundColor : Colors.lightPurple, borderColor : 'transparent', borderWidth : 0, borderRadius : 20, margin : 10}}
                 title='Message Consultant'
                 onPress={() => this.onPressMessageSeller()}/>
               </Card>

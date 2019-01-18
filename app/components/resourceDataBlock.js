@@ -86,11 +86,11 @@ const styles = StyleSheet.create({
     height: Metrics.screenHeight* .2,
   },
   cardSelected: {
-    backgroundColor: '#c77ce8',
+    backgroundColor: Colors.lightPurple,
   },
   cardNotSelected: {
     backgroundColor: 'white',
-    borderColor: '#c77ce8',
+    borderColor: Colors.lightPurple,
   },
   pictureView: {
     marginLeft: Metrics.marginHorizontal,
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   buttonPressed: {
-    color: '#c77ce8',
+    color: Colors.lightPurple,
   },
   buttonNotPressed: {
     color: 'black',

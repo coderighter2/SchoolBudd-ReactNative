@@ -11,33 +11,13 @@ import GenerateForm from 'react-native-form-builder';
 import { View, Text } from 'native-base';
 import { globalStyles } from '../Themes/Styles';
 import Functions from '../Themes/Functions';
-
+import Colors from '../Themes/Colors'
 
 const stripe_url = 'https://api.stripe.com/v1/'
 // const secret_key = firebase.config().stripe.token;
 //create token
 const stripe = require('stripe-client')('pk_test_qkgEe4JVlRcszR12vsEMODWU');
 
-
-// // These Fields will create a login form with three fields
-// const fieldsLogin = [
-//   {
-//     type: 'text',
-//     name: 'emailAddress',
-//     required: true,
-//     icon: 'ios-person',
-//     label: 'Email Address',
-//   },
-//   {
-//     type: 'password',
-//     name: 'password',
-//     icon: 'ios-lock',
-//     required: true,
-//     label: 'Password',
-//   },
-// ];
-
-// These Fields will create a login form with three fields
 const fieldsSignUp = [
   {
     type: 'text',
@@ -98,8 +78,6 @@ export default class Login extends React.Component {
       skypeName: '',
       skypeAlertClear: false,
     }
-    //see what props App.js is constructed with:
-    // console.log(JSON.stringify(props));
   }
 
   componentDidMount() {
@@ -166,10 +144,6 @@ export default class Login extends React.Component {
     }
     this.verifyEmail();
     var user = firebase.auth().currentUser;
-    //   // console.log("email " + this.state.signUpEmail);
-    //   // console.log("password " + this.state.signUpPassword);
-    //   console.log("user " + user);
-    //   // console.log("currentUser" + firebase.auth().currentUser);
     const portalType = await AsyncStorage.getItem('portal');
     firebase.database().ref('users').child(user.uid).child('firstName').set(formValues.firstName);
     firebase.database().ref('users').child(user.uid).child('lastName').set(formValues.lastName);
@@ -224,18 +198,9 @@ export default class Login extends React.Component {
 
 
   onPressSaveNewUser = async () => {
-    // console.log("email pre creating user" + this.state.signUpEmail);
-    // console.log("password " + this.state.signUpPassword);
     const formValues = this.formGenerator.getValues();
     console.log('FORM VALUES', formValues);
-    // if ((formValues.emailAddress == "") || (formValues.password == "") || (formValues.firstName == "") || (formValues.lastName == "")) {
-    //   alert("Please fill in all required categories");
-    // }
-    //check skype name
-    //maybe having a skype dropdown, where we can 1)try out skype names for them 2)create a skype for them
-    // await this.skypeAlert(formValues);
-    // console.log("skype alert " + this.state.skypeAlertClear);
-    // if(this.state.skypeAlertClear == true) {
+
     await this.setState({ signUpEmail: formValues.emailAddress, signUpPassword: formValues.password });
     console.log("email " + this.state.signUpEmail);
     console.log("password " + this.state.signUpPassword);
@@ -270,7 +235,6 @@ export default class Login extends React.Component {
 
       /// pushnotification token save
       await Functions.registerForPushNotificationsAsync(result.uid);
-
 
       await this.setState({isLoginModalVisible: false});
     } else {
@@ -319,8 +283,6 @@ export default class Login extends React.Component {
       //names of each other
       firebase.database().ref('users').child(result.uid).child('name').set(name);
 
-
-
       await AsyncStorage.setItem("hasLoggedIn", "true");
     } else {
       // this.logInWithFacebook();
@@ -331,118 +293,93 @@ export default class Login extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
 
-    if (this.state.isSignUpModalVisible === true) {
-      return (
-        <View style={styles.container}>
-          <View style={styles.feedbackBox}>
-            <Text style={styles.textStyles}>Here at MoveItMoveIt, we appreciate your usage of the app. </Text>
+    return(
+      <View style={styles.container}>
+        <View style={styles.feedbackBox}>
+          <Text style={styles.textStyles}>Here at MoveItMoveIt, we appreciate your usage of the app. </Text>
 
-            <View style={styles.buttonsRow}>
-              <MaterialCommunityIcons style={styles.icon}
-                name='shield'
-                size={Metrics.icons.large}
-                color={'#c77ce8'}
-                onPress={() => this.toggleLoginModal()}
-              />
-              <MaterialCommunityIcons style={styles.icon}
-                name="facebook"
-                size={Metrics.icons.large}
-                color={'#c77ce8'}
-                onPress={() => this.logInWithFacebook()}
-              />
-            </View>
+          <View style={styles.buttonsRow}>
+            <MaterialCommunityIcons style={styles.icon}
+              name='shield'
+              size={Metrics.icons.large}
+              color={Colors.lightPurple}
+              onPress={() => this.toggleLoginModal()}
+            />
+            <MaterialCommunityIcons style={styles.icon}
+              name="facebook"
+              size={Metrics.icons.large}
+              color={Colors.lightPurple}
+              onPress={() => this.logInWithFacebook()}
+            />
+          </View>
 
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-              <Modal
-                isVisible={this.state.isSignUpModalVisible}
-                onBackdropPress={() => this.setState({ isSignUpModalVisible: false })}
-                backdropColor={'grey'}>
-                <View style={globalStyles.modalContainer}>
-                  <Text style={globalStyles.modalTitle}>
-                    Please Sign Up!
-                  </Text>
-                  <GenerateForm
-                    scrollViewProps={{ overScrollMode: 'never' }}
-                    fields={fieldsSignUp}
-                    ref={(c) => {
-                      this.formGenerator = c;
-                    }}
-                  />
-                  <TouchableOpacity
-                    style={globalStyles.btn}
-                    onPress={() => this.onPressSaveNewUser()}
-                  >
-                    <Text style={globalStyles.btnText}>SAVE</Text>
-                  </TouchableOpacity>
-                </View>
-              </Modal>
-            </View>
-
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            {
+              this.state.isSignUpModalVisible === true ? (
+                <Modal
+                  isVisible={this.state.isSignUpModalVisible}
+                  onBackdropPress={() => this.setState({ isSignUpModalVisible: false })}
+                  backdropColor={'grey'}>
+                  <View style={styles.modalView}>
+                    <Text style={styles.modalText}>
+                      Please Sign Up!
+                    </Text>
+                    <View style = {{ width:Metrics.screenWidth - 40, height: Metrics.screenHeight }}>
+                      <GenerateForm
+                        scrollViewProps={{overScrollMode: 'never'}}
+                        fields={fieldsSignUp}
+                        ref={async(c) => { 
+                          this.formGenerator = c;
+                        }}
+                      />
+                    </View>
+                    <TouchableOpacity
+                      style = {styles.saveBtnView}
+                      onPress={() => this.onPressSaveNewUser()}>
+                      <Text style = { styles.saveBtn }>SAVE</Text>
+                    </TouchableOpacity>
+                  </View>
+                </Modal>
+              ): (
+                <Modal
+                  isVisible={this.state.isLoginModalVisible}
+                  onBackdropPress={() => this.setState({ isLoginModalVisible: false })}
+                  backdropColor={'grey'}>
+                  <View style={globalStyles.modalContainer}>
+                    <Text style={globalStyles.modalTitle}>
+                      Please Login!
+                    </Text>
+                    <TextInput
+                      style={globalStyles.defaultTextInput}
+                      value={this.state.loginEmail}
+                      onChangeText={(loginEmail) => this.setState({ loginEmail })}
+                      placeholder="Email" />
+                    <TextInput
+                      style={globalStyles.defaultTextInput}
+                      value={this.state.loginPassword}
+                      secureTextEntry={true}
+                      onChangeText={(loginPassword) => this.setState({ loginPassword })}
+                      placeholder="Password" />
+                    <TouchableOpacity
+                      style={globalStyles.btn}
+                      onPress={() => this.onPressSaveLogin()}
+                    >
+                      <Text style={globalStyles.btnText}>SAVE</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={globalStyles.btn}
+                      onPress={() => this.onPressMakeAccount()}
+                    >
+                      <Text style={globalStyles.btnText}>MAKE AN ACCOUNT</Text>
+                    </TouchableOpacity>
+                  </View>
+                </Modal>
+              )
+            }
           </View>
         </View>
-      );
-    } else {
-
-      return (
-        <View style={styles.container}>
-          <View style={styles.feedbackBox}>
-            <Text style={styles.textStyles}>Here at MoveItMoveIt, we appreciate your usage of the app. </Text>
-
-            <View style={styles.buttonsRow}>
-              <MaterialCommunityIcons style={styles.icon}
-                name='shield'
-                size={Metrics.icons.large}
-                color={'#c77ce8'}
-                onPress={() => this.toggleLoginModal()}
-              />
-              <MaterialCommunityIcons style={styles.icon}
-                name="facebook"
-                size={Metrics.icons.large}
-                color={'#c77ce8'}
-                onPress={() => this.logInWithFacebook()}
-              />
-            </View>
-
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-              <Modal
-                isVisible={this.state.isLoginModalVisible}
-                onBackdropPress={() => this.setState({ isLoginModalVisible: false })}
-                backdropColor={'grey'}>
-                <View style={globalStyles.modalContainer}>
-                  <Text style={globalStyles.modalTitle}>
-                    Please Login!
-                  </Text>
-                  <TextInput
-                    style={globalStyles.defaultTextInput}
-                    value={this.state.loginEmail}
-                    onChangeText={(loginEmail) => this.setState({ loginEmail })}
-                    placeholder="Email" />
-                  <TextInput
-                    style={globalStyles.defaultTextInput}
-                    value={this.state.loginPassword}
-                    secureTextEntry={true}
-                    onChangeText={(loginPassword) => this.setState({ loginPassword })}
-                    placeholder="Password" />
-                  <TouchableOpacity
-                    style={globalStyles.btn}
-                    onPress={() => this.onPressSaveLogin()}
-                  >
-                    <Text style={globalStyles.btnText}>SAVE</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={globalStyles.btn}
-                    onPress={() => this.onPressMakeAccount()}
-                  >
-                    <Text style={globalStyles.btnText}>MAKE AN ACCOUNT</Text>
-                  </TouchableOpacity>
-                </View>
-              </Modal>
-            </View>
-
-          </View>
-        </View>
-      );
-    }
+      </View>
+    )
   }
 }
 
@@ -450,7 +387,7 @@ export default class Login extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#c77ce855',
+    backgroundColor: Colors.lightPurple,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -461,12 +398,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     padding: 10,
     borderStyle: 'solid',
-    borderColor: '#c77ce8',
+    borderColor: Colors.lightPurple,
     borderWidth: 0.5,
-    borderTopLeftRadius: Metrics.screenWidth * .05,
-    borderTopRightRadius: Metrics.screenWidth * .05,
-    borderBottomLeftRadius: Metrics.screenWidth * .05,
-    borderBottomRightRadius: Metrics.screenWidth * .05,
+    borderRadius: Metrics.screenWidth * .05,
     backgroundColor: 'white',
   },
   textStyles: {
@@ -474,14 +408,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     textAlign: 'center',
     fontSize: 20,
-    // color: 'white',
   },
   logoutButton: {
     width: Metrics.screenWidth * .7,
     height: Metrics.screenHeight * .05,
     borderWidth: 1,
     marginBottom: 55,
-    backgroundColor: '#c77ce8',
+    backgroundColor: Colors.lightPurple,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -491,20 +424,20 @@ const styles = StyleSheet.create({
     width: Metrics.screenWidth * .5,
   },
   modalView: {
-    // width: Metrics.screenWidth,
     height: Metrics.screenHeight * .6,
     borderStyle: 'solid',
     borderWidth: 1.5,
-    borderColor: '#c77ce8',
+    borderColor: Colors.lightPurple,
     borderTopWidth: 25,
-    alignItems: 'stretch',
-    // justifyContent: 'space-around',
+    alignItems: 'center',
     backgroundColor: 'white',
     borderRadius: 15,
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 2,
     shadowOpacity: 0.5,
-    shadowColor: '#c77ce8',
+    shadowColor: Colors.lightPurple,
+    marginBottom: 80,
+    overflow: 'hidden',
   },
   modalText: {
     alignSelf: 'center',
@@ -522,7 +455,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#c77ce8',
+    borderColor: Colors.lightPurple,
     backgroundColor: 'white',
   },
   modalBtn: {
@@ -532,9 +465,23 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     padding: 10,
     borderRadius: 10,
-    backgroundColor: '#c77ce8',
+    backgroundColor: Colors.lightPurple,
   },
   btnText: {
     color: 'white',
+  },
+  saveBtn: {
+    color: 'white',
+  },
+  saveBtnView: {
+    position: 'absolute',
+    bottom: 20,
+    alignItems: 'center',
+    height: 40,
+    width: Metrics.screenWidth * .8,
+    marginBottom: 15,
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: Colors.lightPurple,
   },
 })

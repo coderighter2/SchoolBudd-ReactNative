@@ -21,12 +21,8 @@ import {CheckBox} from 'react-native-elements'
 import Modal from 'react-native-modal';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import LoggedOut from '../components/loggedOutScreen';
+import Colors from '../Themes/Colors'
 
-
-
-/*
-for scaling, can use sql, or use a backend developer (firebase)
-*/
 
 
 export default class ProfileConsultantBasicInfo extends React.Component {
@@ -41,7 +37,7 @@ export default class ProfileConsultantBasicInfo extends React.Component {
       <Feather style={styles.icon}
         name="menu"
         size={Metrics.icons.medium}
-        color={'#c77ce8'}
+        color={Colors.lightPurple}
         onPress={() => navigate('DrawerToggle')}
       />
       )
@@ -74,7 +70,6 @@ export default class ProfileConsultantBasicInfo extends React.Component {
     if (loginCheck === "true") {
       await this.setState({hasLoggedIn: true});
       console.log("hasLoggedIn" + this.state.hasLoggedIn);
-      console.log("metroooooooo");
     }
    }
 
@@ -218,12 +213,12 @@ export default class ProfileConsultantBasicInfo extends React.Component {
           <Button
             onPress={() => this.onPressUploadPicture()}
             title="Upload Profile Pic"
-            color="#c77ce8"
+            color={Colors.lightPurple}
           />
           <Button
             onPress={() => this.onPressTakePicture()}
             title="Take Profile Pic"
-            color="#c77ce8"/>
+            color={Colors.lightPurple}/>
         </View>)
 
     } else {
@@ -370,16 +365,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
     marginTop: 5,
-    // backgroundColor: 'white',
   },
   itemInformation: {
     flex: 1.5,
     flexDirection: 'column',
-    //  alignItems: 'center',
-    //  justifyContent: 'space-around',
     margin: 20,
     backgroundColor: 'white',
-    //  padding: 15,
   },
   pictureBox: {
     height: Metrics.screenHeight * .3,
@@ -390,12 +381,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderStyle: 'solid',
     backgroundColor: 'white',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    borderColor : '#c77ce8'
-    //  padding: 10,
+    borderRadius: 15,
+    borderColor : Colors.lightPurple
   },
   picture: {
     height: Metrics.screenHeight * .3,
@@ -404,16 +391,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     resizeMode: 'contain',
     margin: 20,
-    //  padding: 10,
   },
   inputText: {
     flex: 1,
     backgroundColor: 'white',
     flexDirection: 'row',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
     borderStyle: 'solid',
     borderWidth: .5,
     margin: 7,
@@ -426,10 +409,7 @@ const styles = StyleSheet.create({
     flex: 2,
     backgroundColor: 'white',
     flexDirection: 'row',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
     borderStyle: 'solid',
     borderWidth: .5,
     margin: 7,
@@ -446,7 +426,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 20,
     marginBottom: 55,
-    backgroundColor: '#c77ce8',
+    backgroundColor: Colors.lightPurple,
   },
   postButtonText: {
     color: 'white',
@@ -457,17 +437,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalView: {
-    // width: Metrics.screenWidth,
     height: Metrics.screenHeight * .6,
     borderStyle: 'solid',
     borderWidth: .5,
     alignItems: 'center',
     justifyContent: 'space-around',
     backgroundColor: 'white',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
   },
   modalText: {
     fontSize: 24,

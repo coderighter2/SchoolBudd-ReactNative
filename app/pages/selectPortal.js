@@ -4,29 +4,11 @@ import PropTypes from 'prop-types';
 
 import { Button } from 'react-native-elements'
 import Metrics from '../Themes/Metrics';
-
+import Colors from '../Themes/Colors'
 
 export default class SelectPortalScreen extends React.Component {
-
-  // <Button
-  // title="Educators"
-  // buttonStyle={{backgroundColor : '#c77ce8', borderColor : 'transparent', borderWidth : 0, borderRadius : 20, margin : 15}}
-  // onPress={this._selectPortalSchool}/>
-  //
-  // <Button
-  // title="Parents"
-  // buttonStyle={{backgroundColor : '#c77ce8', borderColor : 'transparent', borderWidth : 0, borderRadius : 20, margin : 15}}
-  // onPress={this._selectPortalParent}/>
-
   static navigationOptions = ({ navigation }) => {
     const params = navigation.state.params || {};
-  };
-
-  static propTypes = {
-      // selectPortalStudent: PropTypes.func.isRequired,
-      // selectPortalConsultant: PropTypes.func.isRequired,
-      // selectPortalSchool: PropTypes.func.isRequired,
-      // selectPortalParent: PropTypes.func.isRequired,
   };
 
   _selectPortalStudent = async() => {
@@ -50,7 +32,6 @@ export default class SelectPortalScreen extends React.Component {
       }
   }
 
-
   render() {
     return (
       <SafeAreaView style={styles.container}>
@@ -58,12 +39,12 @@ export default class SelectPortalScreen extends React.Component {
           <Text style={styles.textStyles}>Are you a student or a consultant?</Text>
           <Button
           title="Students"
-          buttonStyle={{backgroundColor : '#c77ce8', borderColor : 'transparent', borderWidth : 0, borderRadius : 20, margin : 15}}
+          buttonStyle={ styles.selectTxt}
           onPress={this._selectPortalStudent}/>
 
           <Button
           title="Consultants"
-          buttonStyle={{backgroundColor : '#c77ce8', borderColor : 'transparent', borderWidth : 0, borderRadius : 20, margin : 15}}
+          buttonStyle={ styles.selectTxt}
           onPress={this._selectPortalConsultant}/>
 
         </View>
@@ -90,5 +71,12 @@ const styles = StyleSheet.create({
     textAlign : 'center',
     fontSize : 20,
     fontWeight : 'bold',
+  },
+  selectTxt:  {
+    backgroundColor : Colors.lightPurple, 
+    borderColor : 'transparent', 
+    borderWidth : 0, 
+    borderRadius : 20, 
+    margin : 15
   }
 });

@@ -9,6 +9,7 @@ import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elemen
 import { CreditCardInput } from "react-native-credit-card-input";
 import axios from 'axios';
 import { globalStyles } from '../Themes/Styles';
+import Colors from '../Themes/Colors'
 
 // const stripe = Stripe('pk_test_qkgEe4JVlRcszR12vsEMODWU');
 // Stripe.setPublishableKey('pk_test_qkgEe4JVlRcszR12vsEMODWU');
@@ -400,7 +401,7 @@ const styles = StyleSheet.create({
   },
   movingView: {
     flex: 1,
-    backgroundColor: '#c77ce8',
+    backgroundColor: Colors.lightPurple,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -412,7 +413,7 @@ const styles = StyleSheet.create({
   },
   buyingView: {
     flex: 1,
-    backgroundColor: '#c77ce8',
+    backgroundColor: Colors.lightPurple,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -447,7 +448,7 @@ const styles = StyleSheet.create({
     padding : 20,
     width : 200,
     borderRadius : 10,
-    backgroundColor : '#c77ce8',
+    backgroundColor : Colors.lightPurple,
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center'

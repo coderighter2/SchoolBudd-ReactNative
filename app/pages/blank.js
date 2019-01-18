@@ -9,6 +9,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import Metrics from '../Themes/Metrics';
 import { Input
 } from "native-base";
+import Colors from '../Themes/Colors'
 
 export default class AddQuestionScreen extends React.Component {
     
@@ -110,7 +111,7 @@ export default class AddQuestionScreen extends React.Component {
                                 <Ionicons style={{ marginLeft: 15, fontWeight : 'bold'}}
                                   name="ios-close-circle-outline"
                                   size={Metrics.icons.medium}
-                                  color={'#c77ce8'}
+                                  color={Colors.lightPurple}
                                   onPress={() => this.setState({ isQuestionModalVisible: false })}
                                 />
                                 <View style={{flex : 1, alignItems: 'center', width : '100%'}}>
@@ -121,7 +122,7 @@ export default class AddQuestionScreen extends React.Component {
                                 <FontAwesome style={{ marginRight: 15, fontWeight : 'bold'}}
                                   name="send"
                                   size={Metrics.icons.medium}
-                                  color={'#c77ce8'}
+                                  color={Colors.lightPurple}
                                   onPress={() => this.onPressPostQuestion()}
                                 />
                               </View>
@@ -155,7 +156,7 @@ export default class AddQuestionScreen extends React.Component {
                             <View style={{flexDirection: "row", margin : 10}}>
                               <Button
                                 titleStyle={{color : 'white', fontWeight: '700', fontSize: 25}}
-                                buttonStyle={{borderRadius: 20, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :'#c77ce8'}}
+                                buttonStyle={{borderRadius: 20, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :Colors.lightPurple}}
                                 title={this.state.postQuestionTopic}
                                 onPress={() => this.onPressTopic()}/>
                             </View>
@@ -210,42 +211,37 @@ export default class AddQuestionScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      padding : 20,
-      backgroundColor : 'white'
-      // alignItems: 'center',
-    },
-
-    textStyles: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 10,
-        marginBottom: 10,
-        fontWeight: 'bold',
-        fontSize: 15,
-    },
-    buttonPressed: {
+  container: {
+    flex: 1,
+    padding : 20,
+    backgroundColor : 'white'
+  },
+  textStyles: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 10,
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
+  buttonPressed: {
     color: '#999999'
-    },
-    buttonNotPressed: {
-    color: '#c77ce8'
-    },
-    modalViewQuestion: {
-        width: Metrics.screenWidth*0.9,
-        height: Metrics.screenHeight * .6,
-        borderStyle: 'solid',
-        borderWidth: .5,
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        backgroundColor: 'white',
-        borderBottomLeftRadius: 15,
-        borderBottomRightRadius: 15,
-        borderTopLeftRadius: 15,
-        borderTopRightRadius: 15,
-      },
-      modalText: {
-        fontSize: 25,
-        fontWeight: 'bold',
-      },
+  },
+  buttonNotPressed: {
+    color: Colors.lightPurple
+  },
+  modalViewQuestion: {
+    width: Metrics.screenWidth*0.9,
+    height: Metrics.screenHeight * .6,
+    borderStyle: 'solid',
+    borderWidth: .5,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: 'white',
+    borderRadius: 15
+  },
+  modalText: {
+    fontSize: 25,
+    fontWeight: 'bold',
+  },
 });

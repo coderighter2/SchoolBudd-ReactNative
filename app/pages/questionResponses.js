@@ -10,12 +10,6 @@ import AnswerBlock from '../components/answerBlock';
 import Modal from "react-native-modal";
 
 
-/*
-  Displays a Jedi ID Card
-
-  start at
-  load more
-*/
 export default class QuestionResponses extends React.Component {
 
 
@@ -269,12 +263,12 @@ export default class QuestionResponses extends React.Component {
                        onSubmitEditing={(text) => this.setState({answer: text})}
                        />
                    <Button
-                     color='#c77ce8'
+                     color={Colors.lightPurple}
                      buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
                      title='Post'
                      onPress={() => this.onPressPostAnswer()}/>
                    <Button
-                     color='#c77ce8'
+                     color={Colors.lightPurple}
                      buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
                      title='Cancel'
                      onPress={() => this.setState({ isAnswerModalVisible: false})}/>
@@ -344,17 +338,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   modalView: {
-    // width: Metrics.screenWidth,
     height: Metrics.screenHeight*.6,
     borderStyle: 'solid',
     borderWidth: .5,
     alignItems: 'center',
     justifyContent: 'space-around',
     backgroundColor: 'white',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
   },
   modalText: {
     fontSize: 24,

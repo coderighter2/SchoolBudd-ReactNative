@@ -48,6 +48,11 @@ const ProfileNavStudent = TabNavigator({
     animationEnabled: true,
     swipeEnabled: true,
     initialRouteName: 'StudentBasicInfo',
+    tabBarOptions: {
+      labelStyle: {
+        fontSize: 17
+      },
+    }
   });
 
 const ProfileNavConsultant = TabNavigator({
@@ -55,11 +60,15 @@ const ProfileNavConsultant = TabNavigator({
   BasicInfo: { screen: pages.ProfileConsultantBasicInfo },
   Preferences: { screen: pages.ConsultantProfilePreferences },
 }, {
-    // Default config for all screens
     tabBarPosition: 'top',
     animationEnabled: true,
     swipeEnabled: true,
     initialRouteName: 'BasicInfo',
+    tabBarOptions: {
+      labelStyle: {
+        fontSize: 17
+      },
+    }
   });
 
 const HomeStackNav = StackNavigator({
@@ -217,15 +226,12 @@ export default class App extends React.Component {
     selectedPortalParent: false,
     selectedPortalSchool: false,
     selectedPortalConsultant: false,
-
   }
 
   componentDidMount() {
     this.rememberOnboarding();
     this.rememberPortal();
     console.disableYellowBox = true;
-    // this.checkIfUserLoggedIn();
-    // console.log(JSON.stringify(this.state.hasDoneOnboarding));
   }
 
 
@@ -243,31 +249,35 @@ export default class App extends React.Component {
       const selectedPortal = await AsyncStorage.getItem('portal');
       console.log("selectedPortal test " + JSON.stringify(selectedPortal));
       if (selectedPortal === 'student') {
-        await this.setState({ selectedPortalStudent: true });
         await this.setState({
+          selectedPortalStudent: true,
           selectedPortalConsultant: false,
-          selectedPortalSchool: false, selectedPortalParent: false
-        });
-      } else if (selectedPortal === 'consultant') {
-        await this.setState({ selectedPortalConsultant: true });
+          selectedPortalSchool: false, 
+          selectedPortalParent: false
+        })
+    } else if (selectedPortal === 'consultant') {
         await this.setState({
           selectedPortalStudent: false,
-          selectedPortalSchool: false, selectedPortalParent: false
-        });
+          selectedPortalConsultant: true,
+          selectedPortalSchool: false, 
+          selectedPortalParent: false
+        })
       } else if (selectedPortal === 'school') {
-        await this.setState({ selectedPortalSchool: true });
         await this.setState({
           selectedPortalStudent: false,
-          selectedPortalConsultant: false, selectedPortalParent: false
-        });
+          selectedPortalConsultant: false,
+          selectedPortalSchool: true, 
+          selectedPortalParent: false
+        })
       } else if (selectedPortal === 'parent') {
-        await this.setState({ selectedPortalParent: true });
         await this.setState({
           selectedPortalStudent: false,
-          selectedPortalSchool: false, selectedPortalConsultant: false
-        });
-      }
-    } catch (error) {
+          selectedPortalConsultant: false,
+          selectedPortalSchool: false, 
+          selectedPortalParent: true
+        })
+    }
+  }catch (error) {
       console.log(error);
     }
   }
@@ -279,46 +289,48 @@ export default class App extends React.Component {
   }
 
   _selectPortalStudent = async () => {
-    await this.setState({ selectedPortalStudent: true });
     await this.setState({
+      selectedPortalStudent: true,
       selectedPortalConsultant: false,
-      selectedPortalSchool: false, selectedPortalParent: false
-    });
+      selectedPortalSchool: false, 
+      selectedPortalParent: false
+    })
     await AsyncStorage.setItem('portal', 'student');
     console.log(this.state.selectedPortalStudent);
   }
 
   _selectPortalConsultant = async () => {
-    await this.setState({ selectedPortalConsultant: true });
     await this.setState({
       selectedPortalStudent: false,
-      selectedPortalSchool: false, selectedPortalParent: false
-    });
+      selectedPortalConsultant: true,
+      selectedPortalSchool: false, 
+      selectedPortalParent: false
+    })
     await AsyncStorage.setItem('portal', 'consultant');
     console.log(this.state.selectedPortalConsultant);
   }
 
   _selectPortalParent = async () => {
-    await this.setState({ selectedPortalParent: true });
     await this.setState({
       selectedPortalStudent: false,
-      selectedPortalSchool: false, selectedPortalConsultant: false
-    });
+      selectedPortalConsultant: false,
+      selectedPortalSchool: false, 
+      selectedPortalParent: true
+    })
     await AsyncStorage.setItem('portal', 'parent');
     console.log(this.state.selectedPortalParent);
   }
 
   _selectPortalSchool = async () => {
-    await this.setState({ selectedPortalSchool: true });
     await this.setState({
       selectedPortalStudent: false,
-      selectedPortalConsultant: false, selectedPortalParent: false
-    });
+      selectedPortalConsultant: false,
+      selectedPortalSchool: true, 
+      selectedPortalParent: false
+    })
     await AsyncStorage.setItem('portal', 'school');
     console.log(this.state.selectedPortalSchool);
   }
-
-
 
   render() {
     if (this.state.hasDoneOnboarding && this.state.selectedPortalStudent) {

@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 import Metrics from '../Themes/Metrics';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-
+import Colors from '../Themes/Colors'
 
 
 export default class LoggedOut extends React.Component {
@@ -26,7 +26,7 @@ export default class LoggedOut extends React.Component {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#c77ce8',
+      backgroundColor: Colors.lightPurple,
       alignItems: 'center',
       justifyContent: 'center'
     },
@@ -38,17 +38,13 @@ const styles = StyleSheet.create({
       padding: 10,
       borderStyle: 'solid',
       borderWidth: 0.5,
-      borderTopLeftRadius: Metrics.screenWidth*.05,
-      borderTopRightRadius: Metrics.screenWidth*.05,
-      borderBottomLeftRadius: Metrics.screenWidth*.05,
-      borderBottomRightRadius: Metrics.screenWidth*.05,
+      borderRadius: Metrics.screenWidth*.05,
       backgroundColor: 'white',
     },
     textStyles: {
       fontStyle: 'italic',
       alignItems: 'center',
       textAlign: 'center',
-      // color: 'white',
     },
     icon: {
       marginLeft: 15,

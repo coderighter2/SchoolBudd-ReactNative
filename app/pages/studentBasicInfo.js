@@ -5,7 +5,7 @@ import UploadSale from '../components/uploadSale';
 import firebase from 'firebase';
 import Metrics from '../Themes/Metrics';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-
+import Colors from '../Themes/Colors'
 
 //import Main from './app/components/Main';
 
@@ -22,7 +22,7 @@ export default class StudentBasicInfo extends React.Component {
       <Feather style={styles.icon}
         name="menu"
         size={Metrics.icons.medium}
-        color={'#c77ce8'}
+        color={Colors.lightPurple}
         onPress={() => navigate('DrawerToggle')}
       />
       )

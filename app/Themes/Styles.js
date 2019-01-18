@@ -1,18 +1,19 @@
 import { StyleSheet } from 'react-native'
+import Colors from '../Themes/Colors'
 
 export const globalStyles = StyleSheet.create({
   modalContainer: {
     alignItems: 'stretch',
     padding: 15,
-    borderWidth: 1.5,
+    borderWidth: 1,
     borderRadius: 15,
-    borderColor: '#c77ce8',
+    borderColor: Colors.lightPurple,
     borderTopWidth: 25,
     backgroundColor: 'white',
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 2,
     shadowOpacity: 0.5,
-    shadowColor: '#c77ce8',
+    shadowColor: Colors.lightPurple,
   },
   modalTitle: {
     alignSelf: 'center',
@@ -33,7 +34,7 @@ export const globalStyles = StyleSheet.create({
     lineHeight: 20,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#c77ce8',
+    borderColor: Colors.lightPurple,
     backgroundColor: 'white',
     // flex: 1,
     // width: "100%",
@@ -49,7 +50,7 @@ export const globalStyles = StyleSheet.create({
     marginBottom: 15,
     padding: 10,
     borderRadius: 10,
-    backgroundColor: '#c77ce8',
+    backgroundColor: Colors.lightPurple,
   },
   btnText: {
     color: 'white',

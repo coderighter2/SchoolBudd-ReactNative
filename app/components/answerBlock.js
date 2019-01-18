@@ -9,12 +9,7 @@ import firebase from 'firebase';
 import Modal from 'react-native-modal';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 
-/*
-  Displays a Jedi ID Card 
 
-  start at
-  load more
-*/
 export default class AnswerBlock extends React.Component {
 
   constructor(props){
@@ -188,13 +183,13 @@ export default class AnswerBlock extends React.Component {
               <FontAwesome style={this.state.upVoted ? styles.buttonPressed : styles.buttonNotPressed} 
                 name="thumbs-o-up"
                 size={20}
-                color={'#c77ce8'}
+                color={Colors.lightPurple}
                 onPress={() => this.onPressUpvote()}
                 />&nbsp;&nbsp; {this.state.upVotes} &nbsp;&nbsp;
               <FontAwesome style={this.state.downVoted ? styles.buttonPressed : styles.buttonNotPressed}
                 name="thumbs-o-down"
                 size={20}
-                color={'#c77ce8'}
+                color={Colors.lightPurple}
                 onPress={() => this.onPressDownvote()}
               />&nbsp;&nbsp; {this.state.downVotes}
               </Text>          

@@ -1,11 +1,3 @@
-// apikey = AIzaSyAqVJm-bHrvstuAs5IIXjxMSiNSJ4p7Jco
-
-/*SectionList with card component; on click card, the availability is set
-*/
-
-//maybe i can store this array on the device, and when i get the key, get tge start time and
-//end times too.
-//json.stringify -> json.parse.startTime
 
 import React from 'react';
 import {
@@ -20,27 +12,29 @@ import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons
 import Modal from "react-native-modal";
 import Metrics from '../Themes/Metrics';
 import { globalStyles } from '../Themes/Styles';
+import Colors from '../Themes/Colors'
+import AskQuestionModal from '../components/askQuestionModal'
 
 
 export default class TimelineSheet extends React.Component {
 
   static navigationOptions = ({ navigation }) => {
-  const params = navigation.state.params || {};
-  const { navigate, state } = navigation;
-  return {
-    headerTitle: params.year + " Year",
-    title: 'Timeline',
-    headerRight: (
-      <Feather
-        style={{ marginRight: 15}}
-        onPress={state.params.handleAdd}
-        name="plus-circle"
-        size={Metrics.icons.medium}
-        color={'#c77ce8'}
-      />
-    ),
-    }
-};
+    const params = navigation.state.params || {};
+    const { navigate, state } = navigation;
+    return {
+      headerTitle: params.year + " Year",
+      title: 'Timeline',
+      headerRight: (
+        <Feather
+          style={{ marginRight: 15}}
+          onPress={state.params.handleAdd}
+          name="plus-circle"
+          size={Metrics.icons.medium}
+          color={Colors.lightPurple}
+        />
+      ),
+      }
+  };
 
   constructor(props) {
      super(props);
@@ -70,10 +64,6 @@ export default class TimelineSheet extends React.Component {
    }
    await console.log("goals array state post " + this.state.goalsArray);
  }
-
- // componentWillUnmount =async() => {
- //   await AsyncStorage.removeItem(JSON.stringify(this.state.year));
- // }
 
    toggleModal = async() => {
      this.setState({isModalVisible: !this.state.isModalVisible});
@@ -105,84 +95,30 @@ export default class TimelineSheet extends React.Component {
   //   const {goBack} = this.props.navigation
   //   goBack()
   // }
-  //
-  // _bookSlot(status,key,value) {
-  //   const month = this.state.bookingDate.month
-  //   const date = this.state.bookingDate.day
-  //   const user = firebase.auth().currentUser
-  //   const uid = user.uid
-  //   let userDataJson = {}
-  //   if(status)
-  //   userDataJson[key] = uid
-  //   else
-  //   userDataJson[key] = null
-  //
-  //   firebase.database().ref('users').child(uid).child("availabilities").child(month).child(date).update(userDataJson)
-  // }
 
   render() {
-
     return (
       <View style={styles.container}>
-      <StatusBar barStyle="light-content"/>
-      {/* <View>  */}
+        <StatusBar barStyle="light-content"/>
         <FlatList
           data={this.state.goalsArray}
           extraData={this.state}
           keyExtractor={this._keyExtractor}
           renderItem={this.listItemRenderer}
         />
-       
-        <Button
-          buttonStyle={{backgroundColor : '#c77ce8', borderColor : 'transparent', borderWidth : 0, borderRadius : 20, margin : 30}}
-          title='Save'
-          onPress={() => this.onPressSaveGoals()}/>
+        <TouchableOpacity style = {styles.saveBtn} onPress={() => this.onPressSaveGoals()}>
+          <Text style = {styles.saveTxt}>SAVE</Text>
+        </TouchableOpacity>
 
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-            <Modal
-              isVisible={this.state.isModalVisible}
-              onBackdropPress={() => this.setState({ isModalVisible: false })}
-              backdropColor={'black'}>
-              <View style={styles.modalView}>
-              <Text style={styles.modalText}>
-
-              </Text>
-                <Text style={styles.modalText}>
-                Ask a Question!
-                </Text>
-                <Text style={styles.modalText}>
-
-
-                </Text>
-                <Input style={{
-                    width: '100%',
-                    alignContent: "flex-start",
-                    justifyContent: "flex-start",
-                    minHeight: 40,
-                    textAlignVertical: "top",
-                    padding: 10,
-                    fontSize: 14,
-                    textDecorationLine: 'none',
-                    lineHeight: 20,
-                    borderRadius: 10,
-                    borderWidth: 1,
-                    borderColor: '#c77ce8',
-                    backgroundColor: 'white',
-                }}
-                   placeholder="Ex: When are the common app essays released?"
-                   underlineColorAndroid="transparent"
-                   multiline={true}
-                   onChangeText={(text) => this.setState({goalText: text})}
-                   onSubmitEditing={(text) => this.setState({goalText: text})}
-                   />
-               <Button
-                 buttonStyle={{backgroundColor : '#c77ce8', width : 300, borderColor : 'transparent', borderWidth : 0, borderRadius : 20, margin : 10}}
-                 title='Add'
-                 onPress={() => this.onPressPushGoal()}/>
-              </View>
-          </Modal>
+          <AskQuestionModal
+            isVisible={this.state.isModalVisible}
+            onBackdropPress={() => this.setState({ isModalVisible: false })}
+            onChangeText={(text) => this.setState({goalText: text})}
+            onSubmitEditing={(text) => this.setState({goalText: text})}
+            onPress={() => this.onPressPushGoal()}
+          />
         </View>
-
       </View>
     );
   }
@@ -193,7 +129,6 @@ const styles = StyleSheet.create({
     flex: 1
   },
   modalView: {
-    // width: Metrics.screenWidth,
     height: Metrics.screenHeight*.3,
     padding: 15,
     borderStyle: 'solid',
@@ -201,9 +136,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     backgroundColor: 'white',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
+  },
+  saveBtn: {
+    width: Metrics.screenWidth,
+    height: 70,
+    backgroundColor: Colors.lightPurple,
+    alignItems:'center',
+    justifyContent: 'center'
+  },
+  saveTxt: {
+    color: 'white',
+    fontSize: 20,
   },
 });

@@ -110,7 +110,6 @@ export default class CollegePrep extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingTop: 40,
     backgroundColor: Colors.snow,
     alignItems: 'center',
     justifyContent: 'center',
@@ -143,41 +142,33 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   itemList: {
-  height: Metrics.screenHeight*.6,
-  width: Metrics.screenWidth,
-  paddingTop: 10,
-},
-modalViewTopic: {
-  // width: Metrics.screenWidth,
-  height: Metrics.screenHeight*.6,
-  borderStyle: 'solid',
-  borderWidth: .5,
-  alignItems: 'center',
-  justifyContent: 'center',
-  backgroundColor: 'white',
-  borderBottomLeftRadius: 15,
-  borderBottomRightRadius: 15,
-  borderTopLeftRadius: 15,
-  borderTopRightRadius: 15,
-},
-modalViewQuestion: {
-  // width: Metrics.screenWidth,
-  height: Metrics.screenHeight*.6,
-  borderStyle: 'solid',
-  borderWidth: .5,
-  alignItems: 'center',
-  justifyContent: 'flex-start',
-  backgroundColor: 'white',
-  borderBottomLeftRadius: 15,
-  borderBottomRightRadius: 15,
-  borderTopLeftRadius: 15,
-  borderTopRightRadius: 15,
-},
-modalText: {
-  fontSize: 24,
-  fontWeight: 'bold',
-},
-icon: {
-  marginLeft: 15,
-}
+    height: Metrics.screenHeight*.6,
+    width: Metrics.screenWidth,
+    paddingTop: 10,
+  },
+  modalViewTopic: {
+    height: Metrics.screenHeight*.6,
+    borderStyle: 'solid',
+    borderWidth: .5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderRadius: 15,
+  },
+  modalViewQuestion: {
+    height: Metrics.screenHeight*.6,
+    borderStyle: 'solid',
+    borderWidth: .5,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: 'white',
+    borderRadius: 15,
+  },
+  modalText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  icon: {
+    marginLeft: 15,
+  }
 });

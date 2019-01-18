@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import { StyleSheet, Text, View, Platform, TouchableHighlight} from 'react-native';
 import { StackNavigator } from 'react-navigation';
-
+import Colors from '../Themes/Colors'
 
 export default class Home extends React.Component {
 
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   movingView: {
     flex: 1,
-    backgroundColor: '#c77ce8',
+    backgroundColor: Colors.lightPurple,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -75,14 +75,13 @@ const styles = StyleSheet.create({
   },
   buyingView: {
     flex: 1,
-    backgroundColor: '#c77ce8',
+    backgroundColor: Colors.lightPurple,
     justifyContent: 'center',
     alignItems: 'center',
   },
   buyingText: {
     color: 'white',
     fontSize: 40,
-    //fontFamily: 'lucida grande',
     padding: 26,
   },
   sellingView: {
