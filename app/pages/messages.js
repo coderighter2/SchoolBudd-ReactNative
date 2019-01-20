@@ -124,7 +124,9 @@ _keyboardDidHide () {
                 style={styles.newRoom}
                 value={this.state.text}
                 onChangeText={(text) => this.setState({text})}
-                placeholder="Type Message Here..."/>
+                placeholder="Type Message Here..."
+                underlineColorAndroid = "transparent"
+              />
               <Button
                 title="Send"
                 onPress={this.send}/>

@@ -14,6 +14,7 @@ const images = {
   storageUnitImage: require('../Images/storageUnitScreenshot.png'),
   vehicleImage: require('../Images/vehicleScreenshot.png'),
   login: require('../Images/loginScreenshot.png'),
+  selectPortal_background: require('../Images/selectportal_backgrond.jpg'),
 }
 
 export default images

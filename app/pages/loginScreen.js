@@ -313,13 +313,14 @@ export default class Login extends React.Component {
             />
           </View>
 
-          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ alignItems: 'center', justifyContent: 'center', }}>
             {
               this.state.isSignUpModalVisible === true ? (
                 <Modal
                   isVisible={this.state.isSignUpModalVisible}
                   onBackdropPress={() => this.setState({ isSignUpModalVisible: false })}
-                  backdropColor={'grey'}>
+                  backdropColor={'grey'}
+                  style = {styles.signupModalView}>
                   <View style={styles.modalView}>
                     <Text style={styles.modalText}>
                       Please Sign Up!
@@ -344,7 +345,8 @@ export default class Login extends React.Component {
                 <Modal
                   isVisible={this.state.isLoginModalVisible}
                   onBackdropPress={() => this.setState({ isLoginModalVisible: false })}
-                  backdropColor={'grey'}>
+                  backdropColor={'grey'}
+                  style = {styles.loginModalView}>
                   <View style={globalStyles.modalContainer}>
                     <Text style={globalStyles.modalTitle}>
                       Please Login!
@@ -353,13 +355,17 @@ export default class Login extends React.Component {
                       style={globalStyles.defaultTextInput}
                       value={this.state.loginEmail}
                       onChangeText={(loginEmail) => this.setState({ loginEmail })}
-                      placeholder="Email" />
+                      placeholder="Email" 
+                      underlineColorAndroid = "transparent"
+                      />
                     <TextInput
                       style={globalStyles.defaultTextInput}
                       value={this.state.loginPassword}
                       secureTextEntry={true}
                       onChangeText={(loginPassword) => this.setState({ loginPassword })}
-                      placeholder="Password" />
+                      placeholder="Password" 
+                      underlineColorAndroid = "transparent"
+                      />
                     <TouchableOpacity
                       style={globalStyles.btn}
                       onPress={() => this.onPressSaveLogin()}
@@ -424,7 +430,7 @@ const styles = StyleSheet.create({
     width: Metrics.screenWidth * .5,
   },
   modalView: {
-    height: Metrics.screenHeight * .6,
+    height: Metrics.screenHeight*2/3,
     borderStyle: 'solid',
     borderWidth: 1.5,
     borderColor: Colors.lightPurple,
@@ -436,7 +442,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     shadowOpacity: 0.5,
     shadowColor: Colors.lightPurple,
-    marginBottom: 80,
+    // marginBottom: 80,
     overflow: 'hidden',
   },
   modalText: {
@@ -484,4 +490,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: Colors.lightPurple,
   },
+  loginModalView: {
+    position: 'absolute', 
+    width: Metrics.screenWidth*.9,
+    top: Metrics.screenHeight/5
+  },
+  signupModalView: {
+    position: 'absolute', 
+    width: Metrics.screenWidth*.9,
+    top: Metrics.screenHeight/20
+  }
 })
