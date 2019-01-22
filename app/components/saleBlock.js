@@ -54,7 +54,7 @@ export default class SaleBlock extends React.Component {
       that.setState({ name: childData.name, cityState: childData.cityState, profilePicture: childData.profilePicture,
         schoolName: childData.schoolName, skypeUsername: childData.skypeUsername});
       if(childData.profilePicture) {
-        Image.getSize(childData.profilePicture, (width, height) => {this.setState({getWidth: width, getHeight:height, ration: width/Metrics.screenWidth*.9})});
+        Image.getSize(childData.profilePicture, (width, height) => {this.setState({getWidth: width, getHeight:height, ration: width/Metrics.screenWidth})});
       }
     });
   }
@@ -116,7 +116,7 @@ export default class SaleBlock extends React.Component {
         <View style={styles.cardView}>
           <Card style={styles.card}
               image={{uri: this.state.profilePicture}}
-              imageStyle={{flex: 1, width: this.state.getWidth/this.state.ration, height: this.state.getHeight/this.state.ration}}
+              imageStyle={{flex: 1, width: this.state.getWidth/this.state.ration*.92, height: this.state.getHeight/this.state.ration*.92}}
               imageProps={{ resizeMode: 'contain'}}
               >
               <View style={{flexDirection :'row'}}>

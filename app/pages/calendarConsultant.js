@@ -42,11 +42,17 @@ export default class CalendarScreen extends React.Component {
   }
 
   onDayPress(day) {
-    this.setState({
-      selected: day.dateString
-    });
-    console.log("pressed " + JSON.stringify(this.state));
-    this.props.navigation.navigate('SetAvailabilityScreen', { bookingDate : day })
+    var date1 = new Date(day.dateString);
+    var date2 = new Date(new Date());
+    if(date1>date2) {
+      this.setState({
+        selected: day.dateString
+      });
+      console.log("pressed " + JSON.stringify(this.state));
+      this.props.navigation.navigate('SetAvailabilityScreen', { bookingDate : day })
+    } else {
+      alert('You have to choose other day afer today!')
+    }
   }
   _onPressBack(){
     const {goBack} = this.props.navigation

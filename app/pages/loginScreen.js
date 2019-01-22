@@ -244,8 +244,6 @@ export default class Login extends React.Component {
       console.log(error);
     });
 
-    console.log('-->', result)
-    console.log(result.user.uid)
     if (result) {
       console.log("email " + this.state.loginEmail);
       console.log("password " + this.state.loginPassword);

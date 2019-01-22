@@ -225,19 +225,6 @@ const SchoolNav = DrawerNavigator({
     drawerWidth: 250,
 });
 
-
-
-const LogoutNav1 = StackNavigator({
-  Logout: { screen: pages.Logout },
-  SelectPortalScreen: { screen: pages.SelectPortal },
-  LoginScreen: {screen: pages.Login},
-  Student: {screen: StudentNav},
-  Consult: { screen: ConsultantNav},
-}, {
-    initialRouteName: 'Logout',
-    title: 'Logout'
-});
-
 export default class App extends React.Component {
 
   state = {

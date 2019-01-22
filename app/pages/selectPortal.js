@@ -26,7 +26,6 @@ export default class SelectPortalScreen extends React.Component {
     } else {
       await AsyncStorage.setItem('portal', 'student');
       this.props.navigation.navigate('LoginScreen');
-      // this.props.navigation.navigate('Home');
     }
   }
 
