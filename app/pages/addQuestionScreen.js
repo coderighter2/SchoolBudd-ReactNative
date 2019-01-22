@@ -26,8 +26,8 @@ export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isQuestionModalVisible: true,
-      isTopicModalVisible: false,
+      isQuestionModalVisible: false,
+      isTopicModalVisible: true,
       postQuestionTopic : 'Select a Question Topic',
       question: '',
       userName: '',
