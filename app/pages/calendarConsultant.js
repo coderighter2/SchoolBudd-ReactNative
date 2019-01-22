@@ -12,6 +12,7 @@ import Metrics from '../Themes/Metrics';
 import LoggedOut from '../components/loggedOutScreen';
 import firebase from 'firebase';
 import Colors from '../Themes/Colors'
+import { Feather } from '@expo/vector-icons';
 
 export default class CalendarScreen extends React.Component {
   constructor(props) {

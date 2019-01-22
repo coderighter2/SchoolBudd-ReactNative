@@ -6,9 +6,9 @@ import Colors from '../Themes/Colors'
 export default class Home extends React.Component {
 
 
-static navigationOptions = {
-  title: 'MoveItMoveIt',
-};
+  static navigationOptions = {
+    title: 'MoveItMoveIt',
+  };
 
   onPressMoving() {
     console.log("Moving");
@@ -30,7 +30,7 @@ static navigationOptions = {
               <View>
               <Text style = {styles.movingText}>Moving</Text>
               </View>
-            </TouchableHighlight>
+          </TouchableHighlight>
 
           <TouchableHighlight
             style={styles.buyingView}
@@ -48,8 +48,7 @@ static navigationOptions = {
               </View>
           </TouchableHighlight>
 
-
-          </View>
+        </View>
      </View>
     );
   }

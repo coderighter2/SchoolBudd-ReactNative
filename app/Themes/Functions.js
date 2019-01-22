@@ -3,10 +3,11 @@ import { StyleSheet, Text, View, Platform, AsyncStorage, SafeAreaView } from 're
 import firebase from 'firebase';
 const PUSH_ENDPOINT = 'https://your-server.com/users/push-token/';
 const EXPO_PUSHNOTI_SERVER = 'https://exp.host/--/api/v2/push/'
+
 const Functions = {
 
   registerForPushNotificationsAsync: async (uid) => {
-    alert(uid);
+    // alert(uid);
     const { status: existingStatus } = await Permissions.getAsync(
       Permissions.NOTIFICATIONS
     );
@@ -28,7 +29,7 @@ const Functions = {
 
     // Get the token that uniquely identifies this device
     let token = await Notifications.getExpoPushTokenAsync();
-    alert(token);
+    // alert(token);
     // POST the token to your backend server from where you can retrieve it to send push notifications.
     await firebase.database().ref('users').child(uid).set({ pushNotificationToken: token });
 

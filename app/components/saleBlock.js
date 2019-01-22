@@ -31,6 +31,9 @@ export default class SaleBlock extends React.Component {
       cityState: '',
       schoolName: '',
       skypeUsername: '',
+      getHeight: '',
+      getWidth: '',
+      ration: null,
     }
 
     console.log(JSON.stringify("saleblock props " + JSON.stringify(props)));
@@ -50,6 +53,9 @@ export default class SaleBlock extends React.Component {
       childData.key = childKey;
       that.setState({ name: childData.name, cityState: childData.cityState, profilePicture: childData.profilePicture,
         schoolName: childData.schoolName, skypeUsername: childData.skypeUsername});
+      if(childData.profilePicture) {
+        Image.getSize(childData.profilePicture, (width, height) => {this.setState({getWidth: width, getHeight:height, ration: width/Metrics.screenWidth*.9})});
+      }
     });
   }
 
@@ -91,7 +97,7 @@ export default class SaleBlock extends React.Component {
           rounded
         />
       );
-    } else 
+    } else {
       return(
         <Avatar
           size="xlarge"
@@ -99,6 +105,7 @@ export default class SaleBlock extends React.Component {
           activeOpacity={0.7}
           rounded
         />);
+    }
   }
 
   render() {
@@ -108,26 +115,23 @@ export default class SaleBlock extends React.Component {
       >
         <View style={styles.cardView}>
           <Card style={styles.card}
-              // title={this.state.name}
               image={{uri: this.state.profilePicture}}
-              imageStyle={{ flex: 1,  marginLeft: 'auto', marginRight : 'auto', width : 300, height: 200}}
-              imageProps={{ resizeMode: 'cover'}}
+              imageStyle={{flex: 1, width: this.state.getWidth/this.state.ration, height: this.state.getHeight/this.state.ration}}
+              imageProps={{ resizeMode: 'contain'}}
               >
               <View style={{flexDirection :'row'}}>
-
-                {/* {this.imageButton()} */}
                 <View style={{flexDirection :'column'}}>
                   <Text style={styles.textStyles}>
-                  Name: {this.state.name}
+                    Name: {this.state.name}
                   </Text>
                   <Text style={styles.textStyles}>
-                  Hometown: {this.state.cityState}
+                    Hometown: {this.state.cityState}
                   </Text>
                   <Text style={styles.textStyles}>
-                  Affiliation: {this.state.schoolName}
+                    Affiliation: {this.state.schoolName}
                   </Text>
                   <Text style={styles.textStyles}>
-                  Price: ${this.props.jedi.price}/hr
+                    Price: ${this.props.jedi.price}/hr
                   </Text>
                 </View>
               </View>
@@ -160,28 +164,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  pictureView: {
-    marginLeft: Metrics.marginHorizontal,
-    marginRight: Metrics.marginHorizontal,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center'
-  },
   picture: {
-    height: Metrics.images.large,
-    width: Metrics.images.large,
-    borderRadius: Metrics.images.large * 0.5
-  },
-  pictureDetails: {
-    flexDirection: 'column',
-    marginLeft: Metrics.marginHorizontal,
-    marginRight: Metrics.marginHorizontal,
-  },
-  jediRowItem: {
-    marginTop: Metrics.marginVertical,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center'
+    flex: 1, 
   },
   textStyles: {
     justifyContent: 'center',
@@ -189,6 +173,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: 13,
   },
 });

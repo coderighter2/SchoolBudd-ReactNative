@@ -22,21 +22,21 @@ const dataTimes =
 export default class Resources extends React.Component {
 
   static navigationOptions = ({ navigation }) => {
-  const params = navigation.state.params || {};
-  const { navigate } = navigation;
-  return {
-    headerTitle: 'Resources',
-    title: 'Resources',
-    headerLeft: (
-      <Feather style={{marginLeft: 15}}
-        name="menu"
-        size={Metrics.icons.medium}
-        color={Colors.lightPurple}
-        onPress={() => navigate('DrawerToggle')}
-      />
-      )
-    }
-};
+    const params = navigation.state.params || {};
+    const { navigate } = navigation;
+    return {
+      headerTitle: 'Resources',
+      title: 'Resources',
+      headerLeft: (
+        <Feather style={{marginLeft: 15}}
+          name="menu"
+          size={Metrics.icons.medium}
+          color={Colors.lightPurple}
+          onPress={() => navigate('DrawerToggle')}
+        />
+        )
+      }
+  };
 
   constructor(props) {
      super(props);

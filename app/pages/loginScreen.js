@@ -59,7 +59,7 @@ const fieldsSignUp = [
 export default class Login extends React.Component {
 
   static navigationOptions = {
-    title: 'Login',
+    header: null,
   };
 
   constructor(props) {
@@ -84,8 +84,16 @@ export default class Login extends React.Component {
     this.checkIfUserLoggedIn();
   }
 
-  toggleLoginModal = () => {
-    this.setState({ isLoginModalVisible: !this.state.isLoginModalVisible });
+  toggleLoginModal = async() => {
+    const loginCheck = await AsyncStorage.getItem("hasLoggedIn");
+    if (loginCheck === "true") {
+      await this.setState({hasLoggedIn: true});
+      this.setState({ isLoginModalVisible: false });
+      alert('You are already logged user.')
+    }
+    else {
+      this.setState({ isLoginModalVisible: true });
+    }
   }
 
   toggleSignUpModal = () => {
@@ -153,6 +161,7 @@ export default class Login extends React.Component {
     await AsyncStorage.setItem("hasLoggedIn", "true");
     this.toggleSignUpModal();
 
+    this.props.navigation.navigate('Home');
 
     //create stripe account if he is a consultant
     const selectedPortal = await AsyncStorage.getItem('portal');
@@ -224,21 +233,30 @@ export default class Login extends React.Component {
 
   onPressSaveLogin = async () => {
     var result = await firebase.auth().signInWithEmailAndPassword(this.state.loginEmail, this.state.loginPassword)
-      .catch(error => this.setState({ errorMessageLogin: error.message }));
+    .catch(error => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      if (errorCode === 'auth/wrong-password') {
+        alert('Wrong password.');
+      } else {
+        alert(errorMessage);
+      }
+      console.log(error);
+    });
 
-    if (this.state.errorMessageLogin == "") {
-      // var user = await firebase.auth().currentUser;
+    console.log('-->', result)
+    console.log(result.user.uid)
+    if (result) {
       console.log("email " + this.state.loginEmail);
       console.log("password " + this.state.loginPassword);
       // firebase.database().ref('users').child(user.uid).child('name');
       await AsyncStorage.setItem("hasLoggedIn", "true");
 
       /// pushnotification token save
-      await Functions.registerForPushNotificationsAsync(result.uid);
+      await Functions.registerForPushNotificationsAsync(result.user.uid);
 
       await this.setState({isLoginModalVisible: false});
-    } else {
-      alert(this.state.errorMessageLogin);
+      this.props.navigation.navigate('Home');
     }
   }
 
@@ -276,7 +294,7 @@ export default class Login extends React.Component {
       var result = await firebase.auth().signInWithCredential(credential);
 
       /// pushnotification token save
-      await Functions.registerForPushNotificationsAsync(result.uid);
+      await Functions.registerForPushNotificationsAsync(result.user.uid);
 
       //After signing in/up, we add some additional user info to the database
       //so that we can use it for other things, e.g. users needing to know

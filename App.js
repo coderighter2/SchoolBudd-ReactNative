@@ -26,16 +26,9 @@ const MessagesNav = StackNavigator({
 }, {
     initialRouteName: 'MessageTableViewScreen',
     title: 'Messages',
-  });
+});
 
-const LogoutNav = StackNavigator({
-  Logout: { screen: pages.Logout },
-  SelectPortalScreen: { screen: pages.SelectPortal },
-  LoginScreen: {screen: pages.Login}
-}, {
-    initialRouteName: 'Logout',
-    title: 'Logout',
-  });
+
 
 
 const ProfileNavStudent = TabNavigator({
@@ -69,13 +62,28 @@ const ProfileNavConsultant = TabNavigator({
         fontSize: 17
       },
     }
-  });
+});
 
 const HomeStackNav = StackNavigator({
   Home: { screen: pages.Feedback },
-}, {
+  }, {
     title: 'Home',
-  });
+  }
+);
+
+const LoginStackNav = StackNavigator({
+  Login: { screen: pages.Login },
+  Home: { screen: pages.Feedback },
+})
+
+const LogoutNav = StackNavigator({
+  Logout: { screen: pages.Logout },
+  SelectPortalScreen: { screen: pages.SelectPortal },
+  LoginScreen: {screen: pages.Login},
+}, {
+    initialRouteName: 'Logout',
+    title: 'Logout'
+});
 
 const UpcomingNav = StackNavigator({
   UpcomingScreen: { screen: pages.UpcomingScreen },
@@ -109,14 +117,14 @@ const InternshipsNav = StackNavigator({
   ResourcesScreen: { screen: pages.Resources },
 }, {
     headerMode: 'none',
-  });
+});
 
 const StudyMaterialsNav = StackNavigator({
   StudyMaterials: { screen: pages.StudyMaterial },
   ResourcesScreen: { screen: pages.Resources },
 }, {
     headerMode: 'none',
-  });
+});
 
 const GoalsTimelineNav = StackNavigator({
   GoalsTimeline: { screen: pages.GoalsTimeline },
@@ -124,14 +132,14 @@ const GoalsTimelineNav = StackNavigator({
   TimelineSheet: { screen: pages.TimelineSheet },
 }, {
     headerMode: 'none',
-  });
+});
 
 const SATACTNav = StackNavigator({
   SATACT: { screen: pages.SATACTPrep },
   ResourcesScreen: { screen: pages.Resources },
 }, {
     headerMode: 'none',
-  });
+});
 
 const CollegPrepNav = StackNavigator({
   CollegePrep: { screen: pages.CollegePrep },
@@ -155,7 +163,7 @@ const AccountInfoNav = StackNavigator({
 
 const ConsultantNav = DrawerNavigator({
   Home: { screen: HomeStackNav },
-  Login: { screen: pages.Login },
+  Login: { screen: LoginStackNav },
   Profile: { screen: ProfileNavConsultant },
   Messages: { screen: MessagesNav },
   Forum: { screen: ForumNav },
@@ -169,10 +177,11 @@ const ConsultantNav = DrawerNavigator({
     drawerCloseRoute: 'DrawerClose',
     drawerToggleRoute: 'DrawerToggle',
     drawerWidth: 250,
-  });
+});
+
 const StudentNav = DrawerNavigator({
   Home: { screen: HomeStackNav },
-  Login: { screen: pages.Login },
+  Login: { screen: LoginStackNav },
   Profile: { screen: ProfileNavStudent },
   FindConsultant: { screen: FindConsultantNav },
   Forum: { screen: ForumNav },
@@ -187,7 +196,7 @@ const StudentNav = DrawerNavigator({
     drawerCloseRoute: 'DrawerClose',
     drawerToggleRoute: 'DrawerToggle',
     drawerWidth: 250,
-  });
+});
 
 const ParentNav = DrawerNavigator({
   Home: { screen: HomeStackNav },
@@ -201,7 +210,7 @@ const ParentNav = DrawerNavigator({
     drawerCloseRoute: 'DrawerClose',
     drawerToggleRoute: 'DrawerToggle',
     drawerWidth: 250,
-  });
+});
 
 const SchoolNav = DrawerNavigator({
   Home: { screen: HomeStackNav },
@@ -214,8 +223,20 @@ const SchoolNav = DrawerNavigator({
     drawerCloseRoute: 'DrawerClose',
     drawerToggleRoute: 'DrawerToggle',
     drawerWidth: 250,
-  });
+});
 
+
+
+const LogoutNav1 = StackNavigator({
+  Logout: { screen: pages.Logout },
+  SelectPortalScreen: { screen: pages.SelectPortal },
+  LoginScreen: {screen: pages.Login},
+  Student: {screen: StudentNav},
+  Consult: { screen: ConsultantNav},
+}, {
+    initialRouteName: 'Logout',
+    title: 'Logout'
+});
 
 export default class App extends React.Component {
 
@@ -233,7 +254,6 @@ export default class App extends React.Component {
     this.rememberPortal();
     console.disableYellowBox = true;
   }
-
 
   rememberOnboarding = async () => {
     try {
@@ -255,7 +275,7 @@ export default class App extends React.Component {
           selectedPortalSchool: false, 
           selectedPortalParent: false
         })
-    } else if (selectedPortal === 'consultant') {
+      } else if (selectedPortal === 'consultant') {
         await this.setState({
           selectedPortalStudent: false,
           selectedPortalConsultant: true,
@@ -276,8 +296,8 @@ export default class App extends React.Component {
           selectedPortalSchool: false, 
           selectedPortalParent: true
         })
-    }
-  }catch (error) {
+     }
+    }catch (error) {
       console.log(error);
     }
   }
@@ -285,7 +305,6 @@ export default class App extends React.Component {
   _onDone = async () => {
     await this.setState({ hasDoneOnboarding: true });
     await AsyncStorage.setItem('onboarding', JSON.stringify(true));
-    console.log(this.state.hasDoneOnboarding);
   }
 
   _selectPortalStudent = async () => {
@@ -296,7 +315,6 @@ export default class App extends React.Component {
       selectedPortalParent: false
     })
     await AsyncStorage.setItem('portal', 'student');
-    console.log(this.state.selectedPortalStudent);
   }
 
   _selectPortalConsultant = async () => {
@@ -307,7 +325,6 @@ export default class App extends React.Component {
       selectedPortalParent: false
     })
     await AsyncStorage.setItem('portal', 'consultant');
-    console.log(this.state.selectedPortalConsultant);
   }
 
   _selectPortalParent = async () => {
@@ -318,7 +335,6 @@ export default class App extends React.Component {
       selectedPortalParent: true
     })
     await AsyncStorage.setItem('portal', 'parent');
-    console.log(this.state.selectedPortalParent);
   }
 
   _selectPortalSchool = async () => {
@@ -369,7 +385,6 @@ export default class App extends React.Component {
       );
     }
   }
-
 }
 
 const styles = StyleSheet.create({

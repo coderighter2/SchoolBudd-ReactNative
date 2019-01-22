@@ -51,10 +51,10 @@ export default class Home extends React.Component {
         <TouchableOpacity onPress={() => this.navigateFreshmanYear()}>
             <LinearGradient
               start={{x: 0, y: 0}} end={{x: 1, y: 0}}
-              colors={['#CE9FFC', '#7367F0']}
+              colors={['#8338af', '#4d2c7d']}
               style={styles.yearItem}>
-              <View style = {[styles.circleView, {borderColor: '#CE9FFC'}]}>
-                <Text style = {[styles.numberTxt, {color: '#CE9FFC'} ]}>1</Text>
+              <View style = {styles.circleView}>
+                <Text style = {[styles.numberTxt, {color: '#8338af'} ]}>1</Text>
               </View>
               <Text style={styles.btnTxt}>
                 Freshman Year
@@ -65,10 +65,10 @@ export default class Home extends React.Component {
         <TouchableOpacity onPress={() => this.navigateSophomoreYear()}>
             <LinearGradient
               start={{x: 0, y: 0}} end={{x: 1, y: 0}}
-              colors={['#FEB692', '#EA5455']}
+              colors={['#c83dd0', '#8227aa']}
               style={styles.yearItem}>
-              <View style = {[styles.circleView, {borderColor: '#FEB692'}]}>
-                <Text style = {[styles.numberTxt, {color: '#FEB692'} ]}>2</Text>
+              <View style = {styles.circleView}>
+                <Text style = {[styles.numberTxt, {color: '#c83dd0'} ]}>2</Text>
               </View>
               <Text style={styles.btnTxt}>
                 Sophomore Year
@@ -79,10 +79,10 @@ export default class Home extends React.Component {
         <TouchableOpacity onPress={() => this.navigateJuniorYear()}>
             <LinearGradient
               start={{x: 0, y: 0}} end={{x: 1, y: 0}}
-              colors={['#90F7EC', '#32CCBC']}
+              colors={['#cd37bb', '#c03dc5']}
               style={styles.yearItem}>
-              <View style = {[styles.circleView, {borderColor: '#90F7EC'}]}>
-                <Text style = {[styles.numberTxt, {color: '#90F7EC'} ]}>3</Text>
+              <View style = {styles.circleView}>
+                <Text style = {[styles.numberTxt, {color: '#cd37bb'} ]}>3</Text>
               </View>
               <Text style={styles.btnTxt}>
                 Junior Year
@@ -93,10 +93,10 @@ export default class Home extends React.Component {
         <TouchableOpacity onPress={() => this.navigateSeniorYear()}>
             <LinearGradient
               start={{x: 0, y: 0}} end={{x: 1, y: 0}}
-              colors={['#FCCF31', '#F55555']}
+              colors={['#e2b0ff', '#9f44d3']}
               style={styles.yearItem}>
-              <View style = {[styles.circleView, {borderColor: '#FCCF31'}]}>
-                <Text style = {[styles.numberTxt, {color: '#FCCF31'} ]}>4</Text>
+              <View style = {styles.circleView}>
+                <Text style = {[styles.numberTxt, {color: '#e2b0ff'} ]}>4</Text>
               </View>
               <Text style={styles.btnTxt}>
                 Senior Year
@@ -136,14 +136,14 @@ const styles = StyleSheet.create({
   },
   circleView: {
     backgroundColor: 'white',
-    borderWidth: 4,
+    // borderWidth: 4,
     alignItems: 'center',
     justifyContent: 'center',
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     borderRadius: 25,
     position:  'absolute',
-    left: 0
+    left: 5
   },
   numberTxt: {
     fontSize: 20,

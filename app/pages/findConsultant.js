@@ -87,7 +87,6 @@ export default class FindConsultant extends React.Component {
     }
   };
 
-
   constructor(props) {
     super(props);
     this.state = {
@@ -111,8 +110,6 @@ export default class FindConsultant extends React.Component {
       selectedAvailabilityPreferencesArray: [],
       emailVerified: false,
     }
-    //see what props App.js is constructed with:
-    // console.log(JSON.stringify(props));
   }
 
   async appendJedis(count, start) {
@@ -262,7 +259,7 @@ export default class FindConsultant extends React.Component {
                 placeholder='Search For Consultant...'
               />
 
-              <View style={{ height: 120, width: Metrics.screenWidth * .9, justifyContent: 'center' }}>
+              <View style={{ width: Metrics.screenWidth * .9, justifyContent: 'center' }}>
                 <Slider
                   value={this.state.price}
                   thumbTintColor={Colors.lightPurple}
@@ -281,19 +278,29 @@ export default class FindConsultant extends React.Component {
                   uniqueKey='id'
                   subKey='children'
                   selectText='Choose some things...'
-                  style={{ backgroundColor: 'red' }}
                   styles={{
-                    selectToggle: [{ flex: 1, marginTop: 15, },  {
+                    container: {
+                      height: Metrics.screenHeight*0.5
+                    },
+                    selectToggle: {
+                      marginVertical: 15,
                       alignItems: 'center',
-                      height: 40,
-                      marginBottom: 15,
                       padding: 20,
                       borderRadius: 10,
                       backgroundColor: Colors.lightPurple,
-                    }],
-                    selectToggleText: globalStyles.btnText,
+                    },
+                    selectToggleText: {
+                      fontSize: 15,
+                      height: 20,
+                      color: 'white'
+                    },
+                    selectedSubItemText: {
+                      color: Colors.lightPurple,
+                    },
+                    button: {
+                      backgroundColor: Colors.lightPurple,
+                    }
                   }}
-                  colors={{selectToggleTextColor : '#FFF'}}
                   showDropDowns={true}
                   readOnlyHeadings={true}
                   onSelectedItemsChange={this.onSelectedItemsChange}
@@ -303,11 +310,6 @@ export default class FindConsultant extends React.Component {
                   onConfirm={() => this.resetList()}
                 />
               </View>
-
-              <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-
-              </View>
-
             </View>
 
             <View style={styles.itemList}>
@@ -334,7 +336,7 @@ export default class FindConsultant extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.snow,
+    backgroundColor: Colors.frost,
   },
   header: {
     height: 60,

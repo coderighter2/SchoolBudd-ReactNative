@@ -15,20 +15,23 @@ export default class CalendarScreen extends React.Component {
     super(props);
     this.state = {};
     this.onDayPress = this.onDayPress.bind(this);
-    console.log("calendar screen props " + JSON.stringify(props));
-
   }
 
   onDayPress(day) {
-    this.setState({
-      selected: day.dateString
-    });
-    console.log("pressed " + JSON.stringify(this.state));
-    this.props.navigation.navigate('MakeAppointmentsScreen', { 
-      propsCalendar: this.props.navigation.state.params.item.key, 
-      bookingDate : day 
-    });
-    // this.props.navigation.navigate('MakeAppointmentsScreen', { bookingDate : day })
+    var date1 = new Date(day.dateString);
+    var date2 = new Date(new Date());
+    if(date1>date2) {
+      this.setState({
+        selected: day.dateString
+      });
+      console.log("pressed " + JSON.stringify(this.state));
+      this.props.navigation.navigate('MakeAppointmentsScreen', { 
+        propsCalendar: this.props.navigation.state.params.item.key, 
+        bookingDate : day 
+      });
+    } else {
+      alert('You have to choose other day afer today!')
+    }
   }
 
   _onPressBack(){
@@ -60,7 +63,6 @@ export default class CalendarScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
   },
   calendar: {
     borderWidth: 1,

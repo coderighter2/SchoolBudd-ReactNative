@@ -7,44 +7,50 @@ import Colors from '../Themes/Colors'
 
 export default class Logout extends React.Component {
 
-  static navigationOptions = {
-     title: 'Logout',
-   };
+  static navigationOptions = ({ navigation }) => {
+    const { navigate } = navigation;
+    return {
+        headerTitle: 'Logout',
+        title: 'Logout',
+        headerLeft: (
+            <Feather style={{marginLeft: 15}}
+                name="menu"
+                size={Metrics.icons.medium}
+                color={Colors.lightPurple}
+                onPress={() => navigate('DrawerToggle')}
+            />
+        )
+    }        
+  };
 
-    onPressLogout = async() => {
-      console.log("props " + JSON.stringify(this.props));
-      await AsyncStorage.setItem("hasLoggedIn", "false");
-      const logoutCheck = await AsyncStorage.getItem("hasLoggedIn");
-      console.log("hasLoggedOut" + logoutCheck);
-      console.log("jimmmmmmmmm");
-      await firebase.auth().signOut();
-      await AsyncStorage.setItem('portal', '');
-      this.props.navigation.navigate("SelectPortalScreen", this.props.screenProps);
-    }
+  onPressLogout = async() => {
+    console.log("props " + JSON.stringify(this.props));
+    await AsyncStorage.setItem("hasLoggedIn", "false");
+    const logoutCheck = await AsyncStorage.getItem("hasLoggedIn");
+    console.log("hasLoggedOut" + logoutCheck);
+    console.log("jimmmmmmmmm");
+    await firebase.auth().signOut();
+    await AsyncStorage.setItem('portal', '');
+    this.props.navigation.navigate("SelectPortalScreen", this.props.screenProps);
+  }
 
-    render() {
-      const { navigate } = this.props.navigation;
-
-        return (
-            <View style={styles.container}>
-              <View style={styles.feedbackBox}>
-              <Text style={styles.textStyles}>Here at MoveItMoveIt, we appreciate your usage of the app. </Text>
-
-              <View style={styles.buttonsRow}>
-
-
-                <View>
-                  <Button
+  render() {
+    const { navigate } = this.props.navigation;
+      return (
+        <View style={styles.container}>
+          <View style={styles.feedbackBox}>
+            <Text style={styles.textStyles}>Here at MoveItMoveIt, we appreciate your usage of the app. </Text>
+            <View style={styles.buttonsRow}>
+              <View>
+                <Button
                   title="Logout"
                   onPress={() => this.onPressLogout()}
                   color={Colors.lightPurple}/>
-                </View>
-
               </View>
-
-                </View>
             </View>
-        );
+          </View>
+        </View>
+      );
     }
   }
 

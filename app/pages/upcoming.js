@@ -14,18 +14,22 @@ import * as Expo from "expo";
 import LoggedOut from '../components/loggedOutScreen';
 export default class UpcomingScreen extends React.Component {
 
-    static navigationOptions = {
-        headerTitle: 'Upcoming Appointments',
-        title: 'Upcoming Appointments',
-        headerLeft: (
-            <Feather style={{marginLeft: 15}}
-              name="menu"
-              size={Metrics.icons.medium}
-              color={Colors.lightPurple}
-              onPress={() => navigate('DrawerToggle')}
-            />
-        )
+    static navigationOptions = ({ navigation }) => {
+        const { navigate } = navigation;
+        return {
+            headerTitle: 'Upcoming Appointments',
+            title: 'Upcoming Appointments',
+            headerLeft: (
+                <Feather style={{marginLeft: 15}}
+                    name="menu"
+                    size={Metrics.icons.medium}
+                    color={Colors.lightPurple}
+                    onPress={() => navigate('DrawerToggle')}
+                />
+            )
+        }        
     };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -130,7 +134,6 @@ export default class UpcomingScreen extends React.Component {
                         />
                     </View>
                 </View>
-
             )
         }
     }

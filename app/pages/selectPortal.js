@@ -11,7 +11,11 @@ import { LinearGradient } from 'expo';
 export default class SelectPortalScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const params = navigation.state.params || {};
+    return {
+      header: null
+    }
   };
+  
 
   _selectPortalStudent = async() => {
     console.log("props " + JSON.stringify(this.props));
@@ -19,9 +23,11 @@ export default class SelectPortalScreen extends React.Component {
       console.log("props " + this.props);
       console.log("select portal working");
       this.props.selectPortalStudent();
-      } else {
-        await AsyncStorage.setItem('portal', 'student');
-      }
+    } else {
+      await AsyncStorage.setItem('portal', 'student');
+      this.props.navigation.navigate('LoginScreen');
+      // this.props.navigation.navigate('Home');
+    }
   }
 
   _selectPortalConsultant = async() => {
@@ -31,6 +37,7 @@ export default class SelectPortalScreen extends React.Component {
       this.props.selectPortalConsultant();
       } else {
         await AsyncStorage.setItem('portal', 'consultant');
+        this.props.navigation.navigate('LoginScreen');
       }
   }
 
@@ -44,10 +51,6 @@ export default class SelectPortalScreen extends React.Component {
           <Text style={styles.textStyles}>
             Are you a student or a consultant?
           </Text>
-          {/* <Button
-            title="Students"
-            buttonStyle={ styles.selectBtn}
-            onPress={this._selectPortalStudent}/> */}
 
           <TouchableOpacity onPress={this._selectPortalStudent}>
             <LinearGradient
@@ -68,11 +71,6 @@ export default class SelectPortalScreen extends React.Component {
                   </Text>
             </LinearGradient>
           </TouchableOpacity>
-
-          {/* <Button
-            title="Consultants"
-            buttonStyle={ styles.selectBtn}
-            onPress={this._selectPortalConsultant}/> */}
       </SafeAreaView>
     );
   }
