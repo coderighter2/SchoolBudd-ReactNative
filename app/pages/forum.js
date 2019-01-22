@@ -94,8 +94,6 @@ async appendJedis(count, start) {
       } else if (childData.topic == this.state.currentTopic && !jedisList.indexOf(childData) > -1) {
         jedisList.push(childData);
       }
-    } else {
-      alert("No Question");
     }
     await this.setState({loading: false, refreshing: false, jedisSectioned: [{title: 'Jedis', data:jedisList}]});
     console.log("loading : " + this.state.loading);
@@ -133,6 +131,8 @@ async appendJedis(count, start) {
           var childData = snapshot.val();
           childData.key = childKey;
           name = childData.name;
+          console.log("childData " + JSON.stringify(childData));
+          console.log("name " + name);
           that.setState({userName: name, userPortal: childData.portal, profileImage : childData.profilePicture},
              () => console.log("user portal in function " + that.state.userPortal));
         });
@@ -141,8 +141,8 @@ async appendJedis(count, start) {
       }
     });
 
-    await console.log("current user " + this.state.userName);
-    await console.log("current user portal " + this.state.userPortal);
+    await console.log("current user " + that.state.userName);
+    await console.log("current user portal " + that.state.userPortal);
     this.appendJedis(3,1);
 
   }
@@ -216,6 +216,7 @@ async appendJedis(count, start) {
 
 
   resetList = async () => {
+    await this.setState({refreshing: true, jedisSectioned: [{title: 'Jedis', data:[]}]});
     this.appendJedis(3,1);
   }
 

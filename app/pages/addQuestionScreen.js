@@ -96,10 +96,11 @@ export default class Login extends React.Component {
     if ((this.state.postQuestionTopic !== 'Select a Question Topic') && (!this.state.question == '')) {
     await this.setState({ isQuestionModalVisible: false});
 
-    console.log("question: ");
+    console.log("question: " + this.state.question);
+    console.log("user portal " + this.state.userPortal);
     await firebase.database().ref('forum').push({
         question: this.state.question,
-        portalQuestion: this.state.userPortal,
+        // portalQuestion: this.state.userPortal,
         author: this.state.userName,
         topic: this.state.postQuestionTopic,
         profileImage : this.state.profileImage
