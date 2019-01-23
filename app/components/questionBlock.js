@@ -50,43 +50,28 @@ export default class QuestionBlock extends React.Component {
     this.props.messageBlock(this.state.convoKey);
   }
 
-  imageButton() {
-    if(this.props.jedi.profileImage){
-      return(
-        <Avatar
-          size="large"
-          source={{uri : this.props.jedi.profileImage}}
-          activeOpacity={0.7}
-          rounded
-        />
-      );
-    } else {
-      return(
-        <Avatar
-          size="large"
-          source={Images.profile}
-          activeOpacity={0.7}
-          rounded
-        />
-      )
-    }
-  }
   render() {
     return (
       <TouchableOpacity onPress={() => this.openConsultantScreen()}>
         <View style={styles.cardView}>
-          <Card style={styles.card}>
-              <View style={{flexDirection : 'row'}}>
-                {this.imageButton()}
-                <Text style={{fontSize : 15, marginLeft :20, fontWeight : '200', lineHeight : 30}}>{this.props.jedi.author}</Text>
-              </View>
-              <Text style={{fontSize: 18, marginLeft : 15, fontWeight: 'bold', marginTop : 10, marginBottom : 10, marginRight : 20}}>
+          {/* <Card style={styles.card}> */}
+              <Text style={styles.questionTxt}>
                 {this.props.jedi.question}
               </Text>
-              <Text style={{fontSize: 13, marginLeft : 15, color : '#888', marginTop : 0, marginBottom : 10, marginRight : 20}}>
+              <View style={{flexDirection : 'row', alignItems: 'center'}}>
+                <Avatar
+                  size="large"
+                  source={this.props.jedi.profileImage?{uri : this.props.jedi.profileImage}:Images.profile}
+                  activeOpacity={0.7}
+                  rounded
+                />
+                <Text style={styles.authorTxt}>{this.props.jedi.author}</Text>
+              </View>
+              
+              <Text style={styles.topicTxt}>
                 Topic : {this.props.jedi.topic}
               </Text>
-          </Card>
+          {/* </Card> */}
 
         </View>
       </TouchableOpacity>
@@ -98,5 +83,22 @@ const styles = StyleSheet.create({
   cardView: {
     width: Metrics.screenWidth,
     borderRadius: Metrics.buttonRadius,
+    backgroundColor: Colors.snow,
+    padding: 15
   },
+  authorTxt: {
+    fontSize : 17, 
+    marginLeft :15, 
+    fontWeight : '200', 
+  },
+  questionTxt: {
+    fontSize: 20, 
+    fontWeight: 'bold', 
+    marginBottom : 10, 
+  },
+  topicTxt: {
+    fontSize: 13,
+    color : '#888', 
+    marginTop : 10, 
+  }
 });

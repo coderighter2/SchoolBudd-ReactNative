@@ -29,8 +29,6 @@ const MessagesNav = StackNavigator({
 });
 
 
-
-
 const ProfileNavStudent = TabNavigator({
   ProfileCard: { screen: pages.StudentProfileCard },
   StudentBasicInfo: { screen: pages.StudentBasicInfo },

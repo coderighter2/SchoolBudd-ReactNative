@@ -6,13 +6,9 @@ import Images from '../Themes/Images';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from 'firebase';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Facebook } from 'expo';
 import Modal from "react-native-modal";
 import { ListItem, Slider, CheckBox, SearchBars } from 'react-native-elements'
-import { WebBrowser } from 'expo';
-import GenerateForm from 'react-native-form-builder';
 import { View, Text } from 'native-base';
-import { globalStyles } from '../Themes/Styles';
 import { Input } from "native-base";
 
 const {width, height} = Dimensions.get('window');
@@ -96,11 +92,10 @@ export default class Login extends React.Component {
     if ((this.state.postQuestionTopic !== 'Select a Question Topic') && (!this.state.question == '')) {
     await this.setState({ isQuestionModalVisible: false});
 
-    console.log("question: " + this.state.question);
-    console.log("user portal " + this.state.userPortal);
+    console.log("question: ");
     await firebase.database().ref('forum').push({
         question: this.state.question,
-        // portalQuestion: this.state.userPortal,
+        portalQuestion: this.state.userPortal,
         author: this.state.userName,
         topic: this.state.postQuestionTopic,
         profileImage : this.state.profileImage
@@ -137,61 +132,61 @@ export default class Login extends React.Component {
     if (this.state.isTopicModalVisible === true) {
       return (
         <View>
-              <CheckBox
-                center
-                title="Ask a Question"
-                iconRight
-                iconType='material'
-                checkedIcon='clear'
-                uncheckedIcon='add'
-                checkedColor='red'
-                containerStyle={{width: Metrics.screenWidth*.95}}
-                checked={this.state.checked}
-                onPress={()=> this.onPressAddQuestion()}
-              />
-              <CheckBox
-                center
-                title={this.state.postQuestionTopic}
-                iconRight
-                iconType='material'
-                checkedIcon='clear'
-                uncheckedIcon='add'
-                checkedColor='red'
-                containerStyle={{width: Metrics.screenWidth*.95}}
-                checked={this.state.checked}
-                onPress={()=> this.onPressTopic()}/>
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <CheckBox
+            center
+            title="Ask a Question"
+            iconRight
+            iconType='material'
+            checkedIcon='clear'
+            uncheckedIcon='add'
+            checkedColor='red'
+            containerStyle={{width: Metrics.screenWidth*.95}}
+            checked={this.state.checked}
+            onPress={()=> this.onPressAddQuestion()}
+          />
+          <CheckBox
+            center
+            title={this.state.postQuestionTopic}
+            iconRight
+            iconType='material'
+            checkedIcon='clear'
+            uncheckedIcon='add'
+            checkedColor='red'
+            containerStyle={{width: Metrics.screenWidth*.95}}
+            checked={this.state.checked}
+            onPress={()=> this.onPressTopic()}/>
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             <Modal
-                isVisible={this.state.isTopicModalVisible}
-                onBackdropPress={() => this.setState({ isTopicModalVisible: false })}
-                backdropColor={'black'}>
-                <View style={styles.modalViewTopic}>
-                    <Text style={styles.modalText}>
-                    Pick a Category!
-                    </Text>
-                    <Button
-                        titleStyle={{color : 'white', fontWeight: '700', fontSize: 20}}
-                        buttonStyle={{width : 200, borderRadius: 5, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :'#03A9F4'}}
-                        title='College Life'
-                        onPress={() => this.onPressCollegeLife()}/>
-                    <Button
-                        titleStyle={{color : 'white', fontWeight: '700', fontSize: 20}}
-                        buttonStyle={{width : 200, borderRadius: 5, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :'#03A9F4'}}
-                        title='College Applications'
-                        onPress={() => this.onPressCollegeApplications()}/>
-                    <Button
-                        titleStyle={{color : 'white', fontWeight: '700', fontSize: 20}}
-                        buttonStyle={{width : 200, borderRadius: 5, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :'#03A9F4'}}
-                        title='Resources'
-                        onPress={() => this.onPressResources()}/>
-                    <Button
-                        titleStyle={{color : 'white', fontWeight: '700', fontSize: 20}}
-                        buttonStyle={{width : 200, borderRadius: 5, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :'#03A9F4'}}
-                        title='All Topics'
-                        onPress={() => this.onPressAllTopics()}/>
-                </View>
+              isVisible={this.state.isTopicModalVisible}
+              onBackdropPress={() => this.setState({ isTopicModalVisible: false })}
+              backdropColor={'black'}>
+              <View style={styles.modalViewTopic}>
+                  <Text style={styles.modalText}>
+                  Pick a Category!
+                  </Text>
+                  <Button
+                      titleStyle={{color : 'white', fontWeight: '700', fontSize: 20}}
+                      buttonStyle={{width : 200, borderRadius: 5, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :'#03A9F4'}}
+                      title='College Life'
+                      onPress={() => this.onPressCollegeLife()}/>
+                  <Button
+                      titleStyle={{color : 'white', fontWeight: '700', fontSize: 20}}
+                      buttonStyle={{width : 200, borderRadius: 5, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :'#03A9F4'}}
+                      title='College Applications'
+                      onPress={() => this.onPressCollegeApplications()}/>
+                  <Button
+                      titleStyle={{color : 'white', fontWeight: '700', fontSize: 20}}
+                      buttonStyle={{width : 200, borderRadius: 5, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :'#03A9F4'}}
+                      title='Resources'
+                      onPress={() => this.onPressResources()}/>
+                  <Button
+                      titleStyle={{color : 'white', fontWeight: '700', fontSize: 20}}
+                      buttonStyle={{width : 200, borderRadius: 5, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :'#03A9F4'}}
+                      title='All Topics'
+                      onPress={() => this.onPressAllTopics()}/>
+              </View>
             </Modal>
-            </View>
+          </View>
 
         </View>
       );
@@ -250,46 +245,28 @@ export default class Login extends React.Component {
                         onPress={() => this.onPressPostQuestion()}
                       />
                     </View>
-                    <View 
-                      style={{
-                        flex: 1,
-                        justifyContent: "flex-start",
-                        alignItems: "flex-start",
-                        width: "100%"
-                      }}
-                    >
-                    <Input style={{
-                        flex: 1,
-                        width: "100%",
-                        fontSize: 20,
-                        alignContent: "flex-start",
-                        justifyContent: "flex-start",
-                        textAlignVertical: "top",
-                        margin: 12
-                        }}
+
+                    <Input style={ styles.inputText }
                       placeholder="Ex: When are the common app essays released?"
                       underlineColorAndroid="transparent"
                       multiline={true}
-                      selectTextOnFocus={true}
-                      spellCheck={true}
                       onChangeText={(text) => this.setState({question: text})}
                       onSubmitEditing={(text) => this.setState({question: text})}
-                      />
-                  </View> 
-                  <View style={{flexDirection: "column", margin : 10}}>
-                    <Button
-                      titleStyle={{color : 'white', fontWeight: '700', fontSize: 25}}
-                      buttonStyle={{borderRadius: 20, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor : Colors.lightPurple}}
-                      title={this.state.postQuestionTopic}
-                      onPress={() => this.onPressTopic()}/>
-                    <Button
-                      titleStyle={{color : 'white', fontWeight: '700', fontSize: 25}}
-                      buttonStyle={{borderRadius: 20, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor : Colors.lightPurple}}
-                      title="Post Question"
-                      onPress={() => this.onPressPostQuestion()}/>
-                  </View>
+                    />
+                    <View style={{flexDirection: "column", margin : 10}}>
+                      <Button
+                        titleStyle={{color : 'white', fontWeight: '700', fontSize: 25}}
+                        buttonStyle={{borderRadius: 20, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor : Colors.lightPurple}}
+                        title={this.state.postQuestionTopic}
+                        onPress={() => this.onPressTopic()}/>
+                      <Button
+                        titleStyle={{color : 'white', fontWeight: '700', fontSize: 25}}
+                        buttonStyle={{borderRadius: 20, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor : Colors.lightPurple}}
+                        title="Post Question"
+                        onPress={() => this.onPressPostQuestion()}/>
+                    </View>
                 </View>
-            </Modal>
+              </Modal>
           </View>
         </View>
       );
@@ -317,28 +294,8 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 24
   },
-  purchaseBox: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-    height: 150,
-    width: Metrics.width*.9,
-  },
-  textStyles: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 10,
-    fontWeight: 'bold',
-    fontSize: 12,
-  },
-  itemList: {
-    height: Metrics.screenHeight*.6,
-    width: Metrics.screenWidth,
-    paddingTop: 10,
-  },
   modalViewTopic: {
-    height: Metrics.screenHeight*.6,
+    height: Metrics.screenHeight*.5,
     borderStyle: 'solid',
     borderWidth: .5,
     alignItems: 'center',
@@ -362,8 +319,9 @@ const styles = StyleSheet.create({
 
   },
   modalText: {
-    fontSize: 25,
+    fontSize: 24,
     fontWeight: 'bold',
+    marginBottom: 20,
   },
   modal: {
     justifyContent: "flex-start",
@@ -394,5 +352,21 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     padding: 5
+  },
+  inputText: {
+    width: '100%',
+    flex: 1,
+    alignContent: "flex-start",
+    justifyContent: "flex-start",
+    minHeight: 40,
+    textAlignVertical: "top",
+    padding: 10,
+    fontSize: 14,
+    textDecorationLine: 'none',
+    lineHeight: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: Colors.lightPurple,
+    backgroundColor: 'white',
   },
 });

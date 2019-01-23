@@ -87,26 +87,6 @@ export default class SaleBlock extends React.Component {
     console.log("pressed message: ");
     this.props.messageBlock(this.state.convoKey);
   }
-  imageButton(){
-    if(this.state.profilePicture){
-      return(
-        <Avatar
-          size="xlarge"
-          source={{uri : this.state.profilePicture}}
-          activeOpacity={0.7}
-          rounded
-        />
-      );
-    } else {
-      return(
-        <Avatar
-          size="xlarge"
-          source={Images.profile}
-          activeOpacity={0.7}
-          rounded
-        />);
-    }
-  }
 
   render() {
     return (

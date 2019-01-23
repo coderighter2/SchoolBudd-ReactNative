@@ -52,28 +52,6 @@ export default class UpcomingBlock extends React.Component {
 
     }
 
-    imageButton() {
-        if (this.state.profileImage) {
-            return (
-                <Avatar
-                    size="large"
-                    source={{ uri: this.state.profileImage }}
-                    activeOpacity={0.7}
-                    rounded
-                />
-            );
-        } else {
-            return (
-                <Avatar
-                    size="large"
-                    source={Images.profile}
-                    activeOpacity={0.7}
-                    rounded
-                />
-            )
-        }
-    }
-
     payout() {
         // this.state.release();
         this.props.navigation.navigate('InputCreditCard', { totalPrice: this.props.upcoming.price, consultantId: this.state.profileId, appointmentId:this.state.appointmentId });
@@ -118,7 +96,12 @@ export default class UpcomingBlock extends React.Component {
                 <Card>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <View style={{ flexDirection: 'row' }}>
-                            {this.imageButton()}
+                            <Avatar
+                                size="large"
+                                source={this.state.profileImage?{ uri: this.state.profileImage }: Images.profile}
+                                activeOpacity={0.7}
+                                rounded
+                            />
                             <View style={{ flexDirection: 'column' }}>
                                 <Text style={{ fontSize: 15, marginLeft: 20, fontWeight: '200' }}>{this.state.profileName}</Text>
                                 <Text style={{ fontSize: 13, marginLeft: 20, color: '#999' }}>{this.props.upcoming.startTime} -</Text>

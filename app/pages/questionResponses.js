@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, TouchableOpacity, Image, AsyncStorage, SectionList, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, TouchableOpacity, Image, AsyncStorage, SectionList, TextInput } from 'react-native';
 import Metrics from '../Themes/Metrics';
 import Colors from '../Themes/Colors';
 import Images from '../Themes/Images';
@@ -8,11 +8,10 @@ import firebase from 'firebase';
 import { NavigationActions } from 'react-navigation';
 import AnswerBlock from '../components/answerBlock';
 import Modal from "react-native-modal";
-
+import { globalStyles } from '../Themes/Styles';
+import { Button } from 'react-native-elements'
 
 export default class QuestionResponses extends React.Component {
-
-
   static navigationOptions = {
     headerTitle: 'Responses',
   };
@@ -40,7 +39,6 @@ export default class QuestionResponses extends React.Component {
 
   var userUID = firebase.auth().currentUser.uid;
   var name;
-  // console.log("uid " + userUID);
   var that = this;
 
   await firebase.auth().onAuthStateChanged(function(user) {
@@ -67,62 +65,6 @@ export default class QuestionResponses extends React.Component {
   this.appendJedis(3,1);
   }
 
-
-  // onPressMessageFreelancer = async () => {
-  //   const { navigate } = this.props.navigation.navigate;
-  //   console.log("testing params" + this.props.navigation.state.params.item.seller);
-  //    await this.rememberMessage();
-  //    console.log("preAdd: " +JSON.stringify(this.state.previousMessage));
-  //    await this.add();
-  //    console.log("convokey: " + this.state.convoKey);
-  //    console.log("asynckey1: " + JSON.stringify(this.state.userID+this.state.sellerID));
-  //    console.log("asynckey2: " + JSON.stringify(this.state.sellerID+this.state.userID));
-  //    this.props.navigation.navigate('MessagesScreen', {key: this.state.convoKey});
-  //   //query
-  // }
-  //
-  //   rememberMessage = async () => {
-  //     try {
-  //         const key1 = await AsyncStorage.getItem(this.state.userID+this.state.sellerID);
-  //         console.log("key1: " + key1);
-  //         const key2 = await AsyncStorage.getItem(this.state.sellerID+this.state.userID);
-  //         console.log("key2: " + key2);
-  //         if (key1 !== null ) {
-  //           this.setState({convoKey: key1, previousMessage: true });
-  //         }
-  //         if (key2 !== null) {
-  //           this.setState({convoKey: key2, previousMessage: true })
-  //         }
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  //
-  // add = async () => {
-  //   // console.log(firebase.database().ref('users').child(this.state.key).child('rooms').child('roomName');
-  //     // console.log("previousMessage: " + this.state.previousMessage);
-  //     if (this.state.previousMessage === false) {
-  //       console.log("enters if statement");
-  //       var roomsList = firebase.database().ref('users').child(this.state.sellerID).child('rooms').push();
-  //       console.log("preset rooms list");
-  //       await roomsList.set({
-  //         roomName: firebase.auth().currentUser.displayName,
-  //       }).then(() => this.setState({text: ""}));
-  //
-  //
-  //       roomsList = firebase.database().ref('users').child(firebase.auth().currentUser.uid).child('rooms').child(roomsList.key);
-  //       await roomsList.set({
-  //         roomName: this.state.sellerName,
-  //       }).then(() => this.setState({text: ""}));
-  //       await AsyncStorage.setItem(this.state.userID+this.state.sellerID, roomsList.key);
-  //       await AsyncStorage.setItem(this.state.sellerID+this.state.userID, roomsList.key);
-  //       await this.setState({convoKey: roomsList.key});
-  //       return roomsList.key;
-  //   } else {
-  //     return this.state.convoKey;
-  //   }
-  // }
-
   async appendJedis(count, start) {
 
     await this.setState({loading : true, refreshing: true});
@@ -131,15 +73,8 @@ export default class QuestionResponses extends React.Component {
       var childKey = snapshot.key;
       var childData = snapshot.val();
       childData.key = childKey;
-      // questionText = childData.question.toLowerCase();
-      // searchTextLowercase = this.state.searchText.toLowerCase();
-      // if (questionText.includes(searchTextLowercase)) {
-        // if (this.state.currentTopic == "Select a Question Topic" || this.state.currentTopic == "All Topics") {
+     
       await jedisList.push(childData);
-        // } else if (childData.topic == this.state.currentTopic) {
-        //   jedisList.push(childData);
-        // }
-    // }
     });
 
     jedisList.sort(function(a,b) { 
@@ -163,7 +98,7 @@ export default class QuestionResponses extends React.Component {
   }
 
   purchaseItem= async (item) => {
-    this.props.navigation.navigate('AnswerScreen', {item: item, question: this.state.question, topic : this.state.topic});
+    this.props.navigation.navigate('AnswerScreen', {item: item, question: this.state.question, topic : this.state.topic, forumLocation: this.state.key});
   }
   resetList = async () => {
     await this.setState({refreshing: true, jedisSectioned: [{title: 'Jedis', data:[]}]});
@@ -185,6 +120,7 @@ export default class QuestionResponses extends React.Component {
   onPressPostAnswer = async() => {
     console.log("pressed answer");
     console.log("author " + JSON.stringify(firebase.auth().currentUser));
+    await this.setState({ isAnswerModalVisible: false});
     await firebase.database().ref('forum').child(this.state.key).child('answers').push({
         answer: this.state.answer,
         author: this.state.userName,
@@ -193,106 +129,81 @@ export default class QuestionResponses extends React.Component {
         upvotes : 0,
         profileImage : '',
       });
-    this.setState({ isAnswerModalVisible: false});
+    
   }
 
-  myImageButton() {
-    if(this.state.profileImage){
-      return(
-        <Avatar
-          size="large"
-          source={{uri : this.state.profileImage}}
-          activeOpacity={0.7}
-          rounded
-        />
-      );
-    } else {
-      return(
-        <Avatar
-          size="large"
-          source={Images.profile}
-          activeOpacity={0.7}
-          rounded
-        />);
-    }
-  }
   _keyExtractor = (item, index) => index;
 
   render() {
-
     return (
-        <View style={styles.container}>
-          <Card style={styles.card}>
-              <View style={{flexDirection : 'row', marginBottom : 15}}>
-                {this.myImageButton()}
-                <Text style={{lineHeight : 30, fontSize :15, marginLeft: 20, fontWeight : '200'}}>
-                {this.state.profileName}
-                </Text>
-              </View>
-              <View style={{marginBottom: 10}}>
-                <Text style={{fontSize: 18, marginLeft : 15, fontWeight: 'bold'}}>{this.state.question}</Text>
-              </View>
-              <View style={{marginBottom: 15}}>
-                <Text style={{fontSize: 13, marginLeft : 15, color : '#888'}}>Topic : {this.state.topic}</Text>
-              </View>
-              <Button
-                icon={{name: 'code'}}
-                backgroundColor='#03A9F4'
-                buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                title='Answer'
-                onPress={() => this.onPressAnswerQuestion()}/>
-              </Card>
-
-            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                <Modal
-                  isVisible={this.state.isAnswerModalVisible}
-                  onBackdropPress={() => this.setState({ isAnswerModalVisible: false })}
-                  backdropColor={'black'}>
-                  <View style={styles.modalView}>
-                    <Text style={styles.modalText}>
-                    Ask a Question!
-                    </Text>
-                    <Text style={styles.modalText}>
-
-                    </Text>
-                    <TextInput style={styles.inputText}
-                       placeholder="No, you shouldn't wait till the last minute to write your common app essay"
-                       underlineColorAndroid="transparent"
-                       multiline={true}
-                       onChangeText={(text) => this.setState({answer: text})}
-                       onSubmitEditing={(text) => this.setState({answer: text})}
-                       />
-                   <Button
-                     color={Colors.lightPurple}
-                     buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                     title='Post'
-                     onPress={() => this.onPressPostAnswer()}/>
-                   <Button
-                     color={Colors.lightPurple}
-                     buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                     title='Cancel'
-                     onPress={() => this.setState({ isAnswerModalVisible: false})}/>
-                  </View>
-              </Modal>
-            </View>
-
-            <View style={styles.itemList}>
-              <SectionList
-                sections={this.state.jedisSectioned}
-                // onEndReached={() => this.loadMore(3,this.state.jedisSectioned[0].data.length+1)}
-                renderItem={({item}) => this.listItemRenderer(item)}
-                ItemSeparatorComponent = {() => (<View style={{height: 10}}/>)}
-                keyExtractor={this._keyExtractor}
-                contentContainerStyle = {{alignItems: 'center'}}
-                onRefresh = {() => this.resetList()}
-                refreshing = {this.state.refreshing}
-                removeClippedSubviews = {true}
+      <View style={styles.container}>
+        <View style={styles.profileView}>
+            <View style={{flexDirection : 'row', marginBottom : 15, alignItems: 'center', marginTop: 10}}>
+              <Avatar
+                size="large"
+                source={this.state.profileImage? {uri : this.state.profileImage} : Images.profile}
+                activeOpacity={0.7}
+                rounded
               />
-              </View>
+              <Text style={{fontSize :17, marginLeft: 15, fontWeight : '200'}}>
+                {this.state.profileName}
+              </Text>
+            </View>
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>{this.state.question}</Text>
+          
+            <Text style={{fontSize: 13, color : '#888', marginVertical: 15}}>Topic : {this.state.topic}</Text>
+            
+            <TouchableOpacity
+              style={globalStyles.btn}
+              onPress={() => this.onPressAnswerQuestion()} >
+              <Text style={styles.btnText}>Answer</Text>
+            </TouchableOpacity>
         </View>
+
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <Modal
+            isVisible={this.state.isAnswerModalVisible}
+            onBackdropPress={() => this.setState({ isAnswerModalVisible: false })}
+            backdropColor={'black'}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>
+                Ask a Question!
+              </Text>
+              <TextInput style={ styles.inputText }
+                  placeholder="Ex: When are the common app essays released?"
+                  underlineColorAndroid="transparent"
+                  multiline={true}
+                  onChangeText={(text) => this.setState({answer: text})}
+                  onSubmitEditing={(text) => this.setState({answer: text})}
+              />
+              <Button
+                buttonStyle={styles.addBtn}
+                title='Post'
+                onPress={() => this.onPressPostAnswer()}/>
+              <Button
+                buttonStyle={styles.addBtn}
+                title='Cancel'
+                onPress={() => this.setState({ isAnswerModalVisible: false})}/>
+            </View>
+          </Modal>
+        </View>
+
+        <View style={styles.itemList}>
+          <SectionList
+            sections={this.state.jedisSectioned}
+            // onEndReached={() => this.loadMore(3,this.state.jedisSectioned[0].data.length+1)}
+            renderItem={({item}) => this.listItemRenderer(item)}
+            ItemSeparatorComponent = {() => (<View style={{height: 10}}/>)}
+            keyExtractor={this._keyExtractor}
+            contentContainerStyle = {{alignItems: 'center'}}
+            onRefresh = {() => this.resetList()}
+            refreshing = {this.state.refreshing}
+            removeClippedSubviews = {true}
+          />
+        </View>
+      </View>
     );
   }
-
 }
 
 const styles = StyleSheet.create({
@@ -301,53 +212,60 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     justifyContent: 'center',
   },
-  pictureView: {
-    marginLeft: Metrics.marginHorizontal,
-    marginRight: Metrics.marginHorizontal,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center'
-  },
-  picture: {
-    height: Metrics.images.large,
-    width: Metrics.images.large,
-    borderRadius: Metrics.images.large * 0.5
+  profileView: {
+    width: Metrics.screenWidth,
+    backgroundColor:'white',
+    padding: 15,
+    paddingBottom: 0,
+    borderBottomWidth: 1,
+    borderColor: 'gray',
   },
   itemList: {
     height: Metrics.screenHeight*.65,
     width: Metrics.screenWidth,
     paddingTop: 10
   },
-  pictureDetails: {
-    flexDirection: 'column',
-    marginLeft: Metrics.marginHorizontal,
-    marginRight: Metrics.marginHorizontal,
-  },
-  jediRowItem: {
-    marginTop: Metrics.marginVertical,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center'
-  },
-  textStyles: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 10,
-    fontWeight: 'bold',
-    fontSize: 12,
-  },
   modalView: {
-    height: Metrics.screenHeight*.6,
+    height: Metrics.screenHeight/2,
+    padding: 15,
     borderStyle: 'solid',
     borderWidth: .5,
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     backgroundColor: 'white',
     borderRadius: 15,
+    marginBottom: 40
   },
   modalText: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
+    marginVertical: 10,
+  },
+  btnText: {
+    color: 'white',
+    fontSize: 18
+  },
+  inputText: {
+    width: '100%',
+    flex: 1,
+    alignContent: "flex-start",
+    justifyContent: "flex-start",
+    textAlignVertical: "top",
+    padding: 10,
+    fontSize: 14,
+    textDecorationLine: 'none',
+    lineHeight: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: Colors.lightPurple,
+    backgroundColor: 'white',
+    marginVertical: 10
+  },
+  addBtn: {
+    backgroundColor : Colors.lightPurple, 
+    width : Metrics.screenWidth * .8, 
+    borderColor : 'transparent', 
+    borderWidth : 0, 
+    borderRadius : 20, margin : 10
   },
 });

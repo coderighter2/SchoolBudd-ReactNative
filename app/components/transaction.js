@@ -65,27 +65,6 @@ export default class Transaction extends React.Component {
 
     }
 
-    imageButton() {
-        if (this.state.profileImage) {
-            return (
-                <Avatar
-                    size="large"
-                    source={{ uri: this.state.profileImage }}
-                    activeOpacity={0.7}
-                    rounded
-                />
-            );
-        } else {
-            return (
-                <Avatar
-                    size="large"
-                    source={Images.profile}
-                    activeOpacity={0.7}
-                    rounded
-                />
-            )
-        }
-    }
     render() {
 
         return (
@@ -93,7 +72,12 @@ export default class Transaction extends React.Component {
                 <Card>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <View style={{ flexDirection: 'row' }}>
-                            {this.imageButton()}
+                            <Avatar
+                                size="large"
+                                source={this.state.profileImage?{ uri: this.state.profileImage }: Images.profile}
+                                activeOpacity={0.7}
+                                rounded
+                            />
                             <View style={{ flexDirection: 'column' }}>
                                 <Text style={{ fontSize: 15, marginLeft: 20, fontWeight: '200' }}>{this.state.profileName}</Text>
                                 <Text style={{ fontSize: 13, marginLeft: 20, color: '#999' }}>$ {this.state.amount}</Text>

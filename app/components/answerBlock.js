@@ -3,12 +3,11 @@ import { StyleSheet, Text, View, Image, ActivityIndicator, TouchableOpacity, Asy
 import Metrics from '../Themes/Metrics';
 import Colors from '../Themes/Colors';
 import Images from '../Themes/Images';
-// import ReadMore from 'react-native-read-more-text';
+import ReadMore from 'react-native-read-more-text';
 import { Card, ListItem, Button, Slider, CheckBox, SearchBar, Avatar } from 'react-native-elements'
 import firebase from 'firebase';
 import Modal from 'react-native-modal';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-
 
 export default class AnswerBlock extends React.Component {
 
@@ -38,26 +37,22 @@ export default class AnswerBlock extends React.Component {
   componentWillMount() {
     this.restoreVote();
   }
-  openConsultantScreen() {
-    console.log('pressed ');
-    this.props.purchaseItem(this.props.jedi);
-  }
 
   onPressUpvote =async() => {
-      if(!this.state.voted){
+    if(!this.state.voted){
+      console.log("up");
+      await this.setState({upVoted : true, downVoted: false});
+      this.saveVote("up");
+    } else {
+      if (this.state.upVoted) {
+        var vote = "up";
+        this.removeVote(vote);
+        //remove vote
+      } else {
         console.log("up");
         await this.setState({upVoted : true, downVoted: false});
         this.saveVote("up");
-      } else {
-        if (this.state.upVoted) {
-          var vote = "up";
-          this.removeVote(vote);
-          //remove vote
-        } else {
-          console.log("up");
-          await this.setState({upVoted : true, downVoted: false});
-          this.saveVote("up");
-        }   
+      }   
     }    
   }
 
@@ -76,8 +71,8 @@ export default class AnswerBlock extends React.Component {
         await this.setState({downVoted : true, upVoted: false});
         this.saveVote("down");
       }   
+    }
   }
-}
 
   removeVote = async(vote) => {
     var ref = firebase.database().ref('forum').child(this.props.forumLocation).child('answers')
@@ -93,7 +88,6 @@ export default class AnswerBlock extends React.Component {
   }
     
   openAnswerScreen() {
-
     console.log('pressed ');
     this.props.purchaseItem(this.props.jedi);
   }
@@ -109,10 +103,10 @@ export default class AnswerBlock extends React.Component {
       if(snapshots.hasChild(firebase.auth().currentUser.uid)){
         await this.setState({voted: true});
         if (snapshots.child(firebase.auth().currentUser.uid).val().val == "up") {
-          console.log("snapshot " + JSON.stringify(snapshots.child(firebase.auth().currentUser.uid).val().val));
+          console.log("snapshot" + JSON.stringify(snapshots.child(firebase.auth().currentUser.uid).val().val));
           await this.setState({upVoted : true, downVoted: false});
         } else {
-          console.log("snapshot " + JSON.stringify(snapshots.child(firebase.auth().currentUser.uid).val().val));
+          console.log("snapshot" + JSON.stringify(snapshots.child(firebase.auth().currentUser.uid).val().val));
           await this.setState({downVoted : true, upVoted: false});
         }
       } else await this.setState({upVoted: false, downVoted: false});
@@ -136,35 +130,18 @@ export default class AnswerBlock extends React.Component {
     })
   }
 
-  imageButton() {
-    if (this.props.jedi.profileImage) {
-      return(
-        <Avatar
-          size="large"
-          source={{uri : this.props.jedi.profileImage}}
-          activeOpacity={0.7}
-          rounded
-        />
-      );
-    } else 
-      return(
-        <Avatar
-          size="large"
-          source={Images.profile}
-          activeOpacity={0.7}
-          rounded
-        />);
-  }
-
-
-
   render() {
     return (
       <TouchableOpacity  onPress={() => this.openAnswerScreen()}>
         <View style={styles.cardView}>
           <Card style={styles.card}>
             <View style={{flexDirection : 'row'}}>
-              {this.imageButton()}
+              <Avatar
+                size="large"
+                source={this.props.jedi.profileImage?{uri : this.props.jedi.profileImage} : Images.profile}
+                activeOpacity={0.7}
+                rounded
+              />
               <Text style={{fontSize : 15, marginLeft :20, fontWeight : 'bold', lineHeight : 30}}>{this.props.jedi.author}</Text>
             </View>
             <View style={{marginTop :10}}> 
@@ -194,7 +171,6 @@ export default class AnswerBlock extends React.Component {
               />&nbsp;&nbsp; {this.state.downVotes}
               </Text>          
           </Card>
-
         </View>
       </TouchableOpacity>
       );
