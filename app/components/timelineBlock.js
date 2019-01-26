@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ActivityIndicator, TouchableOpacity, AsyncStorage, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, AsyncStorage, TextInput } from 'react-native';
 import Metrics from '../Themes/Metrics';
 import Colors from '../Themes/Colors';
 import Images from '../Themes/Images';
@@ -8,7 +8,7 @@ import { Card, ListItem, Button, Slider, CheckBox, SearchBar } from 'react-nativ
 
 export default class TimelineBlock extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -18,6 +18,8 @@ export default class TimelineBlock extends React.Component {
     }
     console.log(JSON.stringify("timelineBlock props " + JSON.stringify(props)));
   }
+
+
 
   render() {
     return (
