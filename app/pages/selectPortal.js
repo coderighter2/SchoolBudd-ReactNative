@@ -18,10 +18,10 @@ export default class SelectPortalScreen extends React.Component {
   
 
   _selectPortalStudent = async() => {
-    console.log("props " + JSON.stringify(this.props));
+    //console.log("props " + JSON.stringify(this.props));
     if (this.props.selectPortalStudent) {
-      console.log("props " + this.props);
-      console.log("select portal working");
+      //console.log("props " + this.props);
+      //console.log("select portal working");
       this.props.selectPortalStudent();
     } else {
       await AsyncStorage.setItem('portal', 'student');
@@ -31,8 +31,8 @@ export default class SelectPortalScreen extends React.Component {
 
   _selectPortalConsultant = async() => {
     if (this.props.selectPortalConsultant) {
-      console.log("props " + this.props);
-      console.log("select portal working");
+      //console.log("props " + this.props);
+      //console.log("select portal working");
       this.props.selectPortalConsultant();
       } else {
         await AsyncStorage.setItem('portal', 'consultant');

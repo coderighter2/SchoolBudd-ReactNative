@@ -24,7 +24,7 @@ export default class Home extends React.Component {
     this.state = {
     }
     //see what props App.js is constructed with:
-    console.log("goals timeline " + JSON.stringify(props));
+    //console.log("goals timeline " + JSON.stringify(props));
   }
 
   navigateFreshmanYear= async() =>{

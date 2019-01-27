@@ -27,7 +27,7 @@ export default class AnswerComponent extends React.Component {
       answer: '',
     }
 
-    console.log(JSON.stringify("answer component props " + JSON.stringify(props)));
+    //console.log(JSON.stringify("answer component props " + JSON.stringify(props)));
   }
 
 

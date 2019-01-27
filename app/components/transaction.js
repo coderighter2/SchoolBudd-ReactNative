@@ -28,14 +28,14 @@ export default class Transaction extends React.Component {
             portal: ''
         }
 
-        console.log(JSON.stringify("questionblock props " + JSON.stringify(props)));
+        //console.log(JSON.stringify("questionblock props " + JSON.stringify(props)));
     }
 
     componentWillMount = async () => {
         try {
             //get consultant price with id
             this.setState({ portal: this.props.portal });
-            console.log("portal3 : " + this.state.portal);
+            //console.log("portal3 : " + this.state.portal);
             var profileId;
             if (this.props.portal === 'student') {
                 profileId = this.props.transaction.target

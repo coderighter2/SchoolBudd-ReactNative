@@ -25,20 +25,20 @@ export default class AvailabilityBlock extends React.Component {
       time: '',
       userID: '',
     }
-    console.log(JSON.stringify("AvailabilityBlock props " + JSON.stringify(props)));
+    //console.log(JSON.stringify("AvailabilityBlock props " + JSON.stringify(props)));
   }
 
 //   componentWillMount= async() => {
 //
 //   var userUID = firebase.auth().currentUser.uid;
 //   var name;
-//   console.log("uid " + userUID);
+//   //console.log("uid " + userUID);
 //   var that = this;
 //
 //   firebase.auth().onAuthStateChanged(function(user) {
 //     if (user) {
-//       console.log(" User is signed in.");
-//       // console.log("name " + firebase.database().ref('users').child(userUID).child('name'));
+//       //console.log(" User is signed in.");
+//       // //console.log("name " + firebase.database().ref('users').child(userUID).child('name'));
 //       firebase.database().ref('users').child(userUID).on('value', function(snapshot) {
 //         var childKey = snapshot.key;
 //         var childData = snapshot.val();
@@ -47,7 +47,7 @@ export default class AvailabilityBlock extends React.Component {
 //         that.setState({ userID: id});
 //       });
 //     } else {
-//       console.log(" User is not signed in.");
+//       //console.log(" User is not signed in.");
 //     }
 //   });
 // }

@@ -52,7 +52,7 @@ export default class UploadSale extends React.Component {
     const loginCheck = await AsyncStorage.getItem("hasLoggedIn");
     if (loginCheck === "true") {
       await this.setState({hasLoggedIn: true});
-      console.log("hasLoggedIn" + this.state.hasLoggedIn);
+      //console.log("hasLoggedIn" + this.state.hasLoggedIn);
     }
    }
 
@@ -63,7 +63,7 @@ export default class UploadSale extends React.Component {
       allowsEditing: true,
       aspect: [4, 3],
     });
-    console.log(result);
+    //console.log(result);
 
     if (!result.cancelled) {
       this.setState({image: result.uri});
@@ -135,11 +135,11 @@ export default class UploadSale extends React.Component {
     }
 
     await ref.put(blob).then((snapshot) => {
-      console.log('puts blob');
+      //console.log('puts blob');
 
-      console.log('Uploaded a data_url string!');
+      //console.log('Uploaded a data_url string!');
       const downloadURL = snapshot.downloadURL;
-      console.log('downloadUrl: ' + downloadURL);
+      //console.log('downloadUrl: ' + downloadURL);
       {
         this.setState({image: downloadURL, test: 'testSuccessful'})
       }

@@ -25,20 +25,20 @@ export default class AvailabilityBlock extends React.Component {
       userID: '',
       date: '',
     }
-    console.log(JSON.stringify("AvailabilityBlock props " + JSON.stringify(props)));
+    //console.log(JSON.stringify("AvailabilityBlock props " + JSON.stringify(props)));
   }
 
 //   componentWillMount= async() => {
 //
 //   var userUID = firebase.auth().currentUser.uid;
 //   var name;
-//   console.log("uid " + userUID);
+//   //console.log("uid " + userUID);
 //   var that = this;
 //
 //   firebase.auth().onAuthStateChanged(function(user) {
 //     if (user) {
-//       console.log(" User is signed in.");
-//       // console.log("name " + firebase.database().ref('users').child(userUID).child('name'));
+//       //console.log(" User is signed in.");
+//       // //console.log("name " + firebase.database().ref('users').child(userUID).child('name'));
 //       firebase.database().ref('users').child(userUID).on('value', function(snapshot) {
 //         var childKey = snapshot.key;
 //         var childData = snapshot.val();
@@ -47,7 +47,7 @@ export default class AvailabilityBlock extends React.Component {
 //         that.setState({ userID: id});
 //       });
 //     } else {
-//       console.log(" User is not signed in.");
+//       //console.log(" User is not signed in.");
 //     }
 //   });
 // }
@@ -55,8 +55,8 @@ export default class AvailabilityBlock extends React.Component {
   componentDidMount = async() => {
     await this.setState({ time: this.props.jedi.item.key});
     await this.setState({ date: this.props.date.dateString});
-    console.log("time " + this.state.time);
-    console.log("date " + this.state.date);
+    //console.log("time " + this.state.time);
+    //console.log("date " + this.state.date);
     this.checkHighlight();
   }
 
@@ -67,12 +67,12 @@ export default class AvailabilityBlock extends React.Component {
       var childKey = snapshot.key;
       var childData = snapshot.val();
       childData.key = childKey;
-      console.log("availibility block child data " + JSON.stringify(childData));
+      //console.log("availibility block child data " + JSON.stringify(childData));
       if (this.state.time == childData.timeSlot) {
         that.setState({cardSelected: true});
       }
     });
-    console.log("highlight checked");
+    //console.log("highlight checked");
   }
 
   storeAvailability= async() => {
@@ -97,7 +97,7 @@ export default class AvailabilityBlock extends React.Component {
           timeSlot: time,
         });
     }
-    console.log('pressed ' + this.state.time);
+    //console.log('pressed ' + this.state.time);
   }
 
   render() {

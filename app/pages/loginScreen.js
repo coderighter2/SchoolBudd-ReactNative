@@ -35,13 +35,6 @@ const fieldsSignUp = [
   },
   {
     type: 'text',
-    name: 'skypeName',
-    icon: 'ios-lock',
-    required: false,
-    label: 'Skype Username (if you have one)',
-  },
-  {
-    type: 'text',
     name: 'emailAddress',
     required: true,
     icon: 'ios-person',
@@ -54,6 +47,14 @@ const fieldsSignUp = [
     required: true,
     label: 'Password',
   },
+  {
+    type: 'text',
+    name: 'skypeName',
+    icon: 'ios-lock',
+    required: false,
+    label: 'Skype Username (if you have one)',
+  },
+  
 ];
 
 export default class Login extends React.Component {
@@ -129,7 +130,7 @@ export default class Login extends React.Component {
     firebase.auth().currentUser.sendEmailVerification()
       .then(() => {
         // Verification email sent.
-        console.log("email Verification sent");
+        //console.log("email Verification sent");
         Alert.alert(
           'Email Verification',
           "We've sent a user verification email. Please click the link in your email inbox to be verified as a user",
@@ -190,7 +191,7 @@ export default class Login extends React.Component {
         body: formBody
       }).then((response) => {
         response.json().then(solved => {
-          console.log("Account " + JSON.stringify(solved));
+          //console.log("Account " + JSON.stringify(solved));
           Alert.alert("Your custom stripe account is registered to this platform correctly.");
           firebase.database().ref('stripe_customers').child(firebase.auth().currentUser.uid).child('account').set({
             id: solved.id,
@@ -208,11 +209,11 @@ export default class Login extends React.Component {
 
   onPressSaveNewUser = async () => {
     const formValues = this.formGenerator.getValues();
-    console.log('FORM VALUES', formValues);
+    //console.log('FORM VALUES', formValues);
 
     await this.setState({ signUpEmail: formValues.emailAddress, signUpPassword: formValues.password });
-    console.log("email " + this.state.signUpEmail);
-    console.log("password " + this.state.signUpPassword);
+    //console.log("email " + this.state.signUpEmail);
+    //console.log("password " + this.state.signUpPassword);
     await firebase.auth().createUserWithEmailAndPassword(this.state.signUpEmail, this.state.signUpPassword)
       .then(this.completeSignUp)
       .catch(function (error) {
@@ -227,7 +228,7 @@ export default class Login extends React.Component {
         } else {
           alert(errorMessage);
         }
-        console.log(error);
+        //console.log(error);
       });
   }
 
@@ -241,12 +242,12 @@ export default class Login extends React.Component {
       } else {
         alert(errorMessage);
       }
-      console.log(error);
+      //console.log(error);
     });
 
     if (result) {
-      console.log("email " + this.state.loginEmail);
-      console.log("password " + this.state.loginPassword);
+      //console.log("email " + this.state.loginEmail);
+      //console.log("password " + this.state.loginPassword);
       // firebase.database().ref('users').child(user.uid).child('name');
       await AsyncStorage.setItem("hasLoggedIn", "true");
 
@@ -260,9 +261,9 @@ export default class Login extends React.Component {
 
   onPressMakeAccount = async () => {
     await this.setState({ isLoginModalVisible: false });
-    console.log("login modal " + this.state.isLoginModalVisible);
+    //console.log("login modal " + this.state.isLoginModalVisible);
     await this.setState({ isSignUpModalVisible: true });
-    console.log("sign up modal " + this.state.isSignUpModalVisible);
+    //console.log("sign up modal " + this.state.isSignUpModalVisible);
   }
 
   checkIfUserLoggedIn = async () => {
@@ -446,7 +447,7 @@ const styles = StyleSheet.create({
     width: Metrics.screenWidth * .5,
   },
   modalView: {
-    height: Metrics.screenHeight*2/3,
+    height: Metrics.screenHeight,
     borderStyle: 'solid',
     borderWidth: 1.5,
     borderColor: Colors.lightPurple,

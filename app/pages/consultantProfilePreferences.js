@@ -88,14 +88,14 @@ export default class ProfileConsultantPreferences extends React.Component {
     const loginCheck = await AsyncStorage.getItem("hasLoggedIn");
     if (loginCheck === "true") {
       await this.setState({hasLoggedIn: true});
-      console.log("hasLoggedIn" + this.state.hasLoggedIn);
+      //console.log("hasLoggedIn" + this.state.hasLoggedIn);
     }
    }
 
   onPressSaveObject = async () => {
     if ((this.state.availabilityPreferences !== 'Set Availability Preferences') && (this.state.bio !== '')) {
       await this.storeItem();
-      console.log("navigation " + JSON.stringify(this.props.navigation));
+      //console.log("navigation " + JSON.stringify(this.props.navigation));
       this.props.navigation.navigate("Home");
     } else {
       alert('Please Fill in All Categories');
@@ -152,27 +152,27 @@ export default class ProfileConsultantPreferences extends React.Component {
 
   onPressIECA = async () => {
     await this.setState({isTypeModalVisible: false, typeConsultant: 'IECA'});
-    console.log(this.state.typeConsultant);
+    //console.log(this.state.typeConsultant);
   };
 
   onPressCurrentStudent = async () => {
     await this.setState({isTypeModalVisible: false, typeConsultant: 'College Student'});
-    console.log(this.state.typeConsultant);
+    //console.log(this.state.typeConsultant);
   };
 
   onPressHourly = async () => {
     await this.setState({isPreferencesModalVisible: false, availabilityPreferences: 'Just Hourly'});
-    console.log(this.state.availabilityPreferences);
+    //console.log(this.state.availabilityPreferences);
   };
 
   onPressPackages = async () => {
     await this.setState({isPreferencesModalVisible: false, availabilityPreferences: 'Just Packages'});
-    console.log(this.state.availabilityPreferences);
+    //console.log(this.state.availabilityPreferences);
   };
 
   onPressBoth = async () => {
     await this.setState({isPreferencesModalVisible: false, availabilityPreferences: 'Both Hourly and Packages'});
-    console.log(this.state.availabilityPreferences);
+    //console.log(this.state.availabilityPreferences);
   };
 
   render() {

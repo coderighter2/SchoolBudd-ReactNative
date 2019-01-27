@@ -16,7 +16,7 @@ export default class TimelineBlock extends React.Component {
       time: '',
       userID: '',
     }
-    console.log(JSON.stringify("timelineBlock props " + JSON.stringify(props)));
+    //console.log(JSON.stringify("timelineBlock props " + JSON.stringify(props)));
   }
 
   render() {

@@ -32,7 +32,7 @@ export default class QuestionResponses extends React.Component {
       key: '',
       userName: '',
     }
-    // console.log("props QuestionResponsesScreen " + JSON.stringify(props));
+    // //console.log("props QuestionResponsesScreen " + JSON.stringify(props));
   }
 
   componentWillMount= async() => {
@@ -43,8 +43,8 @@ export default class QuestionResponses extends React.Component {
 
   await firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-      console.log(" User is signed in.");
-      // console.log("name " + firebase.database().ref('users').child(userUID).child('name'));
+      //console.log(" User is signed in.");
+      // //console.log("name " + firebase.database().ref('users').child(userUID).child('name'));
       firebase.database().ref('users').child(userUID).on('value', function(snapshot) {
         var childKey = snapshot.key;
         var childData = snapshot.val();
@@ -53,15 +53,15 @@ export default class QuestionResponses extends React.Component {
         that.setState({ userName: name, profileImage : childData.profilePicture});
       });
     } else {
-      console.log(" User is not signed in.");
+      //console.log(" User is not signed in.");
     }
   });
   item = this.props.navigation.state.params.item;
 
-  // console.log("QuestionResponsesScreen item " + JSON.stringify(this.props.navigation.state.params.item));
-  // console.log("QuestionResponsesScreen key " + JSON.stringify(this.props.navigation.state.params.item.key));
+  // //console.log("QuestionResponsesScreen item " + JSON.stringify(this.props.navigation.state.params.item));
+  // //console.log("QuestionResponsesScreen key " + JSON.stringify(this.props.navigation.state.params.item.key));
   await this.setState({profileName: item.author, profileImage : item.profileImage, question: item.question, topic : item.topic, key: this.props.navigation.state.params.item.key });
-  // console.log("question key " + this.state.key);
+  // //console.log("question key " + this.state.key);
   this.appendJedis(3,1);
   }
 
@@ -82,7 +82,7 @@ export default class QuestionResponses extends React.Component {
       var direction = 1;
       return b.totalUpvotes>a.totalUpvotes?direction:-direction;
     });
-    console.log("result : " + JSON.stringify(jedisList));
+    //console.log("result : " + JSON.stringify(jedisList));
     await this.setState({loading: false, refreshing: false, jedisSectioned: [{title: 'Jedis', data:jedisList}]});
 
   }
@@ -113,13 +113,13 @@ export default class QuestionResponses extends React.Component {
   }
 
   onPressAnswerQuestion() {
-    console.log("pressed answer");
+    //console.log("pressed answer");
     this.setState({ isAnswerModalVisible: true});
   }
 
   onPressPostAnswer = async() => {
-    console.log("pressed answer");
-    console.log("author " + JSON.stringify(firebase.auth().currentUser));
+    //console.log("pressed answer");
+    //console.log("author " + JSON.stringify(firebase.auth().currentUser));
     await this.setState({ isAnswerModalVisible: false});
     await firebase.database().ref('forum').child(this.state.key).child('answers').push({
         answer: this.state.answer,

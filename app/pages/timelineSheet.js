@@ -46,7 +46,7 @@ export default class TimelineSheet extends React.Component {
        goalText: '',
        year: '',
      }
-     console.log("timeline " + JSON.stringify(props));
+     //console.log("timeline " + JSON.stringify(props));
    }
 
    _keyExtractor = (item, index) => item.key;
@@ -55,14 +55,14 @@ export default class TimelineSheet extends React.Component {
      this.props.navigation.setParams({handleAdd : this.toggleModal});
      await this.setState({ year: this.props.navigation.state.params.year});
      var goalsArrayRetrieved = await AsyncStorage.getItem(JSON.stringify(this.state.year));
-     console.log("goals array retrieved " + goalsArrayRetrieved);
-     console.log("type goals array pre " + typeof goalsArrayRetrieved);
+     //console.log("goals array retrieved " + goalsArrayRetrieved);
+     //console.log("type goals array pre " + typeof goalsArrayRetrieved);
      goalsArrayRetrieved = await JSON.parse(goalsArrayRetrieved);
-     console.log("type goals array post " + typeof goalsArrayRetrieved);
+     //console.log("type goals array post " + typeof goalsArrayRetrieved);
      if ((goalsArrayRetrieved !== null) && (goalsArrayRetrieved.length !== 0)) {
        await this.setState({goalsArray: goalsArrayRetrieved});
    }
-   await console.log("goals array state post " + this.state.goalsArray);
+   //await console.log("goals array state post " + this.state.goalsArray);
  }
 
    toggleModal = async() => {
@@ -73,15 +73,15 @@ export default class TimelineSheet extends React.Component {
      var goals = this.state.goalsArray;
      goals.push(this.state.goalText);
      await this.setState({ goalsArray: goals});
-     console.log("goals array on push" + JSON.stringify(this.state.goalsArray));
+     //console.log("goals array on push" + JSON.stringify(this.state.goalsArray));
      this.setState({isModalVisible: !this.state.isModalVisible});
    }
 
    onPressSaveGoals = async() => {
-     console.log("goals array pre " + JSON.stringify(this.state.goalsArray));
+     //console.log("goals array pre " + JSON.stringify(this.state.goalsArray));
      await AsyncStorage.setItem(JSON.stringify(this.state.year), JSON.stringify(this.state.goalsArray));
      var testArray = await AsyncStorage.getItem(JSON.stringify(this.state.year));
-     console.log("goals array post " + JSON.stringify(testArray));
+     //console.log("goals array post " + JSON.stringify(testArray));
    }
 
    listItemRenderer =(item) => {

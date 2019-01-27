@@ -19,7 +19,7 @@ export default class AvailabilityBlock extends React.Component {
       time: '',
       userID: '',
     }
-    console.log(JSON.stringify("AvailabilityBlock props " + JSON.stringify(props)));
+    //console.log(JSON.stringify("AvailabilityBlock props " + JSON.stringify(props)));
   }
 
   navigateResource() {

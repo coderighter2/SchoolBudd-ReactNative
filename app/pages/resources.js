@@ -44,7 +44,7 @@ export default class Resources extends React.Component {
        jedisSectioned: [{title: 'Jedis',data:[]}],
        refreshing: false,
      }
-     console.log("resource screen props " + JSON.stringify(props));
+     //console.log("resource screen props " + JSON.stringify(props));
    }
 
    _keyExtractor = (item, index) => item.key;

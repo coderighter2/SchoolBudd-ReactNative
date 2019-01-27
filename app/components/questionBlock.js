@@ -26,27 +26,27 @@ export default class QuestionBlock extends React.Component {
       isModalVisible: false,
     }
 
-    console.log(JSON.stringify("questionblock props " + JSON.stringify(props)));
+    //console.log(JSON.stringify("questionblock props " + JSON.stringify(props)));
   }
 
   openConsultantScreen() {
-    console.log('pressed ');
+    //console.log('pressed ');
     this.props.purchaseItem(this.props.jedi);
   }
 
   onPressMessageSeller = async () => {
-    console.log('testing message seller');
+    //console.log('testing message seller');
 
     await this.rememberMessage();
     await this.add();
-    console.log("convokey: " + this.state.convoKey);
+    //console.log("convokey: " + this.state.convoKey);
     this.openMessageScreen();
     this.props.navigation.navigate('MessagesScreen', {key: this.state.convoKey});
     //query
   }
 
   openMessageScreen() {
-    console.log("pressed message: ");
+    //console.log("pressed message: ");
     this.props.messageBlock(this.state.convoKey);
   }
 

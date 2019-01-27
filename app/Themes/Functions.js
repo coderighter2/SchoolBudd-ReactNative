@@ -7,7 +7,7 @@ const EXPO_PUSHNOTI_SERVER = 'https://exp.host/--/api/v2/push/'
 const Functions = {
 
   registerForPushNotificationsAsync: async (uid) => {
-    // alert(uid);
+    console.log('uid : '+uid);
     const { status: existingStatus } = await Permissions.getAsync(
       Permissions.NOTIFICATIONS
     );
@@ -15,6 +15,7 @@ const Functions = {
 
     // only ask if permissions have not already been determined, because
     // iOS won't necessarily prompt the user a second time.
+
     if (existingStatus !== 'granted') {
       // Android remote notification permissions are granted during the app
       // install, so this will only ask on iOS
@@ -26,45 +27,54 @@ const Functions = {
     if (finalStatus !== 'granted') {
       return;
     }
-
+    console.log(Notifications);
     // Get the token that uniquely identifies this device
-    let token = await Notifications.getExpoPushTokenAsync();
-    // alert(token);
+    let token = "";
+    try {
+      token = await Notifications.getExpoPushTokenAsync();
+      console.log("Notifications : " + token);
+    } catch (err) {
+      console.log("ERR : "+err);
+    }
+    
     // POST the token to your backend server from where you can retrieve it to send push notifications.
     await firebase.database().ref('users').child(uid).update({ pushNotificationToken: token });
   },
   deleteUpcomming: async (appointmentId) => {
-    console.log(appointmentId);
+    //console.log(appointmentId);
     await firebase.database().ref('appointments').child(appointmentId).remove();
   },
   sendPushnotification: async (reciepUid) => {
-
+    console.log("reciepUid : " + reciepUid);
     var bodydata = { from: firebase.auth().currentUser.uid, data: "Request pay" }
 
-    await firebase.database().ref('users').child(reciepUid).once('value', async (snapshot) => {
-      var childKey = snapshot.key;
-      var childData = snapshot.val();
-      childData.key = childKey;
-      var reciepToken = childData.pushNotificationToken;
-      await fetch(`${EXPO_PUSHNOTI_SERVER}send`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: {
-          "to": reciepToken,
-          "title": "Request",
-          "sound": "default",
-          "body": JSON.stringify(bodydata),
-          "badge": 1
-        }
-      }).then(() => {
-        alert("Sent pushnotificatin successfully")
-        console.log("success send pushnotification")
-      }).catch((error) => {
-        console.error(error);
-      });
-    })
+    await firebase.database().ref('users').child(reciepUid).once('value').then(
+      async (snapshot) => {
+        var childKey = snapshot.key;
+        var childData = snapshot.val();
+        childData.key = childKey;
+        var reciepToken = childData.pushNotificationToken;
+        console.log('reciepToken : ' + JSON.stringify(childData) );
+        await fetch(`${EXPO_PUSHNOTI_SERVER}send`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: {
+            "to": reciepToken,
+            "title": "Request",
+            "sound": "default",
+            "body": JSON.stringify(bodydata),
+            "badge": 1
+          }
+        }).then(() => {
+          alert("Sent pushnotificatin successfully")
+          //console.log("success send pushnotification")
+        }).catch((error) => {
+          console.error(error);
+        });
+      }
+    )
   },
   createToken: async () => {
     if (!this.state.valid) {
@@ -105,7 +115,7 @@ const Functions = {
       response.json().then(solved => {
         cardToken = solved.id;
         this.setState({ token: cardToken });
-        console.log("card token in fetch " + cardToken);
+        //console.log("card token in fetch " + cardToken);
 
 
         this.createCharge(Math.ceil(this.state.totalPrice * 1.12), solved.id);
@@ -119,7 +129,7 @@ const Functions = {
   // create new transfer from platform account to consultant account
   // parameers : transfer amount, firebase id of consultant
   createTransfer: async (amount, consultant_id) => {
-    console.log(consultant_id)
+    //console.log(consultant_id)
     firebase.database().ref('stripe_customers').child(consultant_id).child('account').once('value')
       .then(value => {
         this.setState({ destination: value.val()['id'] });
@@ -147,7 +157,7 @@ const Functions = {
           body: formBody
         }).then((response) => {
           response.json().then(solved => {
-            console.log("Transfer " + JSON.stringify(solved));
+            //console.log("Transfer " + JSON.stringify(solved));
             this.getAllHistory();
             this.getPlatformBalance();
             this.getConsultantBalance(consultant_id);
@@ -190,7 +200,7 @@ const Functions = {
     }).then((response) => {
       response.json().then(solved => {
         this.setState({ chargeId: solved.id });
-        console.log("charge " + JSON.stringify(solved));
+        //console.log("charge " + JSON.stringify(solved));
         this.getAllHistory();
         this.getPlatformBalance();
         Alert.alert("Your money is locked for appointments! If you complete this appointment, it will be released to consultant.");
@@ -228,7 +238,7 @@ const Functions = {
   // complete this appointment
   // after completion, the 0.95 * appointment's amount will be transfered from platform account to consultant account
   release: async () => {
-    console.log("amount : " + this.state.amount + "  custom account id : " + this.state.consultant_id);
+    //console.log("amount : " + this.state.amount + "  custom account id : " + this.state.consultant_id);
     await this.createTransfer(Math.floor(this.state.amount * 0.95), this.state.consultant_id)
     await this.setState({ bookingStatus: false });
   },
@@ -299,7 +309,7 @@ const Functions = {
       body: formBody
     }).then((response) => {
       response.json().then(solved => {
-        console.log("refunds " + JSON.stringify(solved));
+        //console.log("refunds " + JSON.stringify(solved));
         this.getAllHistory();
         this.getPlatformBalance();
       });

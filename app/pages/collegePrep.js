@@ -51,7 +51,7 @@ export default class CollegePrep extends React.Component {
       userPortal: '',
     }
     //see what props App.js is constructed with:
-    console.log(JSON.stringify(props));
+    //console.log(JSON.stringify(props));
   }
 
   componentDidMount = async() => {

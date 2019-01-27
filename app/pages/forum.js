@@ -69,7 +69,7 @@ export default class Forum extends React.Component {
       userPortal: '',
     }
     //see what props App.js is constructed with:
-    console.log("forum props " + JSON.stringify(props));
+    //console.log("forum props " + JSON.stringify(props));
   }
 
   async appendJedis(count, start) {
@@ -81,8 +81,8 @@ export default class Forum extends React.Component {
       questionText = childData.question.toLowerCase();
       searchTextLowercase = this.state.searchText.toLowerCase();
       var jedisList = this.state.jedisSectioned[0].data.slice();
-      console.log("current topic " + this.state.currentTopic);
-      console.log("userPortal " + this.state.userPortal);
+      //console.log("current topic " + this.state.currentTopic);
+      //console.log("userPortal " + this.state.userPortal);
       // if (questionText.includes(searchTextLowercase) && (this.state.userPortal.toLowerCase() == childData.portalQuestion.toLowerCase())) {
       if (questionText.includes(searchTextLowercase)) {
       //   &&
@@ -96,12 +96,12 @@ export default class Forum extends React.Component {
       } 
 
       await this.setState({loading: false, refreshing: false, jedisSectioned: [{title: 'Jedis', data:jedisList}]});
-      console.log("loading : " + this.state.loading);
+      //console.log("loading : " + this.state.loading);
 
     });
 
     this.state.jedisSectioned.forEach(function(element) {
-      console.log("jedi " + element.value)
+      //console.log("jedi " + element.value)
     });
   }
 
@@ -115,8 +115,8 @@ export default class Forum extends React.Component {
 
     await firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        console.log(" User is signed in.");
-        // console.log("name " + firebase.database().ref('users').child(userUID).child('name'));
+        //console.log(" User is signed in.");
+        // //console.log("name " + firebase.database().ref('users').child(userUID).child('name'));
         firebase.database().ref('users').child(userUID).on('value', function(snapshot) {
           var childKey = snapshot.key;
           var childData = snapshot.val();
@@ -129,9 +129,6 @@ export default class Forum extends React.Component {
         console.log(" User is not signed in.");
       }
     });
-
-    await console.log("current user " + that.state.userName);
-    await console.log("current user portal " + that.state.userPortal);
     this.appendJedis(3,1);
 
   }
@@ -156,13 +153,13 @@ export default class Forum extends React.Component {
     const loginCheck = await AsyncStorage.getItem("hasLoggedIn");
     if (loginCheck === "true") {
       await this.setState({hasLoggedIn: true});
-      console.log("hasLoggedIn" + this.state.hasLoggedIn);
+      //console.log("hasLoggedIn" + this.state.hasLoggedIn);
     }
    }
 
   toggleTopicModal = async() => {
     await this.setState({isTopicModalVisible: true});
-    console.log("topic " + this.state.isTopicModalVisible);
+    //console.log("topic " + this.state.isTopicModalVisible);
   }
 
 
@@ -174,15 +171,15 @@ export default class Forum extends React.Component {
       await this.setState({isQuestionModalVisible: false});
       this.setState({isPostTopic : false});
       await this.setState({isTopicModalVisible: true});
-      console.log("topic modal " + this.state.isTopicModalVisible);
+      //console.log("topic modal " + this.state.isTopicModalVisible);
   }
 
   onPressTopicPostQuestion = async() => {
     await this.setState({isQuestionModalVisible: false});
     this.setState({isPostTopic : true});
     await this.setState({isTopicModalVisible: true});
-    console.log("question modal " + this.state.isQuestionModalVisible);
-    console.log("topic modal " + this.state.isTopicModalVisible);
+    //console.log("question modal " + this.state.isQuestionModalVisible);
+    //console.log("topic modal " + this.state.isTopicModalVisible);
 }
 
   listItemRenderer(item) {
@@ -196,7 +193,7 @@ export default class Forum extends React.Component {
   async loadMore(count, start) {
     if (start > 1 && !this.state.refreshing && !this.state.loading) {
       await this.setState({loading: true});
-      console.log("loading : " + this.state.loading);
+      //console.log("loading : " + this.state.loading);
       await this.appendJedis(count,start);
     }
   }
@@ -215,7 +212,7 @@ export default class Forum extends React.Component {
       await this.setState({isQuestionModalVisible: true});
     } else {
       await this.setState({ isTopicModalVisible: false, currentTopic: 'College Life'});
-      console.log(this.state.currentTopic);
+      //console.log(this.state.currentTopic);
   
       this.resetList();
     }    
@@ -227,7 +224,7 @@ export default class Forum extends React.Component {
       await this.setState({isQuestionModalVisible: true});
     } else {
       await this.setState({ isTopicModalVisible: false, currentTopic: 'College Applications'});
-      console.log(this.state.currentTopic);
+      //console.log(this.state.currentTopic);
   
       this.resetList();
     }
@@ -240,7 +237,7 @@ export default class Forum extends React.Component {
     } else {
 
       await this.setState({ isTopicModalVisible: false, currentTopic: 'Resources'});
-      console.log(this.state.currentTopic);
+      //console.log(this.state.currentTopic);
   
       this.resetList();
     }
@@ -252,7 +249,7 @@ export default class Forum extends React.Component {
       await this.setState({isQuestionModalVisible: true});
     } else {
       await this.setState({ isTopicModalVisible: false, currentTopic: 'All Topics'});
-      console.log(this.state.currentTopic);
+      //console.log(this.state.currentTopic);
   
       this.resetList();
     }

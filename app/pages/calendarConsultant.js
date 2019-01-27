@@ -22,7 +22,7 @@ export default class CalendarScreen extends React.Component {
       emailVerification: true,
     };
     this.onDayPress = this.onDayPress.bind(this);
-    console.log("calendar consultant props " + JSON.stringify(props));
+    //console.log("calendar consultant props " + JSON.stringify(props));
   }
 
   componentDidMount =async() => {
@@ -33,7 +33,7 @@ export default class CalendarScreen extends React.Component {
     const loginCheck = await AsyncStorage.getItem("hasLoggedIn");
     if (loginCheck === "true") {
       await this.setState({ hasLoggedIn: true });
-      console.log("hasLoggedIn" + this.state.hasLoggedIn);
+      //console.log("hasLoggedIn" + this.state.hasLoggedIn);
     }
     const emailVerification = firebase.auth().currentUser.emailVerified;
     if (emailVerification == true) {
@@ -49,7 +49,7 @@ export default class CalendarScreen extends React.Component {
       this.setState({
         selected: day.dateString
       });
-      console.log("pressed " + JSON.stringify(this.state));
+      //console.log("pressed " + JSON.stringify(this.state));
       this.props.navigation.navigate('SetAvailabilityScreen', { bookingDate : day })
     } else {
       alert('You have to choose other day afer today!')

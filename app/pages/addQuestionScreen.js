@@ -31,7 +31,7 @@ export default class Login extends React.Component {
       profileImage: '',
     }
     //see what props App.js is constructed with:
-    // console.log(JSON.stringify(props));
+    // //console.log(JSON.stringify(props));
   }
 
   componentDidMount = async() => {
@@ -43,8 +43,8 @@ export default class Login extends React.Component {
 
     await firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        console.log(" User is signed in.");
-        // console.log("name " + firebase.database().ref('users').child(userUID).child('name'));
+        //console.log(" User is signed in.");
+        // //console.log("name " + firebase.database().ref('users').child(userUID).child('name'));
         firebase.database().ref('users').child(userUID).on('value', function(snapshot) {
           var childKey = snapshot.key;
           var childData = snapshot.val();
@@ -57,23 +57,23 @@ export default class Login extends React.Component {
           that.setState({profileImage: Images.profile})
         }
       } else {
-        console.log(" User is not signed in.");
+        //console.log(" User is not signed in.");
       }
     });
   }
 
   onPressTopic = async () => {
     await this.setState({ isQuestionModalVisible: false });
-    console.log("question modal " + this.state.isQuestionModalVisible);
+    //console.log("question modal " + this.state.isQuestionModalVisible);
     await this.setState({ isTopicModalVisible: true });
-    console.log("topic modal " + this.state.isTopicModalVisible);
+    //console.log("topic modal " + this.state.isTopicModalVisible);
   }
 
   onPressAddQuestion = async () => {
     await this.setState({ isTopicModalVisible: false });
-    console.log("topic modal " + this.state.isTopicModalVisible);
+    //console.log("topic modal " + this.state.isTopicModalVisible);
     await this.setState({ isQuestionModalVisible: true });
-    console.log("question modal " + this.state.isQuestionModalVisible);
+    //console.log("question modal " + this.state.isQuestionModalVisible);
   }
 
   checkIfUserLoggedIn = async () => {
@@ -92,7 +92,7 @@ export default class Login extends React.Component {
     if ((this.state.postQuestionTopic !== 'Select a Question Topic') && (!this.state.question == '')) {
     await this.setState({ isQuestionModalVisible: false});
 
-    console.log("question: ");
+    //console.log("question: ");
     await firebase.database().ref('forum').push({
         question: this.state.question,
         portalQuestion: this.state.userPortal,

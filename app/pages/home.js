@@ -11,10 +11,10 @@ export default class Home extends React.Component {
   };
 
   onPressMoving() {
-    console.log("Moving");
+    //console.log("Moving");
   }
   onPressSelling() {
-    console.log("selling");
+    //console.log("selling");
   }
 
   render() {

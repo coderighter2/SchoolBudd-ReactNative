@@ -42,8 +42,8 @@ export default class AddQuestionScreen extends React.Component {
 
     await firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        console.log(" User is signed in.");
-        // console.log("name " + firebase.database().ref('users').child(userUID).child('name'));
+        //console.log(" User is signed in.");
+        // //console.log("name " + firebase.database().ref('users').child(userUID).child('name'));
         firebase.database().ref('users').child(userUID).on('value', function(snapshot) {
           var childKey = snapshot.key;
           var childData = snapshot.val();
@@ -53,21 +53,18 @@ export default class AddQuestionScreen extends React.Component {
             () => console.log("user portal in function " + that.state.userPortal));
         });
       } else {
-        console.log(" User is not signed in.");
+        //console.log(" User is not signed in.");
       }
     });
-
-    await console.log("current user " + this.state.userName);
-    await console.log("current user portal " + this.state.userPortal);
 
   }
 
   onPressTopic = async() => {
     await this.setState({isQuestionModalVisible: false});
-    console.log("question modal " + this.state.isQuestionModalVisible);
+    //console.log("question modal " + this.state.isQuestionModalVisible);
     this.setState({isPostTopic : false});
     await this.setState({isTopicModalVisible: true});
-    console.log("topic modal " + this.state.isTopicModalVisible);
+    //console.log("topic modal " + this.state.isTopicModalVisible);
 }
 
   onPressPostQuestion = async() => {
@@ -90,7 +87,7 @@ export default class AddQuestionScreen extends React.Component {
     const loginCheck = await AsyncStorage.getItem("hasLoggedIn");
     if (loginCheck === "true") {
       await this.setState({hasLoggedIn: true});
-      console.log("hasLoggedIn" + this.state.hasLoggedIn);
+      //console.log("hasLoggedIn" + this.state.hasLoggedIn);
     }
    }
 

@@ -36,16 +36,16 @@ export default class SaleBlock extends React.Component {
       ration: null,
     }
 
-    console.log(JSON.stringify("saleblock props " + JSON.stringify(props)));
+    //console.log(JSON.stringify("saleblock props " + JSON.stringify(props)));
   }
 
   openConsultantScreen() {
-    console.log('pressed ');
+    //console.log('pressed ');
     this.props.selectConsultant(this.props.jedi);
   }
 
   componentWillMount =async() => {
-    console.log("SaleBlock page open");
+    //console.log("SaleBlock page open");
     var that = this;
     await firebase.database().ref('users').child(this.props.jedi.key).on('value', (snapshot) => {
       var childKey = snapshot.key;
@@ -60,7 +60,7 @@ export default class SaleBlock extends React.Component {
   }
 
   onPressMessageSeller = async () => {
-    console.log('testing message seller');
+    //console.log('testing message seller');
 
     var url;
     if (this.state.skypeUsername !== "") {
@@ -79,12 +79,12 @@ export default class SaleBlock extends React.Component {
   }
 
   onPressBookAppointment(){
-    console.log('testing book appointment');
+    //console.log('testing book appointment');
     this.props.bookAppointment(this.props.jedi);
   }
 
   openMessageScreen() {
-    console.log("pressed message: ");
+    //console.log("pressed message: ");
     this.props.messageBlock(this.state.convoKey);
   }
 

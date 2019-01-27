@@ -69,7 +69,7 @@ export default class ProfileConsultantBasicInfo extends React.Component {
     const loginCheck = await AsyncStorage.getItem("hasLoggedIn");
     if (loginCheck === "true") {
       await this.setState({hasLoggedIn: true});
-      console.log("hasLoggedIn" + this.state.hasLoggedIn);
+      //console.log("hasLoggedIn" + this.state.hasLoggedIn);
     }
    }
 
@@ -80,7 +80,7 @@ export default class ProfileConsultantBasicInfo extends React.Component {
       allowsEditing: true,
       aspect: [4, 3],
     });
-    console.log(result);
+    //console.log(result);
 
     if (!result.cancelled) {
       this.setState({image: result.uri});
@@ -105,7 +105,7 @@ export default class ProfileConsultantBasicInfo extends React.Component {
     if ((this.state.schoolName !== '') && (this.state.cityState !== '') && (this.state.yearsConsultant !== 'Select Years as Consultant')
       && (this.state.image !== '') && (this.state.typeConsultant !== 'Select Type of Consultant')) {
       await this.storeItem();
-      console.log(this.props.navigation);
+      //console.log(this.props.navigation);
       this.props.navigation.navigate("Home");
     } else {
       alert('Please Fill in All Categories');
@@ -131,11 +131,11 @@ export default class ProfileConsultantBasicInfo extends React.Component {
 
 
     await ref.put(blob).then((snapshot) => {
-      console.log('puts blob');
+      //console.log('puts blob');
 
-      console.log('Uploaded a data_url string!');
+      //console.log('Uploaded a data_url string!');
       const downloadURL = snapshot.downloadURL;
-      console.log('downloadUrl: ' + downloadURL);
+      //console.log('downloadUrl: ' + downloadURL);
       {
         this.setState({image: downloadURL, test: 'testSuccessful'})
       }
@@ -149,8 +149,8 @@ export default class ProfileConsultantBasicInfo extends React.Component {
         profilePicture: this.state.image,
       });
 
-    console.log(JSON.stringify(this.state.image));
-    console.log(JSON.stringify(this.state.test));
+    //console.log(JSON.stringify(this.state.image));
+    //console.log(JSON.stringify(this.state.test));
 
     // const pointsRef = firebase.database().ref('users').child(uid).child('points');
   };
@@ -173,32 +173,32 @@ export default class ProfileConsultantBasicInfo extends React.Component {
 
   onPressIECA = async () => {
     await this.setState({isTypeModalVisible: false, typeConsultant: 'IECA'});
-    console.log(this.state.typeConsultant);
+    //console.log(this.state.typeConsultant);
   };
 
   onPressCurrentStudent = async () => {
     await this.setState({isTypeModalVisible: false, typeConsultant: 'College Student'});
-    console.log(this.state.typeConsultant);
+    //console.log(this.state.typeConsultant);
   };
 
   onPressZeroToOne = async () => {
     await this.setState({isYearsModalVisible: false, yearsConsultant: '0-1'});
-    console.log(this.state.yearsConsultant);
+    //console.log(this.state.yearsConsultant);
   };
 
   onPressTwoToThree = async () => {
     await this.setState({isYearsModalVisible: false, yearsConsultant: '2-3'});
-    console.log(this.state.yearsConsultant);
+    //console.log(this.state.yearsConsultant);
   };
 
   onPressFourToFive = async () => {
     await this.setState({isYearsModalVisible: false, yearsConsultant: '4-5'});
-    console.log(this.state.yearsConsultant);
+    //console.log(this.state.yearsConsultant);
   };
 
   onPressGreaterThanFive = async () => {
     await this.setState({isYearsModalVisible: false, yearsConsultant: '< 5'});
-    console.log(this.state.yearsConsultant);
+    //console.log(this.state.yearsConsultant);
   };
 
   render() {

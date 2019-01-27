@@ -40,7 +40,7 @@ export default class AnswerBlock extends React.Component {
 
   onPressUpvote =async() => {
     if(!this.state.voted){
-      console.log("up");
+      //console.log("up");
       await this.setState({upVoted : true, downVoted: false});
       this.saveVote("up");
     } else {
@@ -49,7 +49,7 @@ export default class AnswerBlock extends React.Component {
         this.removeVote(vote);
         //remove vote
       } else {
-        console.log("up");
+        //console.log("up");
         await this.setState({upVoted : true, downVoted: false});
         this.saveVote("up");
       }   
@@ -58,7 +58,7 @@ export default class AnswerBlock extends React.Component {
 
   onPressDownvote =async() => {
     if(!this.state.voted){
-      console.log("down");
+      //console.log("down");
       await this.setState({downVoted : true, upVoted: false});
       this.saveVote("down");
     } else {
@@ -67,7 +67,7 @@ export default class AnswerBlock extends React.Component {
         this.removeVote(vote);
         //remove vote
       } else {
-        console.log("down");
+        //console.log("down");
         await this.setState({downVoted : true, upVoted: false});
         this.saveVote("down");
       }   
@@ -88,7 +88,7 @@ export default class AnswerBlock extends React.Component {
   }
     
   openAnswerScreen() {
-    console.log('pressed ');
+    //console.log('pressed ');
     this.props.purchaseItem(this.props.jedi);
   }
   saveVote = (val) => {
@@ -103,10 +103,10 @@ export default class AnswerBlock extends React.Component {
       if(snapshots.hasChild(firebase.auth().currentUser.uid)){
         await this.setState({voted: true});
         if (snapshots.child(firebase.auth().currentUser.uid).val().val == "up") {
-          console.log("snapshot" + JSON.stringify(snapshots.child(firebase.auth().currentUser.uid).val().val));
+          //console.log("snapshot" + JSON.stringify(snapshots.child(firebase.auth().currentUser.uid).val().val));
           await this.setState({upVoted : true, downVoted: false});
         } else {
-          console.log("snapshot" + JSON.stringify(snapshots.child(firebase.auth().currentUser.uid).val().val));
+          //console.log("snapshot" + JSON.stringify(snapshots.child(firebase.auth().currentUser.uid).val().val));
           await this.setState({downVoted : true, upVoted: false});
         }
       } else await this.setState({upVoted: false, downVoted: false});

@@ -29,7 +29,7 @@ export default class UpcomingBlock extends React.Component {
             appointmentId:''
         }
 
-        console.log(JSON.stringify("questionblock props " + JSON.stringify(props)));
+        //console.log(JSON.stringify("questionblock props " + JSON.stringify(props)));
     }
 
     componentWillMount = async () => {
@@ -57,13 +57,13 @@ export default class UpcomingBlock extends React.Component {
         this.props.navigation.navigate('InputCreditCard', { totalPrice: this.props.upcoming.price, consultantId: this.state.profileId, appointmentId:this.state.appointmentId });
         // Functions.createTransfer(this.props.upcoming.price, this.state.profileId);
 
-        console.log("payout done.");
+        //console.log("payout done.");
     }
     async requestFund() {
         //push notification to student for the release
         //https://docs.expo.io/versions/latest/guides/push-notifications
         await Functions.sendPushnotification(this.props.upcoming.studentID);
-        console.log("payout done.");
+        //console.log("payout done.");
         alert("The student will be notified of the completed appointment");
     }
     paymentButton() {

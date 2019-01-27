@@ -116,23 +116,23 @@ export default class FindConsultant extends React.Component {
 
     var jedisList = this.state.jedisSectioned[0].data.slice();
     var filterPass = false;
-    console.log("testing append jedis");
+    //console.log("testing append jedis");
 
 
     var database = firebase.database();
     database.ref('consultants').on('child_added', (snapshot) => {
-      console.log("testing enter firebase ref");
+      //console.log("testing enter firebase ref");
       var childKey = snapshot.key;
-      console.log("key " + childKey);
+      //console.log("key " + childKey);
       var childData = snapshot.val();
       childData.key = childKey;
-      console.log("child data pulled" + JSON.stringify(childData));
+      //console.log("child data pulled" + JSON.stringify(childData));
      
       jedisList.push(childData);
-      console.log("jedis " + JSON.stringify(jedisList));
+      //console.log("jedis " + JSON.stringify(jedisList));
 
       this.setState({ loading: false, refreshing: false, jedisSectioned: [{ title: 'Jedis', data: jedisList }] });
-      console.log(childData);
+      //console.log(childData);
     });
 
   }
@@ -156,7 +156,7 @@ export default class FindConsultant extends React.Component {
     const loginCheck = await AsyncStorage.getItem("hasLoggedIn");
     if (loginCheck === "true") {
       await this.setState({ hasLoggedIn: true });
-      console.log("hasLoggedIn" + this.state.hasLoggedIn);
+      //console.log("hasLoggedIn" + this.state.hasLoggedIn);
     }
     const emailVerification = firebase.auth().currentUser.emailVerified;
     if (emailVerification == true) {
@@ -194,22 +194,22 @@ export default class FindConsultant extends React.Component {
   resetList = async () => {
     await this.setState({ refreshing: true, jedisSectioned: [{ title: 'Jedis', data: [] }] });
     this.appendJedis(3, 1);
-    console.log("selectedItems " + JSON.stringify(this.state.selectedItems));
+    //console.log("selectedItems " + JSON.stringify(this.state.selectedItems));
   }
 
   onPressMiscellaneous = async () => {
     await this.setState({ isModalVisible: false, currentCategory: 'Miscellaneous' });
-    console.log(this.state.currentCategory);
+    //console.log(this.state.currentCategory);
 
     this.resetList();
   }
 
   onSelectedItemsChange = async (selectedItems) => {
     this.setState({ selectedItems });
-    console.log("typeof " + typeof this.state.selectedItems);
+    //console.log("typeof " + typeof this.state.selectedItems);
     var selectedItemsString = JSON.stringify(selectedItems);
-    console.log("selectedItemsString " + selectedItemsString);
-    console.log("typeof string" + typeof selectedItemsString);
+    //console.log("selectedItemsString " + selectedItemsString);
+    //console.log("typeof string" + typeof selectedItemsString);
     if (selectedItemsString.includes("IECA") || selectedItemsString.includes("Current College Student")) {
       await this.setState({ selectedConsultantType: true });
     } else {
@@ -226,12 +226,13 @@ export default class FindConsultant extends React.Component {
     } else {
       await this.setState({ selectedSpecialties: false });
     }
-    console.log("type " + this.state.selectedConsultantType);
-    console.log("availabilityPreferences " + this.state.selectedAvailabilityPreferences);
-    console.log("specialties " + this.state.selectedSpecialties);
+    //console.log("type " + this.state.selectedConsultantType);
+    //console.log("availabilityPreferences " + this.state.selectedAvailabilityPreferences);
+    //console.log("specialties " + this.state.selectedSpecialties);
   }
 
   bookAppointment = async (item) => {
+    console.log("bookAppointment : "+ JSON.stringify(item) );
     this.props.navigation.navigate('CalendarOtherScreen', { item: item });
   }
 

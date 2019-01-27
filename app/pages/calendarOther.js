@@ -25,7 +25,7 @@ export default class CalendarScreen extends React.Component {
       this.setState({
         selected: day.dateString
       });
-      console.log("pressed " + JSON.stringify(this.state));
+      //console.log("pressed " + JSON.stringify(this.state));
       this.props.navigation.navigate('MakeAppointmentsScreen', { 
         propsCalendar: this.props.navigation.state.params.item.key, 
         bookingDate : day 

@@ -34,12 +34,12 @@ export default class StudentProfileCard extends React.Component {
       photo: null,
     }
     //See what props our StarWarsCard renders with
-    console.log(JSON.stringify(props));
+    //console.log(JSON.stringify(props));
   }
 
   componentWillMount= async() => {
-    console.log("current user" + JSON.stringify(firebase.auth().currentUser));
-    console.log(JSON.stringify(firebase.database().ref('users').child(firebase.auth().currentUser.uid)));
+    //console.log("current user" + JSON.stringify(firebase.auth().currentUser));
+    //console.log(JSON.stringify(firebase.database().ref('users').child(firebase.auth().currentUser.uid)));
     var ref = firebase.database().ref("users").child(firebase.auth().currentUser.uid);
     ref.once("value", (snapshot) => {
     const nameProfile = snapshot.child("name").val(); // {first:"Ada",last:"Lovelace"}
@@ -47,7 +47,7 @@ export default class StudentProfileCard extends React.Component {
     const grade = snapshot.child("grade").val();
     const cityState = snapshot.child("cityState").val();
     const profilePicture = snapshot.child("profilePicture").val();
-    console.log("name " + nameProfile);
+    //console.log("name " + nameProfile);
     if (nameProfile != null) {
         this.setState({profileName: snapshot.child("name").val()});
     } else {
@@ -79,13 +79,13 @@ export default class StudentProfileCard extends React.Component {
 
   // onPressMessageFreelancer = async () => {
   //   const { navigate } = this.props.navigation.navigate;
-  //   console.log("testing params" + this.props.navigation.state.params.item.seller);
+  //   //console.log("testing params" + this.props.navigation.state.params.item.seller);
   //    await this.rememberMessage();
-  //    console.log("preAdd: " +JSON.stringify(this.state.previousMessage));
+  //    //console.log("preAdd: " +JSON.stringify(this.state.previousMessage));
   //    await this.add();
-  //    console.log("convokey: " + this.state.convoKey);
-  //    console.log("asynckey1: " + JSON.stringify(this.state.userID+this.state.sellerID));
-  //    console.log("asynckey2: " + JSON.stringify(this.state.sellerID+this.state.userID));
+  //    //console.log("convokey: " + this.state.convoKey);
+  //    //console.log("asynckey1: " + JSON.stringify(this.state.userID+this.state.sellerID));
+  //    //console.log("asynckey2: " + JSON.stringify(this.state.sellerID+this.state.userID));
   //    this.props.navigation.navigate('MessagesScreen', {key: this.state.convoKey});
   //   //query
   // }
@@ -93,9 +93,9 @@ export default class StudentProfileCard extends React.Component {
   //   rememberMessage = async () => {
   //     try {
   //         const key1 = await AsyncStorage.getItem(this.state.userID+this.state.sellerID);
-  //         console.log("key1: " + key1);
+  //         //console.log("key1: " + key1);
   //         const key2 = await AsyncStorage.getItem(this.state.sellerID+this.state.userID);
-  //         console.log("key2: " + key2);
+  //         //console.log("key2: " + key2);
   //         if (key1 !== null ) {
   //           this.setState({convoKey: key1, previousMessage: true });
   //         }
@@ -103,17 +103,17 @@ export default class StudentProfileCard extends React.Component {
   //           this.setState({convoKey: key2, previousMessage: true })
   //         }
   //     } catch (error) {
-  //       console.log(error);
+  //       //console.log(error);
   //     }
   //   }
   //
   // add = async () => {
-  //   // console.log(firebase.database().ref('users').child(this.state.key).child('rooms').child('roomName');
-  //     // console.log("previousMessage: " + this.state.previousMessage);
+  //   // //console.log(firebase.database().ref('users').child(this.state.key).child('rooms').child('roomName');
+  //     // //console.log("previousMessage: " + this.state.previousMessage);
   //     if (this.state.previousMessage === false) {
-  //       console.log("enters if statement");
+  //       //console.log("enters if statement");
   //       var roomsList = firebase.database().ref('users').child(this.state.sellerID).child('rooms').push();
-  //       console.log("preset rooms list");
+  //       //console.log("preset rooms list");
   //       await roomsList.set({
   //         roomName: firebase.auth().currentUser.displayName,
   //       }).then(() => this.setState({text: ""}));

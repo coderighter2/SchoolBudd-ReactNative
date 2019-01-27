@@ -245,14 +245,14 @@ export default class App extends React.Component {
       const completed = await AsyncStorage.getItem('onboarding');
       await this.setState({ hasDoneOnboarding: JSON.parse(completed) });
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }
 
   rememberPortal = async () => {
     try {
       const selectedPortal = await AsyncStorage.getItem('portal');
-      console.log("selectedPortal test " + JSON.stringify(selectedPortal));
+      //console.log("selectedPortal test " + JSON.stringify(selectedPortal));
       if (selectedPortal === 'student') {
         await this.setState({
           selectedPortalStudent: true,
@@ -283,7 +283,7 @@ export default class App extends React.Component {
         })
      }
     }catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }
 
@@ -330,37 +330,37 @@ export default class App extends React.Component {
       selectedPortalParent: false
     })
     await AsyncStorage.setItem('portal', 'school');
-    console.log(this.state.selectedPortalSchool);
+    //console.log(this.state.selectedPortalSchool);
   }
 
   render() {
     if (this.state.hasDoneOnboarding && this.state.selectedPortalStudent) {
-      console.log(this.state.hasDoneOnboarding);
+      //console.log(this.state.hasDoneOnboarding);
       return (
         <StudentNav />
       );
     } else if (this.state.hasDoneOnboarding && this.state.selectedPortalConsultant) {
-      console.log(this.state.hasDoneOnboarding);
+      //console.log(this.state.hasDoneOnboarding);
       return (
         <ConsultantNav />
       );
     } else if (this.state.hasDoneOnboarding && this.state.selectedPortalSchool) {
-      console.log(this.state.hasDoneOnboarding);
+      //console.log(this.state.hasDoneOnboarding);
       return (
         <SchoolNav />
       );
     } else if (this.state.hasDoneOnboarding && this.state.selectedPortalParent) {
-      console.log(this.state.hasDoneOnboarding);
+      //console.log(this.state.hasDoneOnboarding);
       return (
         <ParentNav />
       );
     } else if (this.state.hasDoneOnboarding === null) {
-      console.log("onboarding check " + this.state.hasDoneOnboarding);
+      //console.log("onboarding check " + this.state.hasDoneOnboarding);
       return (
         <pages.Onboarding onDone={this._onDone} />
       );
     } else {
-      console.log("onboarding console log " + this.state.hasDoneOnboarding);
+      //console.log("onboarding console log " + this.state.hasDoneOnboarding);
       return (
         <pages.SelectPortal
           selectPortalStudent={this._selectPortalStudent}

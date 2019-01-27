@@ -47,6 +47,7 @@ export default class AccountInfo extends React.Component {
       buttonText: 'Show me your ID Card!',
       loading: false,
       refreshing: false,
+      cardRefreshing: false,
       price: 140,
       description: '',
       searchText: '',
@@ -65,10 +66,11 @@ export default class AccountInfo extends React.Component {
       uid: '',
       portal: "",
       balance: "",
-      cardInfo: {}
+      cardInfo: [],
+      selectedCardInfo: {}
     }
     //see what props App.js is constructed with:
-    // console.log(JSON.stringify(props));
+    // //console.log(JSON.stringify(props));
   }
 
   async appendTH(count, start) {
@@ -86,7 +88,7 @@ export default class AccountInfo extends React.Component {
         thList.push(childData);
       else if (this.state.portal === "consultant" && childData.target === this.state.uid)
         thList.push(childData);
-      console.log("thList data pushed" + JSON.stringify(thList), this.state.uid, this.state.portal);
+      //console.log("thList data pushed" + JSON.stringify(thList), this.state.uid, this.state.portal);
       await this.setState({ loading: false, refreshing: false, thSectioned: [{ title: 'THs', data: thList }] });
 
     });
@@ -99,13 +101,38 @@ export default class AccountInfo extends React.Component {
     await this.appendTH(3, 1);
     if (this.state.portal === "consultant")
       await this.getBalance()
-    if (this.state.portal === "student")
-      await this.getCardInfo()
+    if (this.state.portal === "student") {
+      await this.getCardInfo();
+      await this.getSelectCard();
+    }
   }
   getCardInfo = async () => {
 
-    var cardInfo = JSON.parse(await AsyncStorage.getItem('cardInfo'));
-    await this.setState({ cardInfo });
+    this.setState({
+      cardRefreshing: true
+    })
+
+    // var cardInfo = JSON.parse(await AsyncStorage.getItem('cardInfo'));
+    // await this.setState({ cardInfo });
+    await firebase.database().ref('cardinfo').child(this.state.uid).on('value', async (snapshot) => {
+      if (snapshot.val() == null) {
+        await this.setState({
+          cardRefreshing: true
+        })
+        
+      } else {
+        var childKey = snapshot.key;
+        var childData = snapshot.val();
+        childData.key = childKey;
+        console.log("cardinfo");
+        console.log(childData);
+        await this.setState({
+          cardRefreshing: false,
+          cardInfo: [{ title: 'THs', data: JSON.parse(childData.result) }]
+        })
+      }
+      
+    });
 
   }
   getBalance = async () => {
@@ -113,7 +140,7 @@ export default class AccountInfo extends React.Component {
       var childKey = snapshot.key;
       var childData = snapshot.val();
       childData.key = childKey;
-      console.log("balance", JSON.stringify(childData));
+      //console.log("balance", JSON.stringify(childData));
       await this.setState({ balance: `Available : $ ${childData.available[0].amount}    Pending : $ ${childData.pending[0].amount}` })
 
 
@@ -130,7 +157,7 @@ export default class AccountInfo extends React.Component {
     if (loginCheck === "true") {
       await this.setState({ hasLoggedIn: true });
       await this.setState({ uid: firebase.auth().currentUser.uid })
-      console.log("hasLoggedIn" + this.state.hasLoggedIn);
+      //console.log("hasLoggedIn" + this.state.hasLoggedIn);
     }
     const emailVerification = firebase.auth().currentUser.emailVerified;
     if (emailVerification == true) {
@@ -150,7 +177,50 @@ export default class AccountInfo extends React.Component {
         portal={this.state.portal} />
     );
   }
+
   _keyExtractor = (item, index) => index;
+  _keyExtractor1 = (item, index) => index;
+  
+  selectCard = (card) => {
+    AsyncStorage.setItem('cardInfo', JSON.stringify(card));
+    this.setState({
+      selectedCardInfo: card
+    })
+  }
+
+  getSelectCard = () => {
+    if (AsyncStorage.getItem('cardInfo')) {
+      var cardInfo = JSON.parse(AsyncStorage.getItem('cardInfo'));
+      this.setState({
+        selectedCardInfo: cardInfo
+      })
+    }
+  }
+  
+  listCardRenderer = (item) => {
+    return (<TouchableOpacity onPress={()=>this.selectCard(item)}>
+      <Card>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'column' }}>
+              <Text style={{ fontSize: 15, marginLeft: 20, fontWeight: '200' }}>Card number:  {item.cardNum}</Text>
+              <Text style={{ fontSize: 13, marginLeft: 20, color: '#999' }}>Expire day: {item.expMonth} / {item.expYear}</Text>
+              <Text style={{ fontSize: 13, marginLeft: 20, color: '#999' }}>CVC:  {item.cvc}</Text>
+              <Text style={{ fontSize: 15, marginLeft: 20, color: '#999' }}>Name: {item.name}</Text>
+              {/* <Text style={{ fontSize: 15, marginLeft: 20, color: '#999' }}>Postal code: {this.state.cardInfo.postalCode}</Text> */}
+            </View>
+            <View style={{ marginLeft: 30 }}>
+              {this.state.selectedCardInfo && this.state.selectedCardInfo.cardNum && this.state.selectedCardInfo.cardNum == item.cardNum?<Icon
+                name='check'
+                type='evilicon'
+                color='#517fa4'
+              />:<View></View>}
+            </View>
+          </View>
+        </View>
+      </Card>
+    </TouchableOpacity>);
+  } 
   render() {
 
     // if (!this.state.hasLoggedIn) {
@@ -172,30 +242,20 @@ export default class AccountInfo extends React.Component {
               {this.state.portal === "student" &&
                 <View>
                   <Text style={{ margin: 30, fontSize: 20, marginBottom: 0 }}>Select your card</Text>
-                  {this.state.cardInfo ?
-                    <View style={styles.cardView}>
-                      <TouchableOpacity>
-                        <Card>
-                          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <View style={{ flexDirection: 'row' }}>
-                              <View style={{ flexDirection: 'column' }}>
-                                <Text style={{ fontSize: 15, marginLeft: 20, fontWeight: '200' }}>Card number:  {this.state.cardInfo.cardNum}</Text>
-                                <Text style={{ fontSize: 13, marginLeft: 20, color: '#999' }}>Expire day: {this.state.cardInfo.expMonth} / {this.state.cardInfo.expYear}</Text>
-                                <Text style={{ fontSize: 13, marginLeft: 20, color: '#999' }}>CVC:  {this.state.cardInfo.cvc}</Text>
-                                <Text style={{ fontSize: 15, marginLeft: 20, color: '#999' }}>Name: {this.state.cardInfo.name}</Text>
-                                {/* <Text style={{ fontSize: 15, marginLeft: 20, color: '#999' }}>Postal code: {this.state.cardInfo.postalCode}</Text> */}
-                              </View>
-                              <View style={{ marginLeft: 30 }}>
-                                <Icon
-                                  name='check'
-                                  type='evilicon'
-                                  color='#517fa4'
-                                />
-                              </View>
-                            </View>
-                          </View>
-                        </Card>
-                      </TouchableOpacity>
+                  {(this.state.cardInfo && this.state.cardInfo.length > 0 ) ?
+                    <View >
+                      <SectionList
+                        sections={this.state.cardInfo}
+                        // onEndReached={() => this.loadMore(3,this.state.thSectioned[0].data.length+1)}
+                        renderItem={({ item }) => this.listCardRenderer(item)}
+                        ItemSeparatorComponent={() => (<View style={{ height: 10 }} />)}
+                        keyExtractor={this._keyExtractor1}
+                        contentContainerStyle={{ alignItems: 'center' }}
+                        onRefresh={() => this.getCardInfo()}
+                        refreshing={this.state.cardRefreshing}
+                        removeClippedSubviews={true}
+                        ListFooterComponent={this.state.cardRefreshing ? <ActivityIndicator /> : <View />}
+                      />
                     </View> :
                     <Text style={{ fontSize: 13, margin: 30, color: '#999' }}>
                       There is not any inputed card

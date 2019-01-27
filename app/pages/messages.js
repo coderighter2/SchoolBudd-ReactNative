@@ -37,7 +37,7 @@ export default class Messages extends React.Component {
         var list = this.state.rooms.slice();
         list.push(childData);
         this.setState({rooms: list});
-        console.log(childData);
+        //console.log(childData);
     });
   }
 

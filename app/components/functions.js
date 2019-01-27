@@ -38,7 +38,7 @@ createToken = async() => {
        response.json().then(solved => {
         cardToken = solved.id;
         this.setState({token: cardToken});
-        console.log("card token in fetch " + cardToken);
+        //console.log("card token in fetch " + cardToken);
 
 
         this.createCharge(Math.ceil(this.state.totalPrice*1.12), solved.id);
@@ -56,7 +56,7 @@ createToken = async() => {
   firebase.database().ref('stripe_customers').child(consultant_id).child('account').once('value')
   .then(value=>{
     this.setState({destination : value.val()['id']});
-    console.log(this.state.destination);
+    //console.log(this.state.destination);
     var chargeDetails = {
       "amount" : amount,
       "currency" : 'usd',
@@ -81,7 +81,7 @@ createToken = async() => {
        body: formBody
      }).then((response) => {
        response.json().then(solved => {
-        console.log("Transfer " + JSON.stringify(solved));
+        //console.log("Transfer " + JSON.stringify(solved));
         this.getAllHistory();
         this.getPlatformBalance();
         this.getConsultantBalance(consultant_id);
@@ -123,7 +123,7 @@ createCharge = async(amount,token) => {
      }).then((response) => {
        response.json().then(solved => {
         this.setState({chargeId : solved.id});
-        console.log("charge " + JSON.stringify(solved));
+        //console.log("charge " + JSON.stringify(solved));
         this.getAllHistory();
         this.getPlatformBalance();
         Alert.alert("Your money is locked for appointments! If you complete this appointment, it will be released to consultant.");
@@ -161,7 +161,7 @@ createCharge = async(amount,token) => {
  // complete this appointment
  // after completion, the 0.95 * appointment's amount will be transfered from platform account to consultant account
  release = async() => {
-   console.log("amount : "  + this.state.amount + "  custom account id : " + this.state.consultant_id);
+   //console.log("amount : "  + this.state.amount + "  custom account id : " + this.state.consultant_id);
    await this.createTransfer(Math.floor(this.state.amount*0.95), this.state.consultant_id)
    await this.setState({bookingStatus : false});
  }
@@ -232,7 +232,7 @@ createCharge = async(amount,token) => {
      body: formBody
    }).then((response) => {
      response.json().then(solved => {
-      console.log("refunds " + JSON.stringify(solved));
+      //console.log("refunds " + JSON.stringify(solved));
       this.getAllHistory();
       this.getPlatformBalance();
      });

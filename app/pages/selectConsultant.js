@@ -41,7 +41,7 @@ export default class SelectConsultant extends React.Component {
       affiliation: '',
     }
     //See what props our StarWarsCard renders with
-    console.log("SelectConsultant props " + JSON.stringify(props));
+    //console.log("SelectConsultant props " + JSON.stringify(props));
   }
 
   componentDidMount() {
@@ -51,17 +51,17 @@ export default class SelectConsultant extends React.Component {
     hometown: this.props.navigation.state.params.item.cityState, experience: this.props.navigation.state.params.item.years,
     affiliation: this.props.navigation.state.params.item.schoolName, specialties: this.props.navigation.state.params.item.specialties});
     //
-    // console.log("item props: " + JSON.stringify( this.props.navigation.state.params.item));
-    // console.log("item props specialties: " + JSON.stringify( this.props.navigation.state.params.item.specialties));
+    // //console.log("item props: " + JSON.stringify( this.props.navigation.state.params.item));
+    // //console.log("item props specialties: " + JSON.stringify( this.props.navigation.state.params.item.specialties));
     // var arraySpecialties = this.state.specialtiesArray;
-    // console.log("type specialties " + typeof this.state.specialties);
-    // console.log(" specialties " + this.state.specialties);
+    // //console.log("type specialties " + typeof this.state.specialties);
+    // //console.log(" specialties " + this.state.specialties);
     //
     // this.props.navigation.state.params.item.specialties.forEach(function(element) {
-    //   console.log(element.value);
+    //   //console.log(element.value);
     //   arraySpecialties.push(element.value + ", ");
     // });
-    // console.log(this.state.specialtiesArray);
+    // //console.log(this.state.specialtiesArray);
     // this.setState( {specialtiesArray: arraySpecialties});
     // this.setState({description: this.props.navigation.state.params.description})
   }

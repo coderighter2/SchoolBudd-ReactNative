@@ -63,7 +63,7 @@ export default class MakeAppointments extends React.Component {
       fees: 0,
     }
     //see what props App.js is constructed with:
-    console.log("make appointment screen props " + JSON.stringify(props));
+    //console.log("make appointment screen props " + JSON.stringify(props));
   }
 
   componentWillMount =async() => {
@@ -83,15 +83,17 @@ export default class MakeAppointments extends React.Component {
     var childKey = snapshot.key;
     var childData = snapshot.val();
     price = childData.price;
+
+    this.setState({ hourlyPrice: price});
   });
     const user = firebase.auth().currentUser
     await this.setState({ currentUserID: user.uid});
-    // console.log("current user " + this.state.currentUserID);
-    await this.setState({ hourlyPrice: price});
+    console.log("current user " + this.state.currentUserID);
+    
     this.appendJedis(3,1);
     var dateTime = "2015-06-17 02:24:36 AM";
     dateTime = moment(dateTime, 'YYYY-MM-DD, HH:mm:ss A').format('YYYY-MM-DD HH:mm:ss A');
-    // console.log("test date time " + dateTime);
+    // //console.log("test date time " + dateTime);
    
   }
 
@@ -100,9 +102,11 @@ export default class MakeAppointments extends React.Component {
   }
 
   toggleAppointmentModal = async() => {
+    
     await this.setState({timeslotsArrayString : ""});
     var selectedTimeslots = await AsyncStorage.getItem('selectedTimeslots');
-    console.log("time slots retrieved " +  JSON.stringify(selectedTimeslots));
+    console.log(selectedTimeslots);
+    console.log("time slots retrieved " +  JSON.stringify(this.state));
     selectedTimeslots = JSON.parse(selectedTimeslots);
     if ((selectedTimeslots !== null) && (selectedTimeslots.length !== 0)) {
       var selectedTimeslotsString = selectedTimeslots[0];
@@ -131,7 +135,7 @@ export default class MakeAppointments extends React.Component {
       var childKey = snapshot.key;
       var childData = snapshot.val();
       childData.key = childKey;
-      console.log("child data " + JSON.stringify(childData));
+      //console.log("child data " + JSON.stringify(childData));
       jedisList.push(childData);
     });
 
@@ -145,7 +149,7 @@ export default class MakeAppointments extends React.Component {
     } else if (this.state.timeslotsArray.length == 0) {
       alert("Please Select a TimeSlot");
     } else {
-      console.log("Testing 1 1 1 ");
+      //console.log("Testing 1 1 1 ");
       //for each loop through timeslots array {
       // await this.payForAppointment();
       // if (payment == true) { //needs to make sure student has a stripe account/credit card 
@@ -154,26 +158,25 @@ export default class MakeAppointments extends React.Component {
       this.state.timeslotsArray.forEach(function(element) {
         var startTime = DataTimes[element].startTime;
         var endTime = DataTimes[element].endTime;
-        // console.log("start time pre " + startTime);
-        // console.log("end time pre " + endTime);
+        // //console.log("start time pre " + startTime);
+        // //console.log("end time pre " + endTime);
         startTime = JSON.stringify(that.state.dateString) + " " + + startTime;
         endTime = JSON.stringify(that.state.dateString) + " " + endTime;
-        // console.log("end time " + endTime);
+        // //console.log("end time " + endTime);
         startTime = moment(startTime, 'YYYY-MM-DD, HH:mm A').format('YYYY-MM-DD HH:mm:ss A');
         endTime = moment(endTime, 'YYYY-MM-DD, HH:mm A').format('YYYY-MM-DD HH:mm:ss A');
-        // console.log("date time check start" + JSON.stringify(startTime));
-        console.log("date time check end" + JSON.stringify(endTime));
+        // //console.log("date time check start" + JSON.stringify(startTime));
+        //console.log("date time check end" + JSON.stringify(endTime));
         var pushRef = firebase.database().ref('appointments').push();
         var key = pushRef.key;
-        console.log("pushRef " + pushRef.key);
-        firebase.database().ref('appointments/' + pushRef.key).update({
+        firebase.database().ref('appointments').child(pushRef.key).update({
           appointmentId : key,
           studentID: that.state.currentUserID,
           consultantID: that.state.consultantKey,
           summary: that.state.appointmentGoal,
           startTime: startTime,
           endTime: endTime,
-          price : Number(that.state.totalPrice.toFixed(2))
+          price : that.state.totalPrice?Number(that.state.totalPrice.toFixed(2)):140
         });
     //Functions.createCharge(this.state.totalPrice,card token(either from firebase or with create token function))
     //they should be able to select from previously saved cards, or navigate to the card input;
@@ -186,8 +189,8 @@ export default class MakeAppointments extends React.Component {
         if (value == element) {
           ref.child(key).remove();
         }
-        console.log("child data " + JSON.stringify(value));
-        console.log("child key " + JSON.stringify(key));
+        //console.log("child data " + JSON.stringify(value));
+        //console.log("child key " + JSON.stringify(key));
       });
       });
 
@@ -200,7 +203,7 @@ export default class MakeAppointments extends React.Component {
     const loginCheck = await AsyncStorage.getItem("hasLoggedIn");
     if (loginCheck === "true") {
       await this.setState({hasLoggedIn: true});
-      console.log("hasLoggedIn" + this.state.hasLoggedIn);
+      //console.log("hasLoggedIn" + this.state.hasLoggedIn);
     }
     var user = firebase.auth().currentUser;
     if (user) {
@@ -238,7 +241,7 @@ export default class MakeAppointments extends React.Component {
   resetList = async () => {
     await this.setState({refreshing: true, jedisSectioned: [{title: 'Jedis', data:[]}]});
     this.appendJedis(3,1);
-    console.log("selectedItems " + JSON.stringify(this.state.selectedItems));
+    //console.log("selectedItems " + JSON.stringify(this.state.selectedItems));
   }
 
 

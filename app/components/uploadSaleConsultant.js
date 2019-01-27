@@ -50,7 +50,7 @@ export default class UploadSaleConsultant extends React.Component {
     const loginCheck = await AsyncStorage.getItem("hasLoggedIn");
     if (loginCheck === "true") {
       await this.setState({hasLoggedIn: true});
-      console.log("hasLoggedIn" + this.state.hasLoggedIn);
+      //console.log("hasLoggedIn" + this.state.hasLoggedIn);
     }
    }
 
@@ -61,7 +61,7 @@ export default class UploadSaleConsultant extends React.Component {
       allowsEditing: true,
       aspect: [4, 3],
     });
-    console.log(result);
+    //console.log(result);
 
     if (!result.cancelled) {
       this.setState({image: result.uri});
@@ -86,7 +86,7 @@ export default class UploadSaleConsultant extends React.Component {
     if ((this.state.schoolName !== '') && (this.state.cityState !== '') && (this.state.grade !== '')
       && (this.state.image !== '')) {
       await this.storeItem();
-      console.log(this.props.navigation);
+      //console.log(this.props.navigation);
       this.props.purchaseConfirmation(this.state.price, this.state.itemName);
     } else {
       alert('Please Fill in All Categories');
@@ -112,11 +112,11 @@ export default class UploadSaleConsultant extends React.Component {
 
 
     await ref.put(blob).then((snapshot) => {
-      console.log('puts blob');
+      //console.log('puts blob');
 
-      console.log('Uploaded a data_url string!');
+      //console.log('Uploaded a data_url string!');
       const downloadURL = snapshot.downloadURL;
-      console.log('downloadUrl: ' + downloadURL);
+      //console.log('downloadUrl: ' + downloadURL);
       {
         this.setState({image: downloadURL, test: 'testSuccessful'})
       }
@@ -130,8 +130,8 @@ export default class UploadSaleConsultant extends React.Component {
         isCounselor: true,
       });
 
-    console.log(JSON.stringify(this.state.image));
-    console.log(JSON.stringify(this.state.test));
+    //console.log(JSON.stringify(this.state.image));
+    //console.log(JSON.stringify(this.state.test));
 
     // const pointsRef = firebase.database().ref('users').child(uid).child('points');
   };

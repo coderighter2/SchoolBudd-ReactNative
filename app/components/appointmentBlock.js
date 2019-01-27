@@ -27,7 +27,7 @@ export default class AppointmentBlock extends React.Component {
   componentWillMount= async() => {
     var userUID = firebase.auth().currentUser.uid;
     var name;
-    console.log("uid " + userUID);
+    //console.log("uid " + userUID);
     await this.setState({ 
       currentUserID: userUID,
       consultantID: this.props.consultantKey,
@@ -45,21 +45,21 @@ export default class AppointmentBlock extends React.Component {
 
       var timeSlotArray = await AsyncStorage.getItem('selectedTimeslots');
       timeSlotArray = JSON.parse(timeSlotArray);
-      console.log("test " + JSON.stringify(timeSlotArray));
+      //console.log("test " + JSON.stringify(timeSlotArray));
         if ((await AsyncStorage.getItem("selectedTimeslots") == null) || (timeSlotArray.length == 0)) {
           var selectedTimeslots = [];
           selectedTimeslots.push(timeSlot);
           await AsyncStorage.setItem('selectedTimeslots', JSON.stringify(selectedTimeslots));
         } else {
           var selectedTimeslots = await AsyncStorage.getItem('selectedTimeslots');
-          console.log("time slots retrieved " +  JSON.stringify(selectedTimeslots));
+          //console.log("time slots retrieved " +  JSON.stringify(selectedTimeslots));
           selectedTimeslots = JSON.parse(selectedTimeslots);
           if (!selectedTimeslots.includes(timeSlot)) {
             selectedTimeslots.push(timeSlot);
             await AsyncStorage.setItem('selectedTimeslots', JSON.stringify(selectedTimeslots));
           }
           var selectedTimeslots = await AsyncStorage.getItem('selectedTimeslots');
-          console.log("time slots pushed " +  JSON.stringify(selectedTimeslots));
+          //console.log("time slots pushed " +  JSON.stringify(selectedTimeslots));
         }
     }  else {
       var selectedTimeslots = await AsyncStorage.getItem('selectedTimeslots');

@@ -38,20 +38,20 @@ export default class MessagesList extends React.Component {
   componentWillMount() {
     // firebase.database().ref('users').child(firebase.auth().currentUser.uid).child('rooms').on('child_added', (snapshot) => {
     //     var childKey = snapshot.key;
-    //     // console.log("messages list key:" + JSON.stringify(childKey));
+    //     // //console.log("messages list key:" + JSON.stringify(childKey));
     //     var childData = snapshot.val();
     //     childData.key = childKey;
     //     var list = this.state.rooms.slice();
     //     list.push(childData);
     //     this.setState({rooms: list});
-    //     // console.log("child data: " + childData);
+    //     // //console.log("child data: " + childData);
     // });
     this.checkIfUserLoggedIn();
     this.resetList();
   }
 
   async componentDidMount() {
-    // console.log("passing item test: " + this.props.navigation.state.params.item.seller);
+    // //console.log("passing item test: " + this.props.navigation.state.params.item.seller);
     if (this.props.navigation.state.params !== undefined) {
       if (this.props.navigation.state.params.item.id !== undefined) {
         await this.setState({sellerName: this.props.navigation.state.params.item.seller, sellerId: this.props.navigation.state.params.item.id});
@@ -64,7 +64,7 @@ export default class MessagesList extends React.Component {
     const loginCheck = await AsyncStorage.getItem("hasLoggedIn");
     if (loginCheck === "true") {
       await this.setState({hasLoggedIn: true});
-      console.log("hasLoggedIn" + this.state.hasLoggedIn);
+      //console.log("hasLoggedIn" + this.state.hasLoggedIn);
     }
    }
 
@@ -73,11 +73,11 @@ export default class MessagesList extends React.Component {
     const { navigate } = this.props.navigation;
 
     navigate('UserProfileScreen', { username: username });
-    console.log("Requested: " + username);
+    //console.log("Requested: " + username);
   }
 
   _renderItem = ({item}) => {
-    // console.log(item);
+    // //console.log(item);
     return (
       <TouchableOpacity onPress={() => this.props.navigation.navigate('MessagesScreen', {name: item.roomName, key: item.key})}>
         <View style={[styles.addChatContainer,{borderTopWidth: 0, borderBottomWidth: 1}]}>
@@ -101,7 +101,7 @@ export default class MessagesList extends React.Component {
         var list = this.state.rooms.slice();
         list.push(childData);
         this.setState({rooms: list});
-        // console.log("child data: " + childData);
+        // //console.log("child data: " + childData);
     });
     this.setState({refreshing: false});
   }

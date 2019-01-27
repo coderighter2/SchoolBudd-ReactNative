@@ -1,11 +1,11 @@
 import React from 'react';
-import { StyleSheet, View, Text, Button, TouchableHighlight, AsyncStorage, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, Button, TouchableHighlight, AsyncStorage,SectionList, TextInput, TouchableOpacity,ActivityIndicator, Alert, ScrollView } from 'react-native';
 import Metrics from '../Themes/Metrics';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from 'firebase';
 import { Facebook } from 'expo';
 import Modal from "react-native-modal";
-import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
+import { FormLabel, FormInput, FormValidationMessage, Card, Icon } from 'react-native-elements';
 import { CreditCardInput } from "react-native-credit-card-input";
 import axios from 'axios';
 import Functions from '../Themes/Functions';
@@ -30,6 +30,7 @@ export default class InputCreditCard extends React.Component {
       expMonth: '',
       name: '',
       postalCode: '',
+      cardRefreshing: false,
       cvc: '',
       uid: firebase.auth().currentUser.uid,
       valid: false,
@@ -38,19 +39,19 @@ export default class InputCreditCard extends React.Component {
       bookingStatus: false,
       destination: '',
       chargeId: '',
-      cardFormData: { number: "4242 4242 4242 4242", expiry: "09/22", cvc: "234" }
+      cardFormData: { number: "4242 4242 4242 4242", expiry: "09/22", cvc: "234" },
+      cardInfo: [],
+      selectedCardInfo: {}
     };
   }
 
 
   componentWillMount() {
-
     this.getAllHistory();
     this.getPlatformBalance();
     this.setState({ totalPrice: this.props.navigation.state.params.totalPrice });
     this.setState({ consultantId: this.props.navigation.state.params.consultantId });
-    console.log("TotalPrice : " + this.props.navigation.state.params.totalPrice);
-
+    this.getCardInfo();
   }
 
   // register new credit card and get token
@@ -94,7 +95,7 @@ export default class InputCreditCard extends React.Component {
       response.json().then(solved => {
         cardToken = solved.id;
         this.setState({ token: cardToken });
-        console.log("card token in fetch " + cardToken);
+        //console.log("card token in fetch " + cardToken);
 
 
         var cardInfo = {
@@ -106,7 +107,36 @@ export default class InputCreditCard extends React.Component {
           postalCode: this.state.postalCode,
           cardToken: cardToken
         }
-        AsyncStorage.setItem('cardInfo', JSON.stringify(cardInfo));
+        // AsyncStorage.setItem('cardInfo', JSON.stringify(cardInfo));
+        firebase.database().ref('cardinfo').child(this.state.uid).on('value', async (snapshot) => {
+          var result = [];
+          if (snapshot.val() != null) {
+            var childKey = snapshot.key;
+            var childData = snapshot.val();
+            childData.key = childKey;
+            childData = JSON.parse(childData.result);
+            if (childData && childData.length > 0) {
+              var index = 0;
+              var flag = false;
+              childData.forEach(element => {
+                if (element.cardNum == cardInfo.cardNum) {
+                  result[i] = cardInfo;
+                  flag = true;
+                }
+                index ++;
+              });
+              if (!flag) {
+                result.push(cardInfo);
+              }
+            } else {
+              result.push(cardInfo);
+            }
+          } else {
+            result.push(cardInfo);
+          }          
+          firebase.database().ref('cardinfo').child(this.state.uid).update({ result: JSON.stringify(result) });
+        })
+        
         this.createCharge(Math.ceil(this.state.totalPrice * 1.12), solved.id);
       });
     }).catch((error) => {
@@ -145,7 +175,7 @@ export default class InputCreditCard extends React.Component {
     }).then((response) => {
       response.json().then(solved => {
         this.setState({ chargeId: solved.id });
-        console.log("charge " + JSON.stringify(solved));
+        //console.log("charge " + JSON.stringify(solved));
         this.getAllHistory();
         this.getPlatformBalance();
 
@@ -165,7 +195,7 @@ export default class InputCreditCard extends React.Component {
     firebase.database().ref('stripe_customers').child(consultantId).child('account').once('value')
       .then(value => {
         this.setState({ destination: value.val()['id'] });
-        console.log(this.state.destination);
+        //console.log(this.state.destination);
         var chargeDetails = {
           "amount": amount,
           "currency": 'usd',
@@ -190,7 +220,7 @@ export default class InputCreditCard extends React.Component {
           body: formBody
         }).then((response) => {
           response.json().then(solved => {
-            console.log("Transfer " + JSON.stringify(solved));
+            //console.log("Transfer " + JSON.stringify(solved));
             this.getAllHistory();
             this.getPlatformBalance();
             this.getConsultantBalance(consultantId);
@@ -276,14 +306,86 @@ export default class InputCreditCard extends React.Component {
 
   appointmentComplete = async () => {
     const { navigate } = this.props.navigation;
-    const { appointmentId } = this.props.navigation.state.params
-    await this.createTransfer(Math.floor(this.state.totalPrice * 0.95), this.state.consultantId)
-    await this.setState({ bookingStatus: false });    
+    const { appointmentId } = this.props.navigation.state.params;
+    await this.createTransfer(Math.floor(this.state.totalPrice * 0.95), this.state.consultantId);
+    console.log(1);
+    await this.setState({ bookingStatus: false });
+    console.log(2);
     await Functions.deleteUpcomming(appointmentId);
+    
     alert("Your payment succeed!");
     navigate('AccountInfo');
 
   }
+
+  selectCard = (card) => {
+    this.setState({
+      selectedCardInfo: card,
+      cardNum:card.cardNum,
+      expYear: card.expYear,
+      expMonth: card.expMonth,
+      cvc: card.cvc,
+      name: card.name,
+      postalCode: card.postalCode,
+      valid: true
+    })
+  }
+
+  
+  listCardRenderer = (item) => {
+    return (<TouchableOpacity onPress={()=>this.selectCard(item)}>
+      <Card>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'column' }}>
+              <Text style={{ fontSize: 15, marginLeft: 20, fontWeight: '200' }}>Card number:  {item.cardNum}</Text>
+              <Text style={{ fontSize: 13, marginLeft: 20, color: '#999' }}>Expire day: {item.expMonth} / {item.expYear}</Text>
+              <Text style={{ fontSize: 13, marginLeft: 20, color: '#999' }}>CVC:  {item.cvc}</Text>
+              <Text style={{ fontSize: 15, marginLeft: 20, color: '#999' }}>Name: {item.name}</Text>
+              {/* <Text style={{ fontSize: 15, marginLeft: 20, color: '#999' }}>Postal code: {this.state.cardInfo.postalCode}</Text> */}
+            </View>
+            <View style={{ marginLeft: 30 }}>
+              {this.state.selectedCardInfo && this.state.selectedCardInfo.cardNum && this.state.selectedCardInfo.cardNum == item.cardNum?<Icon
+                name='check'
+                type='evilicon'
+                color='#517fa4'
+              />:<View></View>}
+            </View>
+          </View>
+        </View>
+      </Card>
+    </TouchableOpacity>);
+  }
+
+  getCardInfo = async () => {
+
+    this.setState({
+      cardRefreshing: true
+    })
+
+    // var cardInfo = JSON.parse(await AsyncStorage.getItem('cardInfo'));
+    // await this.setState({ cardInfo });
+    await firebase.database().ref('cardinfo').child(this.state.uid).on('value', async (snapshot) => {
+      if (snapshot.val() == null) {
+        await this.setState({
+          cardRefreshing: true
+        })
+        
+      } else {
+        var childKey = snapshot.key;
+        var childData = snapshot.val();
+        childData.key = childKey;
+        this.setState({
+          cardRefreshing: false,
+          cardInfo: [{ title: 'card', data: JSON.parse(childData.result) }]
+        })
+      }
+      
+    });
+
+  }
+
+  _keyExtractor = (item, index) => index;
 
   render() {
     const { navigate } = this.props.navigation;
@@ -308,9 +410,19 @@ export default class InputCreditCard extends React.Component {
 
               placeholders={this.state.cardFormData}
             />
-            <Text style={{ marginLeft: 'auto', marginRight: 'auto', fontSize: 15, fontWeight: 'bold', marginTop: 20 }}>Cost : ${this.state.totalPrice}</Text>
-            <Text style={{ marginLeft: 'auto', marginRight: 'auto', fontSize: 15, fontWeight: 'bold', marginVertical: 20 }}>Processing Fees : ${Math.ceil(this.state.totalPrice * 0.12)}</Text>
 
+            {this.state.cardInfo && this.state.cardInfo.length > 0?<SectionList
+              sections={this.state.cardInfo}
+              // onEndReached={() => this.loadMore(3,this.state.thSectioned[0].data.length+1)}
+              renderItem={({ item }) => this.listCardRenderer(item)}
+              ItemSeparatorComponent={() => (<View style={{ height: 10 }} />)}
+              keyExtractor={this._keyExtractor}
+              contentContainerStyle={{ alignItems: 'center' }}
+              onRefresh={() => this.getCardInfo()}
+              refreshing={this.state.cardRefreshing}
+              removeClippedSubviews={true}
+              ListFooterComponent={this.state.cardRefreshing ? <ActivityIndicator /> : <View />}
+            />:<View></View>}
 
             {
               this.state.bookingStatus ?
@@ -329,7 +441,7 @@ export default class InputCreditCard extends React.Component {
   }
 
   _onChange = form => {
-    console.log(form);
+    //console.log(form);
     this.setState({ valid: form.valid });
     if (form.valid) {
       this.setState({ cardNum: form.values.number.replace(/ /g, '') });
@@ -340,14 +452,24 @@ export default class InputCreditCard extends React.Component {
       this.setState({ postalCode: form.values.postalCode });
     }
   }
-  _onFocus = field => console.log("focusing", field);
+  _onFocus = field => {
+    // if(AsyncStorage.getItem('cardInfo')) {
+    //   var cardInfo = JSON.parse(AsyncStorage.getItem('cardInfo'));
+    //   console.log(cardInfo);
+    //   // this.setState({ cardNum:cardInfo.cardNum });
+    //   // this.setState({ expYear: cardInfo.expYear });
+    //   // this.setState({ expMonth: cardInfo.expMonth });
+    //   // this.setState({ cvc: cardInfo.cvc });
+    //   // this.setState({ name: cardInfo.name });
+    //   // this.setState({ postalCode: cardInfo.postalCode });
+    // }
+  };
 
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 50,
     backgroundColor: '#fff',
     justifyContent: 'center',
   },

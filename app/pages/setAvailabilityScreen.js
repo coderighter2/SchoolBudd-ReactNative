@@ -86,17 +86,17 @@ export default class SetAvailabilityScreen extends React.Component {
        refreshing: false,
        showAgain: true,
      }
-     console.log("set availability screen props " + JSON.stringify(props));
+     //console.log("set availability screen props " + JSON.stringify(props));
    }
 
    _keyExtractor = (item, index) => item.key;
 
    componentDidMount =async() => {
-     console.log(JSON.stringify(this.props.navigation.state.params.bookingDate.dateString));
-     console.log("book date prop " + this.state.bookingDate);
+     //console.log(JSON.stringify(this.props.navigation.state.params.bookingDate.dateString));
+     //console.log("book date prop " + this.state.bookingDate);
      var that = this;
      await AsyncStorage.getItem('showAgain', (err, result) => {
-      console.log("result show again " + result);
+      //console.log("result show again " + result);
       if (result == "true") {
         that.setState({showAgain: false});
       }
@@ -119,9 +119,9 @@ export default class SetAvailabilityScreen extends React.Component {
    doNotShowAgain = async() => {
     await AsyncStorage.setItem('showAgain', 'true');
     await AsyncStorage.getItem('showAgain', (err, result) => {
-      console.log('show again test ' + result);
+      //console.log('show again test ' + result);
     });
-    console.log("do not show again entered");
+    //console.log("do not show again entered");
    }
 
    listItemRenderer =(item) => {
