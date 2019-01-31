@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, AsyncStorage, Button, TextInput, Alert, ScrollView } from 'react-native';
+import { StyleSheet, TouchableOpacity, AsyncStorage, Button, TextInput, Alert, ScrollView, KeyboardAvoidingView } from 'react-native';
 import Metrics from '../Themes/Metrics';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from 'firebase';
@@ -339,6 +339,7 @@ export default class Login extends React.Component {
                 onBackdropPress={() => this.setState({ isSignUpModalVisible: false })}
                 backdropColor={'grey'}
                 style = {styles.signupModalView}>
+                <KeyboardAvoidingView behavior="padding" enabled>
                 <KeyboardAwareScrollView>
                   <View style={styles.modalView}>
                     <Text style={styles.modalText}>
@@ -360,6 +361,7 @@ export default class Login extends React.Component {
                     </TouchableOpacity>
                   </View>
                       </KeyboardAwareScrollView>
+                      </KeyboardAvoidingView>
                 </Modal>
               ): (
                 <Modal
