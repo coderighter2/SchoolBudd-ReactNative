@@ -18,21 +18,15 @@ export default class CalendarScreen extends React.Component {
   }
 
   onDayPress(day) {
-    var date1 = new Date(day.dateString);
-    var date2 = new Date(new Date());
-
-    if(date1>date2 || date1==date2) {
+    
       this.setState({
         selected: day.dateString
       });
       //console.log("pressed " + JSON.stringify(this.state));
-      this.props.navigation.navigate('MakeAppointmentsScreen', { 
+      return this.props.navigation.navigate('MakeAppointmentsScreen', { 
         propsCalendar: this.props.navigation.state.params.item.key, 
         bookingDate : day 
       });
-    } else {
-      alert('You have to choose other day afer today!')
-    }
   }
 
   _onPressBack(){
@@ -45,9 +39,9 @@ export default class CalendarScreen extends React.Component {
         <StatusBar barStyle="light-content"/>
         <View style = {styles.calendarView}>
           <Calendar
-            onDayPress={this.onDayPress}
+            onDayPress={day => this.onDayPress(day)}
             style={styles.calendar}
-            minDate={Date()-1}
+            minDate={new Date()}
             markedDates={{[this.state.selected]: {selected: true}}}
             theme={{
               selectedDayBackgroundColor: 'purple',
