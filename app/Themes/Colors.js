@@ -23,7 +23,8 @@ const colors = {
   banner: '#5F3E63',
   text: '#E0D7E5',
   turquoise: '#40e0d0',
-  lightPurple: '#f0a3f5'
+  // lightPurple: '#f0a3f5'
+  lightPurple: '#eec2f1'
 }
 
 export default colors
