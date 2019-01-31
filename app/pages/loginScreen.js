@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, AsyncStorage, Button, TextInput, Alert } from 'react-native';
+import { StyleSheet, TouchableOpacity, AsyncStorage, Button, TextInput, Alert, ScrollView } from 'react-native';
 import Metrics from '../Themes/Metrics';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import firebase from 'firebase';
@@ -12,6 +12,7 @@ import { View, Text } from 'native-base';
 import { globalStyles } from '../Themes/Styles';
 import Functions from '../Themes/Functions';
 import Colors from '../Themes/Colors'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const stripe_url = 'https://api.stripe.com/v1/'
 // const secret_key = firebase.config().stripe.token;
@@ -334,10 +335,11 @@ export default class Login extends React.Component {
             {
               this.state.isSignUpModalVisible === true ? (
                 <Modal
-                  isVisible={this.state.isSignUpModalVisible}
-                  onBackdropPress={() => this.setState({ isSignUpModalVisible: false })}
-                  backdropColor={'grey'}
-                  style = {styles.signupModalView}>
+                isVisible={this.state.isSignUpModalVisible}
+                onBackdropPress={() => this.setState({ isSignUpModalVisible: false })}
+                backdropColor={'grey'}
+                style = {styles.signupModalView}>
+                <KeyboardAwareScrollView>
                   <View style={styles.modalView}>
                     <Text style={styles.modalText}>
                       Please Sign Up!
@@ -357,11 +359,12 @@ export default class Login extends React.Component {
                       <Text style = { styles.saveBtn }>SAVE</Text>
                     </TouchableOpacity>
                   </View>
+                      </KeyboardAwareScrollView>
                 </Modal>
               ): (
                 <Modal
-                  isVisible={this.state.isLoginModalVisible}
-                  onBackdropPress={() => this.setState({ isLoginModalVisible: false })}
+                isVisible={this.state.isLoginModalVisible}
+                onBackdropPress={() => this.setState({ isLoginModalVisible: false })}
                   backdropColor={'grey'}
                   style = {styles.loginModalView}>
                   <View style={globalStyles.modalContainer}>
@@ -392,7 +395,7 @@ export default class Login extends React.Component {
                     <TouchableOpacity
                       style={globalStyles.btn}
                       onPress={() => this.onPressMakeAccount()}
-                    >
+                      >
                       <Text style={globalStyles.btnText}>MAKE AN ACCOUNT</Text>
                     </TouchableOpacity>
                   </View>
@@ -502,7 +505,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: 40,
     width: Metrics.screenWidth * .8,
-    marginBottom: 15,
+    marginBottom: 100,
     padding: 10,
     borderRadius: 10,
     backgroundColor: Colors.lightPurple,
@@ -510,10 +513,10 @@ const styles = StyleSheet.create({
   loginModalView: {
     position: 'absolute', 
     width: Metrics.screenWidth*.9,
-    top: Metrics.screenHeight/5
+    top: Metrics.screenHeight/17
   },
   signupModalView: {
-    position: 'absolute', 
+    position: 'absolute',
     width: Metrics.screenWidth*.9,
     top: Metrics.screenHeight/20
   }
