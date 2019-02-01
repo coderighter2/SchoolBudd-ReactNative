@@ -40,27 +40,21 @@ export default class CalendarScreen extends React.Component {
       await this.setState({ emailVerified: true});
     }
   }
-
   onDayPress(day) {
-    var date1 = new Date(day.dateString);
-    var date2 = new Date(new Date());
-
-    if(date1>date2 || date1==date2) {
-      this.setState({
-        selected: day.dateString
-      });
-      //console.log("pressed " + JSON.stringify(this.state));
-      this.props.navigation.navigate('SetAvailabilityScreen', { bookingDate : day })
-    } else {
-      alert('You have to choose other day afer today!')
-    }
-  }
+    
+    this.setState({
+      selected: day.dateString
+    });
+    //console.log("pressed " + JSON.stringify(this.state));
+    return this.props.navigation.navigate('SetAvailabilityScreen', { bookingDate : day })
+}
+  
   _onPressBack(){
     const {goBack} = this.props.navigation
       goBack();
   }
   render() {
-    if (!this.state.hasLoggedIn || !this.state.emailVerified) {
+    if (!this.state.hasLoggedIn) {
       return (<LoggedOut />);
     } else {
     return (
@@ -68,9 +62,9 @@ export default class CalendarScreen extends React.Component {
         <StatusBar barStyle="light-content"/>
         <View style = {styles.calendarView}>
           <Calendar
-            onDayPress={this.onDayPress}
+            onDayPress={day => this.onDayPress(day)}
             style={styles.calendar}
-            minDate={Date()-1}
+            minDate={new Date()}
             markedDates={{[this.state.selected]: {selected: true}}}
             theme={{
               selectedDayBackgroundColor: 'purple',
