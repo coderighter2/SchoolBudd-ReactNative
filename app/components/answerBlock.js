@@ -60,7 +60,7 @@ export default class AnswerBlock extends React.Component {
 
   onPressUpvote = async () => {
     if (!this.state.voted) {
-      // console.log("up");
+      // console.log("inside");
       await this.setState({ upVoted: true, downVoted: false });
       this.saveVote("up");
     } else {
@@ -101,8 +101,9 @@ export default class AnswerBlock extends React.Component {
       .child(this.props.forumLocation)
       .child("answers")
       .child(this.props.jedi.key)
-      .child("voted");
-    await ref.remove();
+      .child("voted")
+      .child(firebase.auth().currentUser.uid)
+      await ref.remove();
     if (vote == "up") {
       var upVotes = this.state.upVotes;
       await this.setState({ upVotes: upVotes });
@@ -116,6 +117,7 @@ export default class AnswerBlock extends React.Component {
     //console.log('pressed ');
     this.props.purchaseItem(this.props.jedi);
   }
+
   saveVote = val => {
     firebase
       .database()
@@ -125,7 +127,7 @@ export default class AnswerBlock extends React.Component {
       .child(this.props.jedi.key)
       .child("voted")
       .child(firebase.auth().currentUser.uid)
-      .set({ val: val });
+      .set({ val });
   };
 
   restoreVote = async () => {

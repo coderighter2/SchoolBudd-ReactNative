@@ -98,7 +98,7 @@ export default class AnswerScreen extends React.Component {
 
   onPressUpvote = async () => {
     if (!this.state.voted) {
-      //console.log("up1");
+      //console.log("outside");
       await this.setState({ upVoted: true, downVoted: false });
       this.saveVote("up");
     } else {
