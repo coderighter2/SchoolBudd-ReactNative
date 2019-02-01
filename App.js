@@ -20,6 +20,7 @@ import SelectPortal from "./app/pages/selectPortal";
 import Functions from "./app/Themes/Functions";
 import { Provider } from "react-redux";
 import { store } from "./app/state/store";
+import Colors from "./app/Themes/Colors";
 
 var config1 = {
   apiKey: "AIzaSyBUcTA24OEVHAoOGOUCAJwsG77rOBU-LdQ",
@@ -113,6 +114,17 @@ const UpcomingNav = StackNavigator({
   InputCreditCard: { screen: pages.InputCreditCard }
 });
 
+const navigationConfig = {
+  navigationOptions:  {
+    headerTitle: 'Find A Consultant',
+    title: 'Find A Consultant',
+    headerTintColor: Colors.lightPurple,
+    headerTitleStyle: {
+      color: Colors.lightPurple
+    }
+  }
+}
+
 const FindConsultantNav = StackNavigator({
   FindConsultantScreen: { screen: pages.FindConsultant },
   SelectConsultant: { screen: pages.SelectConsultant },
@@ -120,7 +132,7 @@ const FindConsultantNav = StackNavigator({
   CalendarOtherScreen: { screen: pages.CalendarOtherScreen },
   MakeAppointmentsScreen: { screen: pages.MakeAppointmentsScreen },
   InputCreditCard: { screen: pages.InputCreditCard }
-});
+}, navigationConfig);
 
 const ForumNav = StackNavigator({
   ForumScreen: { screen: pages.Forum },
