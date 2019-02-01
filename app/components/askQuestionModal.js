@@ -29,6 +29,7 @@ export default class askQuestionModal extends React.Component {
               placeholder="Ex: When are the common app essays released?"
               underlineColorAndroid="transparent"
               multiline={true}
+              value={this.props.value}
               onChangeText={this.props.onChangeText}
               onSubmitEditing={this.props.onSubmitEditing}
               />

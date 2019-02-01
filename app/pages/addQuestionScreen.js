@@ -250,6 +250,7 @@ export default class Login extends React.Component {
                       placeholder="Ex: When are the common app essays released?"
                       underlineColorAndroid="transparent"
                       multiline={true}
+                      value={this.state.question}
                       onChangeText={(text) => this.setState({question: text})}
                       onSubmitEditing={(text) => this.setState({question: text})}
                     />
