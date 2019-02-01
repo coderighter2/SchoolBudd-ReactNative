@@ -6,7 +6,8 @@ import {
   Button,
   TextInput,
   Alert,
-  ScrollView
+  ScrollView,
+  ActivityIndicator
 } from "react-native";
 import Metrics from "../Themes/Metrics";
 import {
@@ -88,7 +89,8 @@ export default class Login extends React.Component {
       errorMessageLogin: "",
       skypeNameValid: false,
       skypeName: "",
-      skypeAlertClear: false
+      skypeAlertClear: false,
+      isLoading: false
     };
   }
 
@@ -119,7 +121,7 @@ export default class Login extends React.Component {
   };
 
   skypeAlert = async formValues => {
-    if (formValues.skypeName == "" || this.state.skypeNameValid == false) {
+    if (formValues.skypeName == "") {
       await Alert.alert(
         "Skype",
         "You Will Need a Skype Username for Messaging",
@@ -135,6 +137,9 @@ export default class Login extends React.Component {
         ],
         { cancelable: false }
       );
+    } else {
+      this.setState({ skypeAlertClear: true })
+      return this.completeSignUp()
     }
   };
 
@@ -271,7 +276,8 @@ export default class Login extends React.Component {
 
     await this.setState({
       signUpEmail: formValues.emailAddress,
-      signUpPassword: formValues.password
+      signUpPassword: formValues.password,
+      isLoading: true
     });
     //console.log("email " + this.state.signUpEmail);
     //console.log("password " + this.state.signUpPassword);
@@ -281,7 +287,10 @@ export default class Login extends React.Component {
         this.state.signUpEmail,
         this.state.signUpPassword
       )
-      .then(this.completeSignUp)
+      .then(() => {
+        this.setState({isLoading: false})
+        return this.completeSignUp
+      })
       .catch(function(error) {
         var errorCode = error.code;
         var errorMessage = error.message;
@@ -299,6 +308,7 @@ export default class Login extends React.Component {
   };
 
   onPressSaveLogin = async () => {
+    this.setState({isLoading: true})
     var result = await firebase
       .auth()
       .signInWithEmailAndPassword(
@@ -325,7 +335,7 @@ export default class Login extends React.Component {
       /// pushnotification token save
       await Functions.registerForPushNotificationsAsync(result.user.uid);
 
-      await this.setState({ isLoginModalVisible: false });
+      await this.setState({ isLoginModalVisible: false, isLoading: false });
       this.props.navigation.navigate("Home");
     }
   };
@@ -451,7 +461,7 @@ export default class Login extends React.Component {
                           style={styles.saveBtnView}
                           onPress={() => this.onPressSaveNewUser()}
                         >
-                          <Text style={styles.saveBtn}>SAVE</Text>
+                          <Text style={styles.saveBtn}>{this.state.isLoading ? <ActivityIndicator /> : null} SAVE</Text>
                         </TouchableOpacity>
                       </View>
                     </View>
@@ -490,7 +500,7 @@ export default class Login extends React.Component {
                     style={globalStyles.btn}
                     onPress={() => this.onPressSaveLogin()}
                   >
-                    <Text style={globalStyles.btnText}>SAVE</Text>
+                    <Text style={globalStyles.btnText}>{this.state.isLoading ? <ActivityIndicator /> : null} SAVE</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={globalStyles.btn}
