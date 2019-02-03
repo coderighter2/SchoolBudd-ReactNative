@@ -34,7 +34,7 @@ export default class StudentProfileCard extends React.Component {
       photo: null,
     }
     //See what props our StarWarsCard renders with
-    //console.log(JSON.stringify(props));
+    console.log("props student profile" + JSON.stringify(props));
   }
 
   componentWillMount= async() => {
@@ -42,14 +42,15 @@ export default class StudentProfileCard extends React.Component {
     //console.log(JSON.stringify(firebase.database().ref('users').child(firebase.auth().currentUser.uid)));
     var ref = firebase.database().ref("users").child(firebase.auth().currentUser.uid);
     ref.once("value", (snapshot) => {
-    const nameProfile = snapshot.child("name").val(); // {first:"Ada",last:"Lovelace"}
+    const nameProfile = snapshot.child("firstName").val(); // {first:"Ada",last:"Lovelace"}
     const schoolName = snapshot.child("schoolName").val();
     const grade = snapshot.child("grade").val();
     const cityState = snapshot.child("cityState").val();
     const profilePicture = snapshot.child("profilePicture").val();
+    console.log("profile pic " + profilePicture);
     //console.log("name " + nameProfile);
     if (nameProfile != null) {
-        this.setState({profileName: snapshot.child("name").val()});
+        this.setState({profileName: snapshot.child("firstName").val() + " " + snapshot.child("lastName").val()});
     } else {
       this.setState({profileName: 'Please Enter a Profile Name'});
     }

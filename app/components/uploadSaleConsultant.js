@@ -112,23 +112,27 @@ export default class UploadSaleConsultant extends React.Component {
 
 
     await ref.put(blob).then((snapshot) => {
-      //console.log('puts blob');
+      console.log('puts blob');
 
-      //console.log('Uploaded a data_url string!');
-      const downloadURL = snapshot.downloadURL;
-      //console.log('downloadUrl: ' + downloadURL);
-      {
-        this.setState({image: downloadURL, test: 'testSuccessful'})
-      }
+      snapshot.ref.getDownloadURL().then(function(downloadURL) {
+        console.log("download url " + downloadURL);
+        that.setState({image: downloadURL, test: 'testSuccessful'});
     });
 
-    await firebase.database().ref('users').child(firebase.auth().currentUser.uid).update({
+    });
+
+    try {
+      await firebase.database().ref('users').child(firebase.auth().currentUser.uid).update({
         schoolName: this.state.schoolName,
         grade: this.state.grade,
         cityState: this.state.cityState,
         profilePicture: this.state.image,
         isCounselor: true,
       });
+      alert("Profile Updated");
+    } catch (error) {
+      alert("Profile Update Failed");
+    }
 
     //console.log(JSON.stringify(this.state.image));
     //console.log(JSON.stringify(this.state.test));

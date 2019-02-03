@@ -42,6 +42,7 @@ export default class UploadSale extends React.Component {
       hasLoggedIn: false,
       skypeUsername: '',
     }
+    console.log("props " + JSON.stringify(props));
   }
 
   componentWillMount() {
@@ -88,7 +89,7 @@ export default class UploadSale extends React.Component {
     if ((this.state.schoolName !== '') && (this.state.cityState !== '') && (this.state.grade !== '')
       && (this.state.image !== '')) {
       await this.storeItem();
-      this.props.navigation.navigate('Home');
+      // this.props.navigation.navigate('Home');
     } else {
       alert('Please Fill in All Categories');
     }
@@ -120,6 +121,16 @@ export default class UploadSale extends React.Component {
     const ref = firebase.storage().ref('users').child(firebase.auth().currentUser.uid).child("profilePicture");
     const response = await fetch(this.state.image);
     const blob = await response.blob();
+    var that = this;
+
+    await ref.put(blob).then((snapshot) => {
+      console.log('puts blob');
+
+      snapshot.ref.getDownloadURL().then(function(downloadURL) {
+        that.setState({image: downloadURL, test: 'testSuccessful'});
+    });
+
+    });
 
     if (this.state.skypeUsername == "") {
       await Alert.alert(
@@ -135,17 +146,17 @@ export default class UploadSale extends React.Component {
     }
 
     await ref.put(blob).then((snapshot) => {
-      //console.log('puts blob');
+      console.log('puts blob');
 
-      //console.log('Uploaded a data_url string!');
-      const downloadURL = snapshot.downloadURL;
-      //console.log('downloadUrl: ' + downloadURL);
-      {
-        this.setState({image: downloadURL, test: 'testSuccessful'})
-      }
+      snapshot.ref.getDownloadURL().then(function(downloadURL) {
+        console.log("download url " + downloadURL);
+        that.setState({image: downloadURL, test: 'testSuccessful'});
     });
 
-    await firebase.database().ref('users').child(firebase.auth().currentUser.uid).update({
+    });
+
+    try {
+      await firebase.database().ref('users').child(firebase.auth().currentUser.uid).update({
         schoolName: this.state.schoolName,
         grade: this.state.grade,
         cityState: this.state.cityState,
@@ -153,6 +164,11 @@ export default class UploadSale extends React.Component {
         isCounselor: false,
         skypeUsername: this.state.skypeUsername,
       });
+      alert("Profile Updated");
+    } catch (error) {
+      alert("Profile Update Failed");
+    }
+
 
   };
 
