@@ -60,11 +60,22 @@ const items = [
       name: "Just Packages",
       id: "Just Packages",
     }, {
-      name: "Both",
-      id: "Both",
+      name: "Both Hourly and Packages",
+      id: "Both Hourly and Packages",
     }]
   },
 ]
+
+// because of the bad API of react-native-sectioned-multi-select we need to store keys and categories relations by ourselves
+let itemsCategoriesDict = {};
+
+items.forEach(item => {
+  item.children.forEach(children => {
+    itemsCategoriesDict[children.name] = item.name;
+  });
+});
+
+
 /*
   Displays information about Jedi
 */
@@ -113,27 +124,117 @@ export default class FindConsultant extends React.Component {
   }
 
   async appendJedis(count, start) {
+    const {
+      selectedSpecialties, 
+      selectedSpecialtiesArray, 
+      selectedConsultantType, 
+      selectedConsultantTypeArray, 
+      selectedAvailabilityPreferences,
+      selectedAvailabilityPreferencesArray,
+      searchText
+    } = this.state;
 
     var jedisList = this.state.jedisSectioned[0].data.slice();
-    var filterPass = false;
     //console.log("testing append jedis");
 
+    const database = firebase.database();
+    const consultants = firebase.database().ref('consultants');
 
-    var database = firebase.database();
-    database.ref('consultants').on('child_added', (snapshot) => {
-      //console.log("testing enter firebase ref");
-      var childKey = snapshot.key;
-      //console.log("key " + childKey);
-      var childData = snapshot.val();
-      childData.key = childKey;
-      //console.log("child data pulled" + JSON.stringify(childData));
-     
-      jedisList.push(childData);
-      //console.log("jedis " + JSON.stringify(jedisList));
+    if (searchText) {
+      consultants.on('value', snapshot => {
 
-      this.setState({ loading: false, refreshing: false, jedisSectioned: [{ title: 'Jedis', data: jedisList }] });
-      //console.log(childData);
-    });
+        const usersDict = {}, consultantsDict = {};
+        const data = snapshot.val();
+
+        const promisesArray = Object.keys(data).map(key => {
+          const item = data[key];
+          item.key = key;
+          consultantsDict[key] = item;
+          return database.ref('users').child(key).on('value', s => { 
+            usersDict[key] = s.val();
+          });
+        });
+
+        Promise.all(promisesArray)
+          .then(() => {
+            Object.keys(usersDict).forEach(key => {
+              const user = usersDict[key];
+              console.log("USER", user);
+              const userName = user.name ? 
+              user.name : 
+              user.firstName + ' ' + user.lastName;
+              const hometown = user.cityState || '';
+              const affiliation = user.schoolName || '';
+              if (userName.includes(searchText) 
+                || hometown.includes(searchText) 
+                || affiliation.includes(searchText)
+              ) {
+                jedisList.push(consultantsDict[key]);
+              }
+
+            });
+            console.log("CONS", consultantsDict);
+            this.setState({ 
+              loading: false, 
+              refreshing: false, 
+              jedisSectioned: [{ title: 'Jedis', data: jedisList }] 
+            });
+          });
+        
+      });
+      
+      return;
+    }
+  
+    consultants.orderByChild("price").endAt(this.state.price).on('value', snapshot => {
+      const data = snapshot.val();
+      Object.keys(data).map(key => {
+        const item = data[key];
+        item.key = key;
+        let passed = true;
+        if (selectedSpecialties) {
+          let passedBySpeciality = false;
+          selectedSpecialtiesArray.forEach(selectedSpecialty => {
+            if (item.specialties && item.specialties.find(speciality => speciality.value === selectedSpecialty)) {
+              passedBySpeciality = true;
+            }
+          });
+          if (!passedBySpeciality) {
+            passed = false;
+          }
+        }
+        if (selectedConsultantType) {
+          let passedByConsultantType = false;
+          selectedConsultantTypeArray.forEach(type => {
+            if (type === item.type) {
+              passedByConsultantType = true;
+            }
+          });
+          if (!passedByConsultantType) {
+            passed = false;
+          }
+        }
+        if (selectedAvailabilityPreferences) {
+          let passedByAvailability = false;
+          selectedAvailabilityPreferencesArray.forEach(preference => {
+            if (preference === item.availabilityPreferences) {
+              passedByAvailability = true;
+            }
+          });
+          if (!passedByAvailability) {
+            passed = false;
+          }
+        }
+        if (passed) {
+          jedisList.push(item);
+        }
+      }); 
+      this.setState({ 
+        loading: false, 
+        refreshing: false, 
+        jedisSectioned: [{ title: 'Jedis', data: jedisList }] 
+      });
+    })
 
   }
 
@@ -175,6 +276,7 @@ export default class FindConsultant extends React.Component {
   listItemRenderer(item) {
     return (
       <SaleBlock
+        filterName={this.state.searchText}
         jedi={item}
         bookAppointment={this.bookAppointment}
         selectConsultant={this.selectConsultant} />
@@ -205,31 +307,65 @@ export default class FindConsultant extends React.Component {
   }
 
   onSelectedItemsChange = async (selectedItems) => {
-    this.setState({ selectedItems });
-    //console.log("typeof " + typeof this.state.selectedItems);
-    var selectedItemsString = JSON.stringify(selectedItems);
-    //console.log("selectedItemsString " + selectedItemsString);
-    //console.log("typeof string" + typeof selectedItemsString);
-    if (selectedItemsString.includes("IECA") || selectedItemsString.includes("Current College Student")) {
-      await this.setState({ selectedConsultantType: true });
-    } else {
-      await this.setState({ selectedConsultantType: false });
-    }
-    if (selectedItemsString.includes("Just Hourly") || selectedItemsString.includes("Just Packages") || selectedItemsString.includes("Both")) {
-      await this.setState({ selectedAvailabilityPreferences: true });
-    } else {
-      await this.setState({ selectedAvailabilityPreferences: false });
-    }
-    if (selectedItemsString.includes("Extracurriculars in High School") || selectedItemsString.includes("Grades in College") || selectedItemsString.includes("Internships")
-      || selectedItemsString.includes("Transitioning to College") || selectedItemsString.includes("Fun in College")) {
-      await this.setState({ selectedSpecialties: true });
-    } else {
-      await this.setState({ selectedSpecialties: false });
-    }
-    //console.log("type " + this.state.selectedConsultantType);
-    //console.log("availabilityPreferences " + this.state.selectedAvailabilityPreferences);
-    //console.log("specialties " + this.state.selectedSpecialties);
+    const selectedConsultantTypeArray = [], 
+    selectedSpecialtiesArray = [],
+    selectedAvailabilityPreferencesArray =  [];
+    let selectedConsultantType = false,
+    selectedSpecialties = false,
+    selectedAvailabilityPreferences = false;
+    selectedItems.forEach(item => {
+      const category = itemsCategoriesDict[item];
+      if (category === "Consultant Type") {
+        selectedConsultantType = true;
+        selectedConsultantTypeArray.push(item);
+      }
+      if (category === "Specialties") {
+        selectedSpecialties = true;
+        selectedSpecialtiesArray.push(item);
+      }
+      if (category === "Hourly or Packages") {
+        selectedAvailabilityPreferences = true;
+        selectedAvailabilityPreferencesArray.push(item);
+      }
+    });
+    this.setState({
+      selectedItems,
+      selectedConsultantType, 
+      selectedAvailabilityPreferences, 
+      selectedSpecialties,
+      selectedConsultantTypeArray,
+      selectedAvailabilityPreferencesArray,
+      selectedSpecialtiesArray
+    });
   }
+
+  // onSelectedItemsChange = async (selectedItems) => {
+  //   this.setState({ selectedItems });
+  //   console.log("SELECTED ITEMS", selectedItems);
+  //   //console.log("typeof " + typeof this.state.selectedItems);
+  //   var selectedItemsString = JSON.stringify(selectedItems);
+  //   //console.log("selectedItemsString " + selectedItemsString);
+  //   //console.log("typeof string" + typeof selectedItemsString);
+  //   if (selectedItemsString.includes("IECA") || selectedItemsString.includes("Current College Student")) {
+  //     await this.setState({ selectedConsultantType: true });
+  //   } else {
+  //     await this.setState({ selectedConsultantType: false });
+  //   }
+  //   if (selectedItemsString.includes("Just Hourly") || selectedItemsString.includes("Just Packages") || selectedItemsString.includes("Both")) {
+  //     await this.setState({ selectedAvailabilityPreferences: true });
+  //   } else {
+  //     await this.setState({ selectedAvailabilityPreferences: false });
+  //   }
+  //   if (selectedItemsString.includes("Extracurriculars in High School") || selectedItemsString.includes("Grades in College") || selectedItemsString.includes("Internships")
+  //     || selectedItemsString.includes("Transitioning to College") || selectedItemsString.includes("Fun in College")) {
+  //     await this.setState({ selectedSpecialties: true });
+  //   } else {
+  //     await this.setState({ selectedSpecialties: false });
+  //   }
+  //   //console.log("type " + this.state.selectedConsultantType);
+  //   //console.log("availabilityPreferences " + this.state.selectedAvailabilityPreferences);
+  //   //console.log("specialties " + this.state.selectedSpecialties);
+  // }
 
   bookAppointment = async (item) => {
     console.log("bookAppointment : "+ JSON.stringify(item) );
@@ -238,6 +374,12 @@ export default class FindConsultant extends React.Component {
 
   selectConsultant = async (key) => {
     this.props.navigation.navigate('SelectConsultant', { key: key });
+  }
+
+  changeFilterValue = price => {
+    this.setState({ price }, () => {
+      this.resetList();
+    });
   }
 
   render() {
@@ -268,8 +410,7 @@ export default class FindConsultant extends React.Component {
                   maximumValue={250}
                   value={140}
                   step={1}
-                  onValueChange={(price) => this.setState({ price })}
-                  onSlidingComplete={() => this.resetList()}
+                  onSlidingComplete={this.changeFilterValue}
                 />
                 <Text>Maximum Price: ${this.state.price}</Text>
 
@@ -304,11 +445,11 @@ export default class FindConsultant extends React.Component {
                   }}
                   showDropDowns={true}
                   readOnlyHeadings={true}
-                  onSelectedItemsChange={this.onSelectedItemsChange}
+                  onSelectedItemsChange	={this.onSelectedItemsChange}
                   selectedItems={this.state.selectedItems}
                   showCancelButton={true}
                   showChips={true}
-                  onConfirm={() => this.resetList()}
+                  onConfirm={this.resetList}
                 />
               </View>
             </View>
