@@ -1,7 +1,7 @@
 
 import React from 'react';
 import {
-  AppRegistry, StyleSheet, Text, View, TouchableOpacity, StatusBar, 
+  Alert, StyleSheet, Text, View, TouchableOpacity, StatusBar, 
   SectionList, ActivityIndicator, FlatList, TextInput, AsyncStorage} from 'react-native';
 import { Input
   } from "native-base";
@@ -89,6 +89,32 @@ export default class TimelineSheet extends React.Component {
      this.setState({isModalVisible: !this.state.isModalVisible});
    }
 
+   deleteBlockOption = async(item) => {
+    Alert.alert(
+      "Delete Goal?",
+      "Do you want to remove this goal?",
+      [
+        { text: "Yes", onPress: () => this.deleteBlock(item) },
+        { text: "Edit Goal", onPress: () => this.editBlock(item) },
+        {
+          text: "No", onPress: () => console.log('Cancel Pressed'),
+          style: "cancel"
+        }
+      ],
+      { cancelable: false }
+    );
+   }
+
+   deleteBlock = async(item) => {
+    var goals = this.state.goalsArray;
+    var indexWord = goals.indexOf(this.state.placeholder);
+    console.log("indexWord " + indexWord);
+    await goals.splice(indexWord,1);
+    console.log("goals array spliced " + goals);
+    console.log("goals spliced post/'" + JSON.stringify(this.state.goalsArray));
+    await this.setState({blockSelected: false});
+   }
+
    onPressSaveGoals = async() => {
      //console.log("goals array pre " + JSON.stringify(this.state.goalsArray));
      await AsyncStorage.setItem(JSON.stringify(this.state.year), JSON.stringify(this.state.goalsArray));
@@ -101,7 +127,9 @@ export default class TimelineSheet extends React.Component {
     //  console.log("item " + JSON.stringify(item));
     //  console.log("item " + item.item);
      return (
-       <TouchableOpacity onPress={() => that.editBlock(item)}>
+       <TouchableOpacity 
+       onPress={() => that.editBlock(item)}
+       onLongPress={() => that.deleteBlockOption(item)}>
           <TimelineBlock
           jedi={item}/>
        </TouchableOpacity>
