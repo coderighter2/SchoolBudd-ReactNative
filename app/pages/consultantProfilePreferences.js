@@ -134,14 +134,6 @@ export default class ProfileConsultantPreferences extends React.Component {
     this.togglePreferencesModal();
   }
 
-  toggleTimeModal = () => {
-    this.setState({isTimeModalVisible: !this.state.isTimeModalVisible});
-  };
-
-  onPressTime() {
-    this.toggleTimeModal();
-  }
-
   toggleSpecialtyModal = () => {
     this.setState({isSpecialtyModalVisible: !this.state.isSpecialtyModalVisible});
   };
@@ -221,17 +213,6 @@ export default class ProfileConsultantPreferences extends React.Component {
                         </View>
                       </Modal>
                     </View>
-
-              <CheckBox
-                        center
-                        title={this.state.availabilityPreferences}
-                        iconRight
-                        iconType='material'
-                        uncheckedIcon='add'
-                        textStyle={{fontWeight: 'normal', color: 'gray'}}
-                        containerStyle={{width: Metrics.screenWidth * .85}}
-                        onPress={() => this.onPressPreferences()}
-                      />
 
                       <View style={{alignItems: 'center', justifyContent: 'center'}}>
                         <Modal

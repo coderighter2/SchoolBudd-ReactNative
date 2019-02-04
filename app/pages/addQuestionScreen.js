@@ -10,6 +10,8 @@ import Modal from "react-native-modal";
 import { ListItem, Slider, CheckBox, SearchBars } from 'react-native-elements'
 import { View, Text } from 'native-base';
 import { Input } from "native-base";
+import { LinearGradient } from 'expo';
+
 
 const {width, height} = Dimensions.get('window');
 
@@ -131,30 +133,34 @@ export default class Login extends React.Component {
 
     if (this.state.isTopicModalVisible === true) {
       return (
-        <View>
-          <CheckBox
-            center
-            title="Ask a Question"
-            iconRight
-            iconType='material'
-            checkedIcon='clear'
-            uncheckedIcon='add'
-            checkedColor='red'
-            containerStyle={{width: Metrics.screenWidth*.95}}
-            checked={this.state.checked}
-            onPress={()=> this.onPressAddQuestion()}
-          />
-          <CheckBox
-            center
-            title={this.state.postQuestionTopic}
-            iconRight
-            iconType='material'
-            checkedIcon='clear'
-            uncheckedIcon='add'
-            checkedColor='red'
-            containerStyle={{width: Metrics.screenWidth*.95}}
-            checked={this.state.checked}
-            onPress={()=> this.onPressTopic()}/>
+        <View style={styles.container}>
+        <TouchableOpacity onPress={()=> this.onPressAddQuestion()}>
+              <LinearGradient
+                start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                colors={['#8338af', '#4d2c7d']}
+                style={styles.yearItem}>
+                <View style = {styles.circleView}>
+                  <Text style = {[styles.numberTxt, {color: '#8338af'} ]}>1</Text>
+                </View>
+                <Text style={styles.btnTxt}>
+                  Ask Question
+                </Text>
+              </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=> this.onPressTopic()}>
+              <LinearGradient
+                start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                colors={['#c83dd0', '#8227aa']}
+                style={styles.yearItem}>
+                <View style = {styles.circleView}>
+                  <Text style = {[styles.numberTxt, {color: '#c83dd0'} ]}>2</Text>
+                </View>
+                <Text style={styles.btnTxt}>
+                  Change Topic
+                </Text>
+              </LinearGradient>
+          </TouchableOpacity> 
           <View style={{ alignItems: 'center', justifyContent: 'center' }}>
             <Modal
               isVisible={this.state.isTopicModalVisible}
@@ -191,32 +197,37 @@ export default class Login extends React.Component {
         </View>
       );
     } else {
-
+ 
       return (
         <View style={styles.container}>
-          <CheckBox
-            center
-            title="Ask a Question"
-            iconRight
-            iconType='material'
-            checkedIcon='clear'
-            uncheckedIcon='add'
-            checkedColor='red'
-            containerStyle={{width: Metrics.screenWidth*.95}}
-            checked={this.state.checked}
-            onPress={()=> this.onPressAddQuestion()}
-          />
-          <CheckBox
-            center
-            title={this.state.postQuestionTopic}
-            iconRight
-            iconType='material'
-            checkedIcon='clear'
-            uncheckedIcon='add'
-            checkedColor='red'
-            containerStyle={{width: Metrics.screenWidth*.95}}
-            checked={this.state.checked}
-            onPress={()=> this.onPressTopic()}/>
+
+        <TouchableOpacity onPress={()=> this.onPressAddQuestion()}>
+              <LinearGradient
+                start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                colors={['#8338af', '#4d2c7d']}
+                style={styles.yearItem}>
+                <View style = {styles.circleView}>
+                  <Text style = {[styles.numberTxt, {color: '#8338af'} ]}>1</Text>
+                </View>
+                <Text style={styles.btnTxt}>
+                  Ask Question
+                </Text>
+              </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=> this.onPressTopic()}>
+              <LinearGradient
+                start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                colors={['#c83dd0', '#8227aa']}
+                style={styles.yearItem}>
+                <View style = {styles.circleView}>
+                  <Text style = {[styles.numberTxt, {color: '#c83dd0'} ]}>2</Text>
+                </View>
+                <Text style={styles.btnTxt}>
+                  Change Topic
+                </Text>
+              </LinearGradient>
+          </TouchableOpacity> 
             
             <View style={{ alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
               <Modal
@@ -281,7 +292,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: Colors.lightPurple,
+    backgroundColor: 'white',
   },
   header: {
     height: 60,
@@ -369,5 +380,39 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.lightPurple,
     backgroundColor: 'white',
+  },
+  yearItem: {
+    backgroundColor : Colors.lightPurple, 
+    width : 300,
+    height: 50,
+    borderRadius : 25, 
+    margin : 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    shadowColor: 'black',
+    shadowOffset: { height: 3, width: 3},
+  },
+  btnTxt: {
+    backgroundColor: 'transparent',
+    fontSize: 18,
+    color: '#fff',
+  },
+  circleView: {
+    backgroundColor: 'white',
+    // borderWidth: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 40,
+    height: 40,
+    borderRadius: 25,
+    position:  'absolute',
+    left: 5
+  },
+  numberTxt: {
+    fontSize: 20,
+    fontWeight: 'bold'
   },
 });

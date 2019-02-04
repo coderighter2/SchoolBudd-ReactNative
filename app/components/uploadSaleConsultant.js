@@ -87,7 +87,6 @@ export default class UploadSaleConsultant extends React.Component {
       && (this.state.image !== '')) {
       await this.storeItem();
       //console.log(this.props.navigation);
-      this.props.purchaseConfirmation(this.state.price, this.state.itemName);
     } else {
       alert('Please Fill in All Categories');
     }

@@ -244,10 +244,10 @@ export default class ProfileConsultantBasicInfo extends React.Component {
             <View style={styles.itemInformation}>
 
               <TextInput style={styles.inputText}
-                         placeholder="City, State (ex: Atlanta, GA)"
-                         underlineColorAndroid="transparent"
-                         onChangeText={(text) => this.setState({cityState: text})}
-                         onSubmitEditing={() => this.onSubmitEditingItem(this.state.searchText)}
+                placeholder="City, State (ex: Atlanta, GA)"
+                underlineColorAndroid="transparent"
+                onChangeText={(text) => this.setState({cityState: text})}
+                onSubmitEditing={() => this.onSubmitEditingItem(this.state.searchText)}
               />
 
               <CheckBox

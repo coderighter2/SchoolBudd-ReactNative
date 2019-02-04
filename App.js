@@ -215,7 +215,6 @@ const ConsultantNav = DrawerNavigator(
     Home: { screen: HomeStackNav },
     Login: { screen: LoginStackNav },
     Profile: { screen: ProfileNavConsultant },
-    Messages: { screen: MessagesNav },
     Forum: { screen: ForumNav },
     Upcoming: { screen: UpcomingNav },
     AccountInfo: { screen: AccountInfoNav },
