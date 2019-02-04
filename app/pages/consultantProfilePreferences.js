@@ -61,9 +61,11 @@ export default class ProfileConsultantPreferences extends React.Component {
 
     this.state = {
       availabilityPreferences: 'Set Availability Preferences',
-      timesAvailable: 'Select Years as Consultant',
-      times: '',
       bio: '',
+      isTypeModalVisible: false,
+      isYearsModalVisible: false,
+      typeConsultant: 'Type of Consultant',
+      yearsConsultant: 'Select Years as Consultant',
       isPreferencesModalVisible: false,
       isTimesModalVisible: false,
       isSpecialtyModalVisible: false,
@@ -119,6 +121,8 @@ export default class ProfileConsultantPreferences extends React.Component {
     await firebase.database().ref('consultants').child(firebase.auth().currentUser.uid).update({
         specialties: this.state.selectedSpecialties,
         availabilityPreferences: this.state.availabilityPreferences,
+        typeConsultant: this.state.typeConsultant,
+        yearsConsultant: this.state.yearsConsultant,
         bio: this.state.bio,
         price: this.state.price,
       });
@@ -142,6 +146,23 @@ export default class ProfileConsultantPreferences extends React.Component {
     this.toggleSpecialtyModal();
   }
 
+
+  toggleYearsModal = () => {
+    this.setState({isYearsModalVisible: !this.state.isYearsModalVisible});
+  };
+
+  onPressYears() {
+    this.toggleYearsModal();
+  }
+
+  toggleTypeModal = () => {
+    this.setState({isTypeModalVisible: !this.state.isTypeModalVisible});
+  };
+
+  onPressType() {
+    this.toggleTypeModal();
+  }
+
   onPressIECA = async () => {
     await this.setState({isTypeModalVisible: false, typeConsultant: 'IECA'});
     //console.log(this.state.typeConsultant);
@@ -150,6 +171,26 @@ export default class ProfileConsultantPreferences extends React.Component {
   onPressCurrentStudent = async () => {
     await this.setState({isTypeModalVisible: false, typeConsultant: 'College Student'});
     //console.log(this.state.typeConsultant);
+  };
+
+  onPressZeroToOne = async () => {
+    await this.setState({isYearsModalVisible: false, yearsConsultant: '0-1'});
+    //console.log(this.state.yearsConsultant);
+  };
+
+  onPressTwoToThree = async () => {
+    await this.setState({isYearsModalVisible: false, yearsConsultant: '2-3'});
+    //console.log(this.state.yearsConsultant);
+  };
+
+  onPressFourToFive = async () => {
+    await this.setState({isYearsModalVisible: false, yearsConsultant: '4-5'});
+    //console.log(this.state.yearsConsultant);
+  };
+
+  onPressGreaterThanFive = async () => {
+    await this.setState({isYearsModalVisible: false, yearsConsultant: '< 5'});
+    //console.log(this.state.yearsConsultant);
   };
 
   onPressHourly = async () => {
@@ -214,6 +255,17 @@ export default class ProfileConsultantPreferences extends React.Component {
                       </Modal>
                     </View>
 
+                    <CheckBox
+                        center
+                        title={this.state.availabilityPreferences}
+                        iconRight
+                        iconType='material'
+                        uncheckedIcon='add'
+                        textStyle={{fontWeight: 'normal', color: 'gray'}}
+                        containerStyle={{width: Metrics.screenWidth * .85}}
+                        onPress={() => this.onPressPreferences()}
+                      />
+
                       <View style={{alignItems: 'center', justifyContent: 'center'}}>
                         <Modal
                           isVisible={this.state.isPreferencesModalVisible}
@@ -242,63 +294,103 @@ export default class ProfileConsultantPreferences extends React.Component {
                         </Modal>
                       </View>
 
-                      <CheckBox
-                                center
-                                title={'Set Available Times'}
-                                iconRight
-                                iconType='material'
-                                uncheckedIcon='add'
-                                textStyle={{fontWeight: 'normal', color: 'gray'}}
-                                containerStyle={{width: Metrics.screenWidth * .85}}
-                                onPress={() => this.onPressTime()}
-                              />
+                <CheckBox
+                  center
+                  title={this.state.typeConsultant}
+                  iconRight
+                  iconType='material'
+                  uncheckedIcon='add'
+                  textStyle={{fontWeight: 'normal', color: 'gray'}}
+                  containerStyle={{width: Metrics.screenWidth * .85}}
+                  onPress={() => this.onPressType()}
+                />
 
-                              <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                                <Modal
-                                  isVisible={this.state.isTimeModalVisible}
-                                  onBackdropPress={() => this.setState({isTimeModalVisible: false})}
-                                  backdropColor={'black'}>
-                                  <View style={styles.modalView}>
-                                    <Text style={styles.modalText}>
-                                      Set Available Times!
-                                    </Text>
-                                    <Button
-                                      backgroundColor='#03A9F4'
-                                      buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                                      title='Just Hourly or Less'
-                                      onPress={() => this.onPressZeroToOne()}/>
-                                    <Button
-                                      backgroundColor='#03A9F4'
-                                      buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                                      title='Just Packages (10+ hours)'
-                                      onPress={() => this.onPressTwoToThree()}/>
-                                    <Button
-                                      backgroundColor='#03A9F4'
-                                      buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                                      title='Both Hourly and Packages'
-                                      onPress={() => this.onPressFourToFive()}/>
-                                  </View>
-                                </Modal>
-                              </View>
+                <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                  <Modal
+                    isVisible={this.state.isTypeModalVisible}
+                    onBackdropPress={() => this.setState({isTypeModalVisible: false})}
+                    backdropColor={'black'}>
+                    <View style={styles.modalView}>
+                      <Text style={styles.modalText}>
+                        Pick a Category!
+                      </Text>
+                      <Button
+                        backgroundColor='#03A9F4'
+                        buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
+                        title='IECA Consultant'
+                        onPress={() => this.onPressIECA()}/>
+                      <Button
+                        backgroundColor='#03A9F4'
+                        buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
+                        title='Current College Student'
+                        onPress={() => this.onPressCurrentStudent()}/>
+                    </View>
+                  </Modal>
+                </View>
 
-                              <Slider
-                                value={this.state.price}
-                                thumbTintColor= {Colors.lightPurple}
-                                minimumValue= {5}
-                                maximumValue= {250}
-                                value = {140}
-                                step={1}
-                                onValueChange={(price) => this.setState({price})}
-                                onSlidingComplete={(price) => this.setState({price})}
-                               />
-                              <Text>Price Per Hour: ${this.state.price}</Text>
-
-                      <TextInput style={styles.inputText}
-                                 placeholder="Bio"
-                                 underlineColorAndroid="transparent"
-                                 onChangeText={(text) => this.setState({bio: text})}
-                                 onSubmitEditing={() => this.onSubmitEditingBio(this.state.searchText)}
+                 <CheckBox
+                        center
+                        title={this.state.yearsConsultant}
+                        iconRight
+                        iconType='material'
+                        uncheckedIcon='add'
+                        textStyle={{fontWeight: 'normal', color: 'gray'}}
+                        containerStyle={{width: Metrics.screenWidth * .85}}
+                        onPress={() => this.onPressYears()}
                       />
+
+                      <View style={{alignItems: 'center', justifyContent: 'center'}}>
+                        <Modal
+                          isVisible={this.state.isYearsModalVisible}
+                          onBackdropPress={() => this.setState({isYearsModalVisible: false})}
+                          backdropColor={'black'}>
+                          <View style={styles.modalView}>
+                            <Text style={styles.modalText}>
+                              Years as Consultant!
+                            </Text>
+                            <Button
+                              backgroundColor='#03A9F4'
+                              buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
+                              title='0 - 1 Years'
+                              onPress={() => this.onPressZeroToOne()}/>
+                            <Button
+                              backgroundColor='#03A9F4'
+                              buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
+                              title='2 - 3 Years'
+                              onPress={() => this.onPressTwoToThree()}/>
+                            <Button
+                              backgroundColor='#03A9F4'
+                              buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
+                              title='4 - 5 Years'
+                              onPress={() => this.onPressFourToFive()}/>
+                            <Button
+                              backgroundColor='#03A9F4'
+                              buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
+                              title='> 5 Years'
+                              onPress={() => this.onPressGreaterThanFive()}/>
+                          </View>
+                        </Modal>
+                      </View>
+
+
+  `                  <Slider
+                      value={this.state.price}
+                      thumbTintColor= {Colors.lightPurple}
+                      minimumValue= {5}
+                      maximumValue= {250}
+                      value = {140}
+                      step={1}
+                      onValueChange={(price) => this.setState({price})}
+                      onSlidingComplete={(price) => this.setState({price})}
+                      />
+                    <Text>Price Per Hour: ${this.state.price}</Text>`
+
+                  <TextInput style={styles.inputText}
+                    placeholder="Bio"
+                    underlineColorAndroid="transparent"
+                    onChangeText={(text) => this.setState({bio: text})}
+                    onSubmitEditing={() => this.onSubmitEditingBio(this.state.searchText)}
+                  />
 
 
 

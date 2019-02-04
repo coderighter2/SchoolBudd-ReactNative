@@ -34,8 +34,8 @@ export default class ConsultantProfileCard extends React.Component {
       sellerID: '',
       convoKey: '',
       profileName: '',
-      yearsConsultant: '',
-      typeConsultant: '',
+      typeConsultant: 'Select Type of Consultant',
+      yearsConsultant: 'Select Years as Consultant',
       userID: firebase.auth().currentUser.uid,
       previousMessage: false,
       photo: null,
@@ -48,13 +48,21 @@ export default class ConsultantProfileCard extends React.Component {
     //console.log("current user" + JSON.stringify(firebase.auth().currentUser));
     //console.log(JSON.stringify(firebase.database().ref('users').child(firebase.auth().currentUser.uid)));
     var ref = firebase.database().ref("users").child(firebase.auth().currentUser.uid);
-    ref.once("value", (snapshot) => {
+    await ref.once("value", (snapshot) => {
     const nameProfile = snapshot.child("name").val(); // {first:"Ada",last:"Lovelace"}
     //console.log("name " + nameProfile);
-    this.setState({profileName: snapshot.child("name").val(), schoolName: snapshot.child("schoolName").val(), grade: snapshot.child("grade").val(),
-  cityState: snapshot.child("cityState").val(), profilePicture: snapshot.child("profilePicture").val(), yearsConsultant: snapshot.child("years").val(),
-  typeConsultant: snapshot.child("type").val() });
+   this.setState({profileName: snapshot.child("name").val(), schoolName: snapshot.child("schoolName").val(), 
+    grade: snapshot.child("grade").val(), cityState: snapshot.child("cityState").val(),
+     profilePicture: snapshot.child("profilePicture").val(), yearsConsultant: snapshot.child("years").val(),
+    typeConsultant: snapshot.child("type").val() });
   });
+
+  var refConsultant = firebase.database().ref("consultants").child(firebase.auth().currentUser.uid);
+  await refConsultant.once("value", (snapshot) => {
+     this.setState({yearsConsultant: snapshot.child("years").val(),
+    typeConsultant: snapshot.child("type").val() });
+  });
+
   }
 
 

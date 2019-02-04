@@ -51,10 +51,7 @@ export default class ProfileConsultantBasicInfo extends React.Component {
       image: '',
       schoolName: '',
       cityState: '',
-      typeConsultant: 'Select Type of Consultant',
-      yearsConsultant: 'Select Years as Consultant',
-      isTypeModalVisible: false,
-      isYearsModalVisible: false,
+      skypeUsername: '',
       imageUri: '',
       test: '',
       hasLoggedIn: false,
@@ -102,8 +99,8 @@ export default class ProfileConsultantBasicInfo extends React.Component {
 
 
   onPressSaveObject = async () => {
-    if ((this.state.schoolName !== '') && (this.state.cityState !== '') && (this.state.yearsConsultant !== 'Select Years as Consultant')
-      && (this.state.image !== '') && (this.state.typeConsultant !== 'Select Type of Consultant')) {
+    if ((this.state.schoolName !== '') && (this.state.cityState !== '') && (this.state.skypeUsername)
+      && (this.state.image !== '')) {
       await this.storeItem();
       //console.log(this.props.navigation);
       this.props.navigation.navigate("Home");
@@ -143,62 +140,20 @@ export default class ProfileConsultantBasicInfo extends React.Component {
 
     await firebase.database().ref('users').child(firebase.auth().currentUser.uid).update({
         schoolName: this.state.schoolName,
-        years: this.state.yearsConsultant,
-        type: this.state.typeConsultant,
         cityState: this.state.cityState,
         profilePicture: this.state.image,
+        skypeUsername: this.state.skypeUsername,
+      });
+
+      await firebase.database().ref('consultants').child(firebase.auth().currentUser.uid).update({
+        years: this.state.yearsConsultant,
+        type: this.state.typeConsultant,
       });
 
     //console.log(JSON.stringify(this.state.image));
     //console.log(JSON.stringify(this.state.test));
 
     // const pointsRef = firebase.database().ref('users').child(uid).child('points');
-  };
-
-  toggleYearsModal = () => {
-    this.setState({isYearsModalVisible: !this.state.isYearsModalVisible});
-  };
-
-  onPressYears() {
-    this.toggleYearsModal();
-  }
-
-  toggleTypeModal = () => {
-    this.setState({isTypeModalVisible: !this.state.isTypeModalVisible});
-  };
-
-  onPressType() {
-    this.toggleTypeModal();
-  }
-
-  onPressIECA = async () => {
-    await this.setState({isTypeModalVisible: false, typeConsultant: 'IECA'});
-    //console.log(this.state.typeConsultant);
-  };
-
-  onPressCurrentStudent = async () => {
-    await this.setState({isTypeModalVisible: false, typeConsultant: 'College Student'});
-    //console.log(this.state.typeConsultant);
-  };
-
-  onPressZeroToOne = async () => {
-    await this.setState({isYearsModalVisible: false, yearsConsultant: '0-1'});
-    //console.log(this.state.yearsConsultant);
-  };
-
-  onPressTwoToThree = async () => {
-    await this.setState({isYearsModalVisible: false, yearsConsultant: '2-3'});
-    //console.log(this.state.yearsConsultant);
-  };
-
-  onPressFourToFive = async () => {
-    await this.setState({isYearsModalVisible: false, yearsConsultant: '4-5'});
-    //console.log(this.state.yearsConsultant);
-  };
-
-  onPressGreaterThanFive = async () => {
-    await this.setState({isYearsModalVisible: false, yearsConsultant: '< 5'});
-    //console.log(this.state.yearsConsultant);
   };
 
   render() {
@@ -247,94 +202,22 @@ export default class ProfileConsultantBasicInfo extends React.Component {
                 placeholder="City, State (ex: Atlanta, GA)"
                 underlineColorAndroid="transparent"
                 onChangeText={(text) => this.setState({cityState: text})}
-                onSubmitEditing={() => this.onSubmitEditingItem(this.state.searchText)}
+                onSubmitEditing={(text) => this.setState({cityState: text})}
               />
 
-              <CheckBox
-              center
-              title={this.state.typeConsultant}
-              iconRight
-              iconType='material'
-              uncheckedIcon='add'
-              textStyle={{fontWeight: 'normal', color: 'gray'}}
-              containerStyle={{width: Metrics.screenWidth * .85}}
-              onPress={() => this.onPressType()}
-            />
-
-            <View style={{alignItems: 'center', justifyContent: 'center'}}>
-              <Modal
-                isVisible={this.state.isTypeModalVisible}
-                onBackdropPress={() => this.setState({isTypeModalVisible: false})}
-                backdropColor={'black'}>
-                <View style={styles.modalView}>
-                  <Text style={styles.modalText}>
-                    Pick a Category!
-                  </Text>
-                  <Button
-                    backgroundColor='#03A9F4'
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                    title='IECA Consultant'
-                    onPress={() => this.onPressIECA()}/>
-                  <Button
-                    backgroundColor='#03A9F4'
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                    title='Current College Student'
-                    onPress={() => this.onPressCurrentStudent()}/>
-                </View>
-              </Modal>
-            </View>
-
-              <TextInput style={styles.inputText}
-                         placeholder="School Name (if current student) or Company Name"
-                         underlineColorAndroid="transparent"
-                         onChangeText={(text) => this.setState({schoolName: text})}
-                         onSubmitEditing={() => this.onSubmitEditingPrice(this.state.searchText)}
+            <TextInput style={styles.inputText}
+                  placeholder="School Name or Company Name"
+                  underlineColorAndroid="transparent"
+                  onChangeText={(text) => this.setState({schoolName: text})}
+                  onSubmitEditing={(text) => this.setState({schoolName: text})}
               />
 
-              <CheckBox
-                        center
-                        title={this.state.yearsConsultant}
-                        iconRight
-                        iconType='material'
-                        uncheckedIcon='add'
-                        textStyle={{fontWeight: 'normal', color: 'gray'}}
-                        containerStyle={{width: Metrics.screenWidth * .85}}
-                        onPress={() => this.onPressYears()}
-                      />
-
-                      <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                        <Modal
-                          isVisible={this.state.isYearsModalVisible}
-                          onBackdropPress={() => this.setState({isYearsModalVisible: false})}
-                          backdropColor={'black'}>
-                          <View style={styles.modalView}>
-                            <Text style={styles.modalText}>
-                              Years as Consultant!
-                            </Text>
-                            <Button
-                              backgroundColor='#03A9F4'
-                              buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                              title='0 - 1 Years'
-                              onPress={() => this.onPressZeroToOne()}/>
-                            <Button
-                              backgroundColor='#03A9F4'
-                              buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                              title='2 - 3 Years'
-                              onPress={() => this.onPressTwoToThree()}/>
-                            <Button
-                              backgroundColor='#03A9F4'
-                              buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                              title='4 - 5 Years'
-                              onPress={() => this.onPressFourToFive()}/>
-                            <Button
-                              backgroundColor='#03A9F4'
-                              buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                              title='> 5 Years'
-                              onPress={() => this.onPressGreaterThanFive()}/>
-                          </View>
-                        </Modal>
-                      </View>
-
+            <TextInput style={styles.inputText}
+                  placeholder="Skype Username"
+                  underlineColorAndroid="transparent"
+                  onChangeText={(text) => this.setState({skypeUsername: text})}
+                  onSubmitEditing={(text) => this.setState({skypeUsername: text})}
+              />
             </View>
 
 
@@ -373,7 +256,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   pictureBox: {
-    height: Metrics.screenHeight * .3,
+    height: Metrics.screenHeight * .25,
     width: Metrics.screenWidth * .6,
     alignItems: 'center',
     justifyContent: 'center',

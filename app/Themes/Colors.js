@@ -24,7 +24,7 @@ const colors = {
   text: '#E0D7E5',
   turquoise: '#40e0d0',
   // lightPurple: '#f0a3f5'
-  lightPurple: '#eec2f1'
+  lightPurple:  'rgb(199, 140, 207)',
 }
 
 export default colors
