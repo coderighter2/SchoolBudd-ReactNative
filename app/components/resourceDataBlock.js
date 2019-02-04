@@ -25,20 +25,20 @@ export default class AvailabilityBlock extends React.Component {
       time: '',
       userID: '',
     }
-    console.log(JSON.stringify("AvailabilityBlock props " + JSON.stringify(props)));
+    //console.log(JSON.stringify("AvailabilityBlock props " + JSON.stringify(props)));
   }
 
 //   componentWillMount= async() => {
 //
 //   var userUID = firebase.auth().currentUser.uid;
 //   var name;
-//   console.log("uid " + userUID);
+//   //console.log("uid " + userUID);
 //   var that = this;
 //
 //   firebase.auth().onAuthStateChanged(function(user) {
 //     if (user) {
-//       console.log(" User is signed in.");
-//       // console.log("name " + firebase.database().ref('users').child(userUID).child('name'));
+//       //console.log(" User is signed in.");
+//       // //console.log("name " + firebase.database().ref('users').child(userUID).child('name'));
 //       firebase.database().ref('users').child(userUID).on('value', function(snapshot) {
 //         var childKey = snapshot.key;
 //         var childData = snapshot.val();
@@ -47,7 +47,7 @@ export default class AvailabilityBlock extends React.Component {
 //         that.setState({ userID: id});
 //       });
 //     } else {
-//       console.log(" User is not signed in.");
+//       //console.log(" User is not signed in.");
 //     }
 //   });
 // }
@@ -65,13 +65,13 @@ navigateResource() {
             <TouchableOpacity onPress={() => this.navigateResource()}>
               <View style={styles.cardView}>
                 <Card
-                containerStyle= {this.state.cardSelected ? styles.cardSelected : styles.cardNotSelected}
-                wrapperStyle= {this.state.cardSelected ? styles.cardSelected : styles.cardNotSelected}
-                    title={this.props.jedi.item.key}>
+                  containerStyle={this.state.cardSelected ? styles.cardSelected : styles.cardNotSelected}
+                  wrapperStyle={this.state.cardSelected ? styles.cardSelected : styles.cardNotSelected}
+                  title={this.props.jedi.item.key}>
                     <Text>
                     summary: {this.props.jedi.item.summary}
-                    </Text>>
-                    </Card>
+                    </Text>
+                  </Card>
 
               </View>
             </TouchableOpacity>
@@ -83,13 +83,14 @@ const styles = StyleSheet.create({
   cardView: {
     width: Metrics.screenWidth,
     borderRadius: Metrics.buttonRadius,
-    height: Metrics.screenHeight* .4,
+    height: Metrics.screenHeight* .2,
   },
   cardSelected: {
-    backgroundColor: 'powderblue',
+    backgroundColor: Colors.lightPurple,
   },
   cardNotSelected: {
     backgroundColor: 'white',
+    borderColor: Colors.lightPurple,
   },
   pictureView: {
     marginLeft: Metrics.marginHorizontal,
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   buttonPressed: {
-    color: 'lightblue',
+    color: Colors.lightPurple,
   },
   buttonNotPressed: {
     color: 'black',

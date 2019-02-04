@@ -1,0 +1,6 @@
+
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
+
+export const SET_PORTAL_TYPE = "SET_PORTAL_TYPE";
+export const RESET_PORTAL_TYPE = "RESET_PORTAL_TYPE";

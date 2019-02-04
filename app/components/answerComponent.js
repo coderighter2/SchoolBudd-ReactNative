@@ -7,12 +7,7 @@ import { Card, ListItem, Button, Slider, CheckBox, SearchBar } from 'react-nativ
 import firebase from 'firebase';
 import Modal from 'react-native-modal';
 
-/*
-  Displays a Jedi ID Card
 
-  start at
-  load more
-*/
 export default class AnswerComponent extends React.Component {
 
   constructor(props){
@@ -32,7 +27,7 @@ export default class AnswerComponent extends React.Component {
       answer: '',
     }
 
-    console.log(JSON.stringify("answer component props " + JSON.stringify(props)));
+    //console.log(JSON.stringify("answer component props " + JSON.stringify(props)));
   }
 
 
@@ -51,12 +46,14 @@ export default class AnswerComponent extends React.Component {
                 style={styles.inputText}
                 value={this.state.answer}
                 onChangeText={(answer) => this.setState({answer})}
-                placeholder="Your Answer Goes Here"/>
-                <Button
-                  color='powderblue'
-                  buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                  title='Answer'
-                  onPress={() => this.onPressPostQuestion()}/>
+                placeholder="Your Answer Goes Here"
+                underlineColorAndroid = "transparent"
+                />
+              <Button
+                color= {Colors.lightPurple}
+                buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
+                title='Answer'
+                onPress={() => this.onPressPostQuestion()}/>
             </View>
         </Modal>
       </View>

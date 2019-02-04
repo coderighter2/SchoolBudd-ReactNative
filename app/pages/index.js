@@ -16,6 +16,7 @@ import ConsultantProfileCard from './consultantProfileCard';
 import ConsultantProfilePreferences from './consultantProfilePreferences';
 import Forum from './forum';
 import QuestionResponses from './questionResponses';
+import AnswerScreen from './answerScreen';
 import CalendarConsultantScreen from './calendarConsultant';
 import CalendarOtherScreen from './calendarOther';
 import SetAvailabilityScreen from './setAvailabilityScreen.js';
@@ -28,16 +29,22 @@ import StudyMaterial from './studyMaterial';
 import SATACTPrep from './satACT';
 import TimelineSheet from './timelineSheet';
 import Blank2 from './blank2';
-import InputCreditCard from './inputCreditCard'
+import UpcomingScreen from './upcoming';
+import InputCreditCard from './inputCreditCard';
+import AddQuestionScreen from './addQuestionScreen';
+import AccountInfo from './accountInfo';
+
 
 
 export {
+  AccountInfo,
   Home,
   FindConsultant,
   StudentBasicInfo,
   SelectConsultant,
   Messages,
   Feedback,
+  UpcomingScreen,
   Onboarding,
   Logout,
   Login,
@@ -49,6 +56,7 @@ export {
   ConsultantProfileCard,
   ConsultantProfilePreferences,
   Forum,
+  AnswerScreen,
   QuestionResponses,
   CalendarConsultantScreen,
   CalendarOtherScreen,
@@ -63,4 +71,5 @@ export {
   TimelineSheet,
   Blank2,
   InputCreditCard,
+  AddQuestionScreen,
 }

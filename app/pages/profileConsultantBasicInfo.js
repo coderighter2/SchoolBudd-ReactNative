@@ -21,12 +21,8 @@ import {CheckBox} from 'react-native-elements'
 import Modal from 'react-native-modal';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import LoggedOut from '../components/loggedOutScreen';
+import Colors from '../Themes/Colors'
 
-
-
-/*
-for scaling, can use sql, or use a backend developer (firebase)
-*/
 
 
 export default class ProfileConsultantBasicInfo extends React.Component {
@@ -41,7 +37,7 @@ export default class ProfileConsultantBasicInfo extends React.Component {
       <Feather style={styles.icon}
         name="menu"
         size={Metrics.icons.medium}
-        color={'lightblue'}
+        color={Colors.lightPurple}
         onPress={() => navigate('DrawerToggle')}
       />
       )
@@ -55,10 +51,7 @@ export default class ProfileConsultantBasicInfo extends React.Component {
       image: '',
       schoolName: '',
       cityState: '',
-      typeConsultant: 'Select Type of Consultant',
-      yearsConsultant: 'Select Years as Consultant',
-      isTypeModalVisible: false,
-      isYearsModalVisible: false,
+      skypeUsername: '',
       imageUri: '',
       test: '',
       hasLoggedIn: false,
@@ -73,8 +66,7 @@ export default class ProfileConsultantBasicInfo extends React.Component {
     const loginCheck = await AsyncStorage.getItem("hasLoggedIn");
     if (loginCheck === "true") {
       await this.setState({hasLoggedIn: true});
-      console.log("hasLoggedIn" + this.state.hasLoggedIn);
-      console.log("metroooooooo");
+      //console.log("hasLoggedIn" + this.state.hasLoggedIn);
     }
    }
 
@@ -85,7 +77,7 @@ export default class ProfileConsultantBasicInfo extends React.Component {
       allowsEditing: true,
       aspect: [4, 3],
     });
-    console.log(result);
+    //console.log(result);
 
     if (!result.cancelled) {
       this.setState({image: result.uri});
@@ -107,10 +99,10 @@ export default class ProfileConsultantBasicInfo extends React.Component {
 
 
   onPressSaveObject = async () => {
-    if ((this.state.schoolName !== '') && (this.state.cityState !== '') && (this.state.yearsConsultant !== 'Select Years as Consultant')
-      && (this.state.image !== '') && (this.state.typeConsultant !== 'Select Type of Consultant')) {
+    if ((this.state.schoolName !== '') && (this.state.cityState !== '') && (this.state.skypeUsername)
+      && (this.state.image !== '')) {
       await this.storeItem();
-      console.log(this.props.navigation);
+      //console.log(this.props.navigation);
       this.props.navigation.navigate("Home");
     } else {
       alert('Please Fill in All Categories');
@@ -136,11 +128,11 @@ export default class ProfileConsultantBasicInfo extends React.Component {
 
 
     await ref.put(blob).then((snapshot) => {
-      console.log('puts blob');
+      //console.log('puts blob');
 
-      console.log('Uploaded a data_url string!');
+      //console.log('Uploaded a data_url string!');
       const downloadURL = snapshot.downloadURL;
-      console.log('downloadUrl: ' + downloadURL);
+      //console.log('downloadUrl: ' + downloadURL);
       {
         this.setState({image: downloadURL, test: 'testSuccessful'})
       }
@@ -148,62 +140,20 @@ export default class ProfileConsultantBasicInfo extends React.Component {
 
     await firebase.database().ref('users').child(firebase.auth().currentUser.uid).update({
         schoolName: this.state.schoolName,
-        years: this.state.yearsConsultant,
-        type: this.state.typeConsultant,
         cityState: this.state.cityState,
         profilePicture: this.state.image,
+        skypeUsername: this.state.skypeUsername,
       });
 
-    console.log(JSON.stringify(this.state.image));
-    console.log(JSON.stringify(this.state.test));
+      await firebase.database().ref('consultants').child(firebase.auth().currentUser.uid).update({
+        years: this.state.yearsConsultant,
+        type: this.state.typeConsultant,
+      });
+
+    //console.log(JSON.stringify(this.state.image));
+    //console.log(JSON.stringify(this.state.test));
 
     // const pointsRef = firebase.database().ref('users').child(uid).child('points');
-  };
-
-  toggleYearsModal = () => {
-    this.setState({isYearsModalVisible: !this.state.isYearsModalVisible});
-  };
-
-  onPressYears() {
-    this.toggleYearsModal();
-  }
-
-  toggleTypeModal = () => {
-    this.setState({isTypeModalVisible: !this.state.isTypeModalVisible});
-  };
-
-  onPressType() {
-    this.toggleTypeModal();
-  }
-
-  onPressIECA = async () => {
-    await this.setState({isTypeModalVisible: false, typeConsultant: 'IECA'});
-    console.log(this.state.typeConsultant);
-  };
-
-  onPressCurrentStudent = async () => {
-    await this.setState({isTypeModalVisible: false, typeConsultant: 'College Student'});
-    console.log(this.state.typeConsultant);
-  };
-
-  onPressZeroToOne = async () => {
-    await this.setState({isYearsModalVisible: false, yearsConsultant: '0-1'});
-    console.log(this.state.yearsConsultant);
-  };
-
-  onPressTwoToThree = async () => {
-    await this.setState({isYearsModalVisible: false, yearsConsultant: '2-3'});
-    console.log(this.state.yearsConsultant);
-  };
-
-  onPressFourToFive = async () => {
-    await this.setState({isYearsModalVisible: false, yearsConsultant: '4-5'});
-    console.log(this.state.yearsConsultant);
-  };
-
-  onPressGreaterThanFive = async () => {
-    await this.setState({isYearsModalVisible: false, yearsConsultant: '< 5'});
-    console.log(this.state.yearsConsultant);
   };
 
   render() {
@@ -218,12 +168,12 @@ export default class ProfileConsultantBasicInfo extends React.Component {
           <Button
             onPress={() => this.onPressUploadPicture()}
             title="Upload Profile Pic"
-            color="lightblue"
+            color={Colors.lightPurple}
           />
           <Button
             onPress={() => this.onPressTakePicture()}
             title="Take Profile Pic"
-            color="lightblue"/>
+            color={Colors.lightPurple}/>
         </View>)
 
     } else {
@@ -249,97 +199,25 @@ export default class ProfileConsultantBasicInfo extends React.Component {
             <View style={styles.itemInformation}>
 
               <TextInput style={styles.inputText}
-                         placeholder="City, State (ex: Atlanta, GA)"
-                         underlineColorAndroid="transparent"
-                         onChangeText={(text) => this.setState({cityState: text})}
-                         onSubmitEditing={() => this.onSubmitEditingItem(this.state.searchText)}
+                placeholder="City, State (ex: Atlanta, GA)"
+                underlineColorAndroid="transparent"
+                onChangeText={(text) => this.setState({cityState: text})}
+                onSubmitEditing={(text) => this.setState({cityState: text})}
               />
 
-              <CheckBox
-              center
-              title={this.state.typeConsultant}
-              iconRight
-              iconType='material'
-              uncheckedIcon='add'
-              textStyle={{fontWeight: 'normal', color: 'gray'}}
-              containerStyle={{width: Metrics.screenWidth * .85}}
-              onPress={() => this.onPressType()}
-            />
-
-            <View style={{alignItems: 'center', justifyContent: 'center'}}>
-              <Modal
-                isVisible={this.state.isTypeModalVisible}
-                onBackdropPress={() => this.setState({isTypeModalVisible: false})}
-                backdropColor={'black'}>
-                <View style={styles.modalView}>
-                  <Text style={styles.modalText}>
-                    Pick a Category!
-                  </Text>
-                  <Button
-                    backgroundColor='#03A9F4'
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                    title='IECA Consultant'
-                    onPress={() => this.onPressIECA()}/>
-                  <Button
-                    backgroundColor='#03A9F4'
-                    buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                    title='Current College Student'
-                    onPress={() => this.onPressCurrentStudent()}/>
-                </View>
-              </Modal>
-            </View>
-
-              <TextInput style={styles.inputText}
-                         placeholder="School Name (if current student) or Company Name"
-                         underlineColorAndroid="transparent"
-                         onChangeText={(text) => this.setState({schoolName: text})}
-                         onSubmitEditing={() => this.onSubmitEditingPrice(this.state.searchText)}
+            <TextInput style={styles.inputText}
+                  placeholder="School Name or Company Name"
+                  underlineColorAndroid="transparent"
+                  onChangeText={(text) => this.setState({schoolName: text})}
+                  onSubmitEditing={(text) => this.setState({schoolName: text})}
               />
 
-              <CheckBox
-                        center
-                        title={this.state.yearsConsultant}
-                        iconRight
-                        iconType='material'
-                        uncheckedIcon='add'
-                        textStyle={{fontWeight: 'normal', color: 'gray'}}
-                        containerStyle={{width: Metrics.screenWidth * .85}}
-                        onPress={() => this.onPressYears()}
-                      />
-
-                      <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                        <Modal
-                          isVisible={this.state.isYearsModalVisible}
-                          onBackdropPress={() => this.setState({isYearsModalVisible: false})}
-                          backdropColor={'black'}>
-                          <View style={styles.modalView}>
-                            <Text style={styles.modalText}>
-                              Years as Consultant!
-                            </Text>
-                            <Button
-                              backgroundColor='#03A9F4'
-                              buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                              title='0 - 1 Years'
-                              onPress={() => this.onPressZeroToOne()}/>
-                            <Button
-                              backgroundColor='#03A9F4'
-                              buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                              title='2 - 3 Years'
-                              onPress={() => this.onPressTwoToThree()}/>
-                            <Button
-                              backgroundColor='#03A9F4'
-                              buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                              title='4 - 5 Years'
-                              onPress={() => this.onPressFourToFive()}/>
-                            <Button
-                              backgroundColor='#03A9F4'
-                              buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
-                              title='> 5 Years'
-                              onPress={() => this.onPressGreaterThanFive()}/>
-                          </View>
-                        </Modal>
-                      </View>
-
+            <TextInput style={styles.inputText}
+                  placeholder="Skype Username"
+                  underlineColorAndroid="transparent"
+                  onChangeText={(text) => this.setState({skypeUsername: text})}
+                  onSubmitEditing={(text) => this.setState({skypeUsername: text})}
+              />
             </View>
 
 
@@ -370,32 +248,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
     marginTop: 5,
-    // backgroundColor: 'white',
   },
   itemInformation: {
     flex: 1.5,
     flexDirection: 'column',
-    //  alignItems: 'center',
-    //  justifyContent: 'space-around',
     margin: 20,
     backgroundColor: 'white',
-    //  padding: 15,
   },
   pictureBox: {
-    height: Metrics.screenHeight * .3,
+    height: Metrics.screenHeight * .25,
     width: Metrics.screenWidth * .6,
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 70,
     marginTop: 10,
     borderStyle: 'solid',
-    borderWidth: .5,
     backgroundColor: 'white',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    //  padding: 10,
+    borderRadius: 15,
+    borderColor : Colors.lightPurple
   },
   picture: {
     height: Metrics.screenHeight * .3,
@@ -404,16 +274,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     resizeMode: 'contain',
     margin: 20,
-    //  padding: 10,
   },
   inputText: {
     flex: 1,
     backgroundColor: 'white',
     flexDirection: 'row',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
     borderStyle: 'solid',
     borderWidth: .5,
     margin: 7,
@@ -426,10 +292,7 @@ const styles = StyleSheet.create({
     flex: 2,
     backgroundColor: 'white',
     flexDirection: 'row',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
     borderStyle: 'solid',
     borderWidth: .5,
     margin: 7,
@@ -446,7 +309,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 20,
     marginBottom: 55,
-    backgroundColor: 'lightblue',
+    backgroundColor: Colors.lightPurple,
   },
   postButtonText: {
     color: 'white',
@@ -457,17 +320,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalView: {
-    // width: Metrics.screenWidth,
     height: Metrics.screenHeight * .6,
     borderStyle: 'solid',
     borderWidth: .5,
     alignItems: 'center',
     justifyContent: 'space-around',
     backgroundColor: 'white',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
   },
   modalText: {
     fontSize: 24,

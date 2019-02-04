@@ -37,7 +37,7 @@ export default class Messages extends React.Component {
         var list = this.state.rooms.slice();
         list.push(childData);
         this.setState({rooms: list});
-        console.log(childData);
+        //console.log(childData);
     });
   }
 
@@ -124,7 +124,9 @@ _keyboardDidHide () {
                 style={styles.newRoom}
                 value={this.state.text}
                 onChangeText={(text) => this.setState({text})}
-                placeholder="Type Message Here..."/>
+                placeholder="Type Message Here..."
+                underlineColorAndroid = "transparent"
+              />
               <Button
                 title="Send"
                 onPress={this.send}/>

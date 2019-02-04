@@ -33,7 +33,7 @@ const fields = [
 export default class FormGenerator extends Component {
   login() {
     const formValues = this.formGenerator.getValues();
-    console.log('FORM VALUES', formValues);
+    //console.log('FORM VALUES', formValues);
   }
   render() {
     return (

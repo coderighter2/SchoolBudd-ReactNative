@@ -5,7 +5,7 @@ import UploadSale from '../components/uploadSale';
 import firebase from 'firebase';
 import Metrics from '../Themes/Metrics';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-
+import Colors from '../Themes/Colors'
 
 //import Main from './app/components/Main';
 
@@ -13,21 +13,21 @@ import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons
 export default class StudentBasicInfo extends React.Component {
 
   static navigationOptions = ({ navigation }) => {
-  const params = navigation.state.params || {};
-  const { navigate } = navigation;
-  return {
-    headerTitle: 'Sell Stuff',
-    title: 'Sell Stuff',
-    headerLeft: (
-      <Feather style={styles.icon}
-        name="menu"
-        size={Metrics.icons.medium}
-        color={'lightblue'}
-        onPress={() => navigate('DrawerToggle')}
-      />
+    const params = navigation.state.params || {};
+    const { navigate } = navigation;
+    return {
+      headerTitle: 'Sell Stuff',
+      title: 'Sell Stuff',
+      headerLeft: (
+        <Feather style={styles.icon}
+          name="menu"
+          size={Metrics.icons.medium}
+          color={Colors.lightPurple}
+          onPress={() => navigate('DrawerToggle')}
+        />
       )
     }
-};
+  };
 
   purchaseConfirmation= async (price, name) => {
     this.props.navigation.navigate('SellersThankYou', {price:price, itemName: name});
@@ -45,7 +45,7 @@ export default class StudentBasicInfo extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: Colors.lightPurple,
     alignItems: 'center',
     justifyContent: 'center',
   },

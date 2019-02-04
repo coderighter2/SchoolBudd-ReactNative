@@ -1,0 +1,418 @@
+import React from 'react';
+import { StyleSheet, TouchableOpacity, AsyncStorage, Button, TextInput, Alert, Dimensions, ScrollView } from 'react-native';
+import Metrics from '../Themes/Metrics';
+import Colors from '../Themes/Colors';
+import Images from '../Themes/Images';
+import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import firebase from 'firebase';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import Modal from "react-native-modal";
+import { ListItem, Slider, CheckBox, SearchBars } from 'react-native-elements'
+import { View, Text } from 'native-base';
+import { Input } from "native-base";
+import { LinearGradient } from 'expo';
+
+
+const {width, height} = Dimensions.get('window');
+
+export default class Login extends React.Component {
+
+  static navigationOptions = {
+    title: 'Login',
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isQuestionModalVisible: false,
+      isTopicModalVisible: true,
+      postQuestionTopic : 'Select a Question Topic',
+      question: '',
+      userName: '',
+      userPortal: '',
+      profileImage: '',
+    }
+    //see what props App.js is constructed with:
+    // //console.log(JSON.stringify(props));
+  }
+
+  componentDidMount = async() => {
+    this.checkIfUserLoggedIn();
+
+    var userUID = firebase.auth().currentUser.uid;
+    var name;
+    var that = this;
+
+    await firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        //console.log(" User is signed in.");
+        // //console.log("name " + firebase.database().ref('users').child(userUID).child('name'));
+        firebase.database().ref('users').child(userUID).on('value', function(snapshot) {
+          var childKey = snapshot.key;
+          var childData = snapshot.val();
+          childData.key = childKey;
+          name = childData.name;
+          that.setState({userName: name, userPortal: childData.portal, profileImage : childData.profilePicture},
+             () => console.log("user portal in function " + that.state.userPortal));
+        });
+        if (that.state.profileImage == null) {
+          that.setState({profileImage: Images.profile})
+        }
+      } else {
+        //console.log(" User is not signed in.");
+      }
+    });
+  }
+
+  onPressTopic = async () => {
+    await this.setState({ isQuestionModalVisible: false });
+    //console.log("question modal " + this.state.isQuestionModalVisible);
+    await this.setState({ isTopicModalVisible: true });
+    //console.log("topic modal " + this.state.isTopicModalVisible);
+  }
+
+  onPressAddQuestion = async () => {
+    await this.setState({ isTopicModalVisible: false });
+    //console.log("topic modal " + this.state.isTopicModalVisible);
+    await this.setState({ isQuestionModalVisible: true });
+    //console.log("question modal " + this.state.isQuestionModalVisible);
+  }
+
+  checkIfUserLoggedIn = async () => {
+    var _this = this;
+    var user = firebase.auth().currentUser;
+    if (user) {
+      // console.warn('user already logged in');
+      await AsyncStorage.setItem("hasLoggedIn", "true");
+    } else {
+      // console.warn('Prompt log in');
+      // _this.logInWithFacebook(); //Change this line to log in with email or use Facebook Login
+    }
+  }
+
+  onPressPostQuestion = async() => {
+    if ((this.state.postQuestionTopic !== 'Select a Question Topic') && (!this.state.question == '')) {
+    await this.setState({ isQuestionModalVisible: false});
+
+    //console.log("question: ");
+    await firebase.database().ref('forum').push({
+        question: this.state.question,
+        portalQuestion: this.state.userPortal,
+        author: this.state.userName,
+        topic: this.state.postQuestionTopic,
+        profileImage : this.state.profileImage
+      });
+    } else {
+      alert("Please choose the topic and fill the input.");
+    }
+  }
+
+  onPressCollegeLife = async() => {
+      await this.setState({ isTopicModalVisible: false, postQuestionTopic : 'College Life'});
+      await this.setState({isQuestionModalVisible: true});
+  }
+
+  onPressCollegeApplications = async() => {
+      await this.setState({ isTopicModalVisible: false, postQuestionTopic : 'College Applications'});
+      await this.setState({isQuestionModalVisible: true});
+  }
+
+  onPressResources = async() => {
+      await this.setState({ isTopicModalVisible: false, postQuestionTopic : 'Resources'});
+      await this.setState({isQuestionModalVisible: true});
+  }
+
+  onPressAllTopics = async() => {
+      await this.setState({ isTopicModalVisible: false, postQuestionTopic : 'All Topics'});
+      await this.setState({isQuestionModalVisible: true});
+  }
+
+
+  render() {
+    const { navigate } = this.props.navigation;
+
+    if (this.state.isTopicModalVisible === true) {
+      return (
+        <View style={styles.container}>
+        <TouchableOpacity onPress={()=> this.onPressAddQuestion()}>
+              <LinearGradient
+                start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                colors={['#8338af', '#4d2c7d']}
+                style={styles.yearItem}>
+                <View style = {styles.circleView}>
+                  <Text style = {[styles.numberTxt, {color: '#8338af'} ]}>1</Text>
+                </View>
+                <Text style={styles.btnTxt}>
+                  Ask Question
+                </Text>
+              </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=> this.onPressTopic()}>
+              <LinearGradient
+                start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                colors={['#c83dd0', '#8227aa']}
+                style={styles.yearItem}>
+                <View style = {styles.circleView}>
+                  <Text style = {[styles.numberTxt, {color: '#c83dd0'} ]}>2</Text>
+                </View>
+                <Text style={styles.btnTxt}>
+                  Change Topic
+                </Text>
+              </LinearGradient>
+          </TouchableOpacity> 
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <Modal
+              isVisible={this.state.isTopicModalVisible}
+              onBackdropPress={() => this.setState({ isTopicModalVisible: false })}
+              backdropColor={'black'}>
+              <View style={styles.modalViewTopic}>
+                  <Text style={styles.modalText}>
+                  Pick a Category!
+                  </Text>
+                  <Button
+                      titleStyle={{color : 'white', fontWeight: '700', fontSize: 20}}
+                      buttonStyle={{width : 200, borderRadius: 5, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :'#03A9F4'}}
+                      title='College Life'
+                      onPress={() => this.onPressCollegeLife()}/>
+                  <Button
+                      titleStyle={{color : 'white', fontWeight: '700', fontSize: 20}}
+                      buttonStyle={{width : 200, borderRadius: 5, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :'#03A9F4'}}
+                      title='College Applications'
+                      onPress={() => this.onPressCollegeApplications()}/>
+                  <Button
+                      titleStyle={{color : 'white', fontWeight: '700', fontSize: 20}}
+                      buttonStyle={{width : 200, borderRadius: 5, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :'#03A9F4'}}
+                      title='Resources'
+                      onPress={() => this.onPressResources()}/>
+                  <Button
+                      titleStyle={{color : 'white', fontWeight: '700', fontSize: 20}}
+                      buttonStyle={{width : 200, borderRadius: 5, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor :'#03A9F4'}}
+                      title='All Topics'
+                      onPress={() => this.onPressAllTopics()}/>
+              </View>
+            </Modal>
+          </View>
+
+        </View>
+      );
+    } else {
+ 
+      return (
+        <View style={styles.container}>
+
+        <TouchableOpacity onPress={()=> this.onPressAddQuestion()}>
+              <LinearGradient
+                start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                colors={['#8338af', '#4d2c7d']}
+                style={styles.yearItem}>
+                <View style = {styles.circleView}>
+                  <Text style = {[styles.numberTxt, {color: '#8338af'} ]}>1</Text>
+                </View>
+                <Text style={styles.btnTxt}>
+                  Ask Question
+                </Text>
+              </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={()=> this.onPressTopic()}>
+              <LinearGradient
+                start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+                colors={['#c83dd0', '#8227aa']}
+                style={styles.yearItem}>
+                <View style = {styles.circleView}>
+                  <Text style = {[styles.numberTxt, {color: '#c83dd0'} ]}>2</Text>
+                </View>
+                <Text style={styles.btnTxt}>
+                  Change Topic
+                </Text>
+              </LinearGradient>
+          </TouchableOpacity> 
+            
+            <View style={{ alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+              <Modal
+                  isVisible={this.state.isQuestionModalVisible}
+                  onBackdropPress={() => this.setState({ isQuestionModalVisible: false })}
+                  backdropColor={'black'}
+                  style={{ justifyContent: "flex-start", margin: 0}}>  
+                  <View style={styles.modalViewQuestion}> 
+              
+                    <View style={{flexDirection : 'row', marginTop : 10}}>
+                      <Ionicons style={{ marginLeft: 15, fontWeight : 'bold'}}
+                        name="ios-close-circle-outline"
+                        size={Metrics.icons.medium}
+                        color={Colors.lightPurple}
+                        onPress={() => this.setState({ isQuestionModalVisible: false })}
+                      />
+                      <View style={{flex : 1, alignItems: 'center', width : '100%'}}>
+                        <Text style={styles.modalText}>
+                        Ask a Question!
+                        </Text>
+                      </View>
+                      <FontAwesome style={{ marginRight: 15, fontWeight : 'bold'}}
+                        name="send"
+                        size={Metrics.icons.medium}
+                        color={Colors.lightPurple}
+                        onPress={() => this.onPressPostQuestion()}
+                      />
+                    </View>
+
+                    <Input style={ styles.inputText }
+                      placeholder="Ex: When are the common app essays released?"
+                      underlineColorAndroid="transparent"
+                      multiline={true}
+                      value={this.state.question}
+                      onChangeText={(text) => this.setState({question: text})}
+                      onSubmitEditing={(text) => this.setState({question: text})}
+                    />
+                    <View style={{flexDirection: "column", margin : 10}}>
+                      <Button
+                        titleStyle={{color : 'white', fontWeight: '700', fontSize: 25}}
+                        buttonStyle={{borderRadius: 20, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor : Colors.lightPurple}}
+                        title={this.state.postQuestionTopic}
+                        onPress={() => this.onPressTopic()}/>
+                      <Button
+                        titleStyle={{color : 'white', fontWeight: '700', fontSize: 25}}
+                        buttonStyle={{borderRadius: 20, margin: 5, borderWidth : 1, borderColor : '#FFF', backgroundColor : Colors.lightPurple}}
+                        title="Post Question"
+                        onPress={() => this.onPressPostQuestion()}/>
+                    </View>
+                </View>
+              </Modal>
+          </View>
+        </View>
+      );
+    }
+  }
+}
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    backgroundColor: 'white',
+  },
+  header: {
+    height: 60,
+    width: width,
+    backgroundColor: "#ff8080",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10
+  },
+  title: {
+    color: 'white',
+    fontSize: 24
+  },
+  modalViewTopic: {
+    height: Metrics.screenHeight*.5,
+    borderStyle: 'solid',
+    borderWidth: .5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderRadius: 15,
+  },
+  modalViewQuestion: {
+    flex: .5,
+    borderStyle: 'solid',
+    borderWidth: .5,
+    marginTop: Metrics.screenWidth*.1,
+    marginLeft: 20,
+    marginRight: 20,
+    borderRadius: 15,
+    backgroundColor: "white",
+    padding: 22,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "rgba(0, 0, 0, 0.1)"
+
+  },
+  modalText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  modal: {
+    justifyContent: "flex-start",
+    position : "absolute",
+    zIndex: 4,
+    elevation: 4,
+    width : Metrics.screenWidth,
+    height: Metrics.screenHeight,
+    marginTop: Expo.Constants.statusBarHeight / 2
+  },
+  icon: {
+    marginLeft: 15,
+  },
+  footerIcons: {
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  modalFooter: {
+    backgroundColor: "white",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 0.2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    height: 54,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    padding: 5
+  },
+  inputText: {
+    width: '100%',
+    flex: 1,
+    alignContent: "flex-start",
+    justifyContent: "flex-start",
+    minHeight: 40,
+    textAlignVertical: "top",
+    padding: 10,
+    fontSize: 14,
+    textDecorationLine: 'none',
+    lineHeight: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: Colors.lightPurple,
+    backgroundColor: 'white',
+  },
+  yearItem: {
+    backgroundColor : Colors.lightPurple, 
+    width : 300,
+    height: 50,
+    borderRadius : 25, 
+    margin : 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    shadowColor: 'black',
+    shadowOffset: { height: 3, width: 3},
+  },
+  btnTxt: {
+    backgroundColor: 'transparent',
+    fontSize: 18,
+    color: '#fff',
+  },
+  circleView: {
+    backgroundColor: 'white',
+    // borderWidth: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 40,
+    height: 40,
+    borderRadius: 25,
+    position:  'absolute',
+    left: 5
+  },
+  numberTxt: {
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+});

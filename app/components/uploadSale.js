@@ -22,16 +22,10 @@ import {CheckBox} from 'react-native-elements'
 import Modal from 'react-native-modal';
 import LoggedOut from '../components/loggedOutScreen';
 import {WebBrowser} from 'expo';
-
-
-
-/*
-for scaling, can use sql, or use a backend developer (firebase)
-*/
+import Colors from '../Themes/Colors'
 
 
 export default class UploadSale extends React.Component {
-
 
   constructor(props) {
     super(props);
@@ -48,6 +42,7 @@ export default class UploadSale extends React.Component {
       hasLoggedIn: false,
       skypeUsername: '',
     }
+    console.log("props " + JSON.stringify(props));
   }
 
   componentWillMount() {
@@ -58,8 +53,7 @@ export default class UploadSale extends React.Component {
     const loginCheck = await AsyncStorage.getItem("hasLoggedIn");
     if (loginCheck === "true") {
       await this.setState({hasLoggedIn: true});
-      console.log("hasLoggedIn" + this.state.hasLoggedIn);
-      console.log("metroooooooo");
+      //console.log("hasLoggedIn" + this.state.hasLoggedIn);
     }
    }
 
@@ -70,7 +64,7 @@ export default class UploadSale extends React.Component {
       allowsEditing: true,
       aspect: [4, 3],
     });
-    console.log(result);
+    //console.log(result);
 
     if (!result.cancelled) {
       this.setState({image: result.uri});
@@ -95,8 +89,7 @@ export default class UploadSale extends React.Component {
     if ((this.state.schoolName !== '') && (this.state.cityState !== '') && (this.state.grade !== '')
       && (this.state.image !== '')) {
       await this.storeItem();
-      console.log(this.props.navigation);
-      this.props.navigation.navigate('Home');
+      // this.props.navigation.navigate('Home');
     } else {
       alert('Please Fill in All Categories');
     }
@@ -128,6 +121,16 @@ export default class UploadSale extends React.Component {
     const ref = firebase.storage().ref('users').child(firebase.auth().currentUser.uid).child("profilePicture");
     const response = await fetch(this.state.image);
     const blob = await response.blob();
+    var that = this;
+
+    await ref.put(blob).then((snapshot) => {
+      console.log('puts blob');
+
+      snapshot.ref.getDownloadURL().then(function(downloadURL) {
+        that.setState({image: downloadURL, test: 'testSuccessful'});
+    });
+
+    });
 
     if (this.state.skypeUsername == "") {
       await Alert.alert(
@@ -145,15 +148,15 @@ export default class UploadSale extends React.Component {
     await ref.put(blob).then((snapshot) => {
       console.log('puts blob');
 
-      console.log('Uploaded a data_url string!');
-      const downloadURL = snapshot.downloadURL;
-      console.log('downloadUrl: ' + downloadURL);
-      {
-        this.setState({image: downloadURL, test: 'testSuccessful'})
-      }
+      snapshot.ref.getDownloadURL().then(function(downloadURL) {
+        console.log("download url " + downloadURL);
+        that.setState({image: downloadURL, test: 'testSuccessful'});
     });
 
-    await firebase.database().ref('users').child(firebase.auth().currentUser.uid).update({
+    });
+
+    try {
+      await firebase.database().ref('users').child(firebase.auth().currentUser.uid).update({
         schoolName: this.state.schoolName,
         grade: this.state.grade,
         cityState: this.state.cityState,
@@ -161,15 +164,12 @@ export default class UploadSale extends React.Component {
         isCounselor: false,
         skypeUsername: this.state.skypeUsername,
       });
+      alert("Profile Updated");
+    } catch (error) {
+      alert("Profile Update Failed");
+    }
 
-   // await firebase.database().ref('student').child(firebase.auth().currentUser.uid).update({
-   //
-   // });
 
-    console.log(JSON.stringify(this.state.image));
-    console.log(JSON.stringify(this.state.test));
-
-    // const pointsRef = firebase.database().ref('users').child(uid).child('points');
   };
 
   toggleModal = () => {
@@ -181,10 +181,7 @@ export default class UploadSale extends React.Component {
   }
 
   render() {
-
     let {image} = this.state;
-
-
     let contentView = null;
     if (this.state.image === '') {
       contentView =
@@ -192,12 +189,12 @@ export default class UploadSale extends React.Component {
           <Button
             onPress={() => this.onPressUploadPicture()}
             title="Upload Profile Pic"
-            color="lightblue"
+            color={Colors.lightPurple}
           />
           <Button
             onPress={() => this.onPressTakePicture()}
             title="Take Profile Pic"
-            color="lightblue"/>
+            color={Colors.lightPurple}/>
         </View>)
 
     } else {
@@ -209,67 +206,52 @@ export default class UploadSale extends React.Component {
     if (!this.state.hasLoggedIn) {
         return (<LoggedOut/>);
     } else {
-
-    return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-
-        <KeyboardAwareScrollView>
-          <SafeAreaView style={styles.container}>
-
-            <View style={styles.pictureBox}>
-              {contentView}
-            </View>
-
-            <View style={styles.itemInformation}>
-
-              <TextInput style={styles.inputText}
-                         placeholder="City, State (ex: Atlanta, GA)"
-                         underlineColorAndroid="transparent"
-                         onChangeText={(text) => this.setState({cityState: text})}
-                         onSubmitEditing={() => this.onSubmitEditingItem(this.state.searchText)}
-              />
-
-              <TextInput style={styles.inputText}
-                         placeholder="School Name"
-                         underlineColorAndroid="transparent"
-                         onChangeText={(text) => this.setState({schoolName: text})}
-                         onSubmitEditing={() => this.onSubmitEditingPrice(this.state.searchText)}
-              />
-
-              <TextInput style={styles.inputText}
-                         placeholder="Grade/Year in School"
-                         underlineColorAndroid="transparent"
-                         onChangeText={(text) => this.setState({grade: text})}
-                         onSubmitEditing={() => this.onSubmitEditingDescription(this.state.searchText)}
-              />
-
-              <TextInput style={styles.inputText}
-                         placeholder="Skype Username"
-                         underlineColorAndroid="transparent"
-                         onChangeText={(text) => this.setState({skypeUsername: text})}
-                         onSubmitEditing={() => this.onSubmitEditingDescription(this.state.searchText)}
-              />
-
-            </View>
-
-
-            <TouchableOpacity style={styles.postButton}
-                              onPress={() => this.onPressSaveObject()}>
-              <View>
-                <Text style={styles.postButtonText}>
-                  Update Profile
-                </Text>
+      return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <KeyboardAwareScrollView>
+            <SafeAreaView style={styles.container}>
+              <View style={styles.pictureBox}>
+                {contentView}
               </View>
-            </TouchableOpacity>
+              <View style={styles.itemInformation}>
+                <TextInput style={styles.inputText}
+                          placeholder="City, State (ex: Atlanta, GA)"
+                          underlineColorAndroid="transparent"
+                          onChangeText={(text) => this.setState({cityState: text})}
+                          onSubmitEditing={() => this.onSubmitEditingItem(this.state.searchText)}
+                />
+                <TextInput style={styles.inputText}
+                          placeholder="School Name"
+                          underlineColorAndroid="transparent"
+                          onChangeText={(text) => this.setState({schoolName: text})}
+                          onSubmitEditing={() => this.onSubmitEditingPrice(this.state.searchText)}
+                />
+                <TextInput style={styles.inputText}
+                          placeholder="Grade/Year in School"
+                          underlineColorAndroid="transparent"
+                          onChangeText={(text) => this.setState({grade: text})}
+                          onSubmitEditing={() => this.onSubmitEditingDescription(this.state.searchText)}
+                />
+                <TextInput style={styles.inputText}
+                          placeholder="Skype Username"
+                          underlineColorAndroid="transparent"
+                          onChangeText={(text) => this.setState({skypeUsername: text})}
+                          onSubmitEditing={() => this.onSubmitEditingDescription(this.state.searchText)}
+                />
+              </View>
 
-          </SafeAreaView>
-        </KeyboardAwareScrollView>
-      </TouchableWithoutFeedback>
-
-
-    );
+              <TouchableOpacity style={styles.postButton}
+                                onPress={() => this.onPressSaveObject()}>
+                  <Text style={styles.postButtonText}>
+                    Update Profile
+                  </Text>
+              </TouchableOpacity>
+            </SafeAreaView>
+          </KeyboardAwareScrollView>
+        </TouchableWithoutFeedback>
+      );
+    }
   }
-}
 }
 
 const styles = StyleSheet.create({
@@ -280,32 +262,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
     marginTop: 5,
-    // backgroundColor: 'white',
   },
   itemInformation: {
     flex: 1.5,
     flexDirection: 'column',
-    //  alignItems: 'center',
-    //  justifyContent: 'space-around',
     margin: 20,
     backgroundColor: 'white',
-    //  padding: 15,
   },
   pictureBox: {
     height: Metrics.screenHeight * .3,
     width: Metrics.screenWidth * .6,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 70,
+    marginLeft: 60,
     marginTop: 10,
     borderStyle: 'solid',
     borderWidth: .5,
     backgroundColor: 'white',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    //  padding: 10,
+    borderRadius: 15,
   },
   picture: {
     height: Metrics.screenHeight * .3,
@@ -314,32 +288,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     resizeMode: 'contain',
     margin: 20,
-    //  padding: 10,
   },
   inputText: {
     flex: 1,
     backgroundColor: 'white',
     flexDirection: 'row',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
     borderStyle: 'solid',
-    borderWidth: .5,
+    borderWidth: 1,
+    borderColor: Colors.lightPurple,
     margin: 7,
-    width: Metrics.screenWidth * .85,
+    width: Metrics.screenWidth * .78,
     justifyContent: 'space-around',
     alignItems: 'center',
     paddingLeft: 20,
+    fontSize: 17
   },
   bigInputText: {
     flex: 2,
     backgroundColor: 'white',
     flexDirection: 'row',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15,
     borderStyle: 'solid',
     borderWidth: .5,
     margin: 7,
@@ -349,35 +318,30 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   postButton: {
-    flex: .7,
+    flex: .4,
     justifyContent: 'center',
     alignItems: 'center',
     borderStyle: 'solid',
     borderWidth: 1,
     marginTop: 20,
     marginBottom: 55,
-    backgroundColor: 'lightblue',
+    backgroundColor: Colors.lightPurple,
   },
   postButtonText: {
     color: 'white',
-    fontSize: 40,
-    fontWeight: 'bold',
+    fontSize: 30,
   },
   keyboardAction: {
     flex: 1,
   },
   modalView: {
-    // width: Metrics.screenWidth,
     height: Metrics.screenHeight * .6,
     borderStyle: 'solid',
     borderWidth: .5,
     alignItems: 'center',
     justifyContent: 'space-around',
     backgroundColor: 'white',
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+    borderRadius: 15
   },
   modalText: {
     fontSize: 24,

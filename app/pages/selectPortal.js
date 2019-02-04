@@ -1,80 +1,89 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, SafeAreaView, Button } from 'react-native';
-import PropTypes from 'prop-types';
-import Metrics from '../Themes/Metrics';
-import Images from '../Themes/Images';
-import Onboarding from 'react-native-onboarding-swiper';
+import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  SafeAreaView,
+  AsyncStorage,
+  TouchableOpacity
+} from "react-native";
+import PropTypes from "prop-types";
 
-export default class OnboardingScreen extends React.Component {
+import { Button } from "react-native-elements";
+import Metrics from "../Themes/Metrics";
+import Colors from "../Themes/Colors";
+import Images from "../Themes/Images";
+import { LinearGradient } from "expo";
+import { connect } from "react-redux";
+import { setPortal } from "../state/actions/drawer";
 
+class SelectPortalScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   static navigationOptions = ({ navigation }) => {
     const params = navigation.state.params || {};
+    return {
+      header: null
+    };
   };
 
-  static propTypes = {
-      selectPortalStudent: PropTypes.func.isRequired,
-      selectPortalConsultant: PropTypes.func.isRequired,
-      selectPortalSchool: PropTypes.func.isRequired,
-      selectPortalParent: PropTypes.func.isRequired,
-  };
-
-  _selectPortalStudent = () => {
+  _selectPortalStudent = async () => {
+    const { setPortal } = this.props;
     if (this.props.selectPortalStudent) {
-      console.log("props " + this.props);
-      console.log("select portal working");
+      //console.log("props " + this.props);
+      //console.log("select portal working");
       this.props.selectPortalStudent();
-      }
-  }
+    } else {
+      await AsyncStorage.setItem("portal", "student");
+      this.props.navigation.navigate("LoginScreen");
+    }
+    setPortal({ portalType: "student" });
+  };
 
-  _selectPortalConsultant = () => {
+  _selectPortalConsultant = async () => {
+    const { setPortal } = this.props;
     if (this.props.selectPortalConsultant) {
-      console.log("props " + this.props);
-      console.log("select portal working");
+      //console.log("props " + this.props);
+      //console.log("select portal working");
       this.props.selectPortalConsultant();
-      }
-  }
-
-  _selectPortalSchool = () => {
-    if (this.props.selectPortalSchool) {
-      console.log("props " + this.props);
-      console.log("select portal working");
-      this.props.selectPortalSchool();
-      }
-  }
-
-  _selectPortalParent = () => {
-    if (this.props.selectPortalParent) {
-      console.log("props " + this.props);
-      console.log("select portal working");
-      this.props.selectPortalParent();
-      }
-  }
+    } else {
+      await AsyncStorage.setItem("portal", "consultant");
+      this.props.navigation.navigate("LoginScreen");
+    }
+    setPortal({ portalType: "consultant" });
+  };
 
   render() {
     return (
       <SafeAreaView style={styles.container}>
-      <View style={styles.feedbackBox}>
-      <Text style={styles.textStyles}>Here at MoveItMoveIt, we love to improve. Your input can help us do that. :)</Text>
-          <Button
-          title="Students"
-          onPress={this._selectPortalStudent}
-          backgroundColor="skyblue"/>
+        <Image
+          style={styles.backgroundImg}
+          source={Images.selectPortal_background}
+        />
+        <Text style={styles.textStyles}>
+          Are you a student or a consultant?
+        </Text>
 
-          <Button
-          title="Consultants"
-          onPress={this._selectPortalConsultant}
-          backgroundColor="skyblue"/>
+        <TouchableOpacity onPress={this._selectPortalStudent}>
+          <LinearGradient
+            colors={["#CE9FFC", "#7367F0"]}
+            style={styles.selectBtn}
+          >
+            <Text style={styles.btnTxt}>Students</Text>
+          </LinearGradient>
+        </TouchableOpacity>
 
-          <Button
-          title="Educators"
-          onPress={this._selectPortalSchool}
-          backgroundColor="skyblue"/>
-
-          <Button
-          title="Parents"
-          onPress={this._selectPortalParent}
-          backgroundColor="skyblue"/>
-        </View>
+        <TouchableOpacity onPress={this._selectPortalConsultant}>
+          <LinearGradient
+            colors={["#CE9FFC", "#7367F0"]}
+            style={styles.selectBtn}
+          >
+            <Text style={styles.btnTxt}>Consultants</Text>
+          </LinearGradient>
+        </TouchableOpacity>
       </SafeAreaView>
     );
   }
@@ -85,13 +94,58 @@ const styles = StyleSheet.create({
     width: Metrics.screenWidth,
     height: Metrics.screenHeight,
     // flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center"
   },
   contentImage: {
-    height: Metrics.screenHeight*.35,
-    width: Metrics.screenWidth*.5,
+    height: Metrics.screenHeight * 0.35,
+    width: Metrics.screenWidth * 0.5,
     borderRadius: 15
   },
+  textStyles: {
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "white",
+    marginBottom: 25
+  },
+  selectBtn: {
+    borderColor: "transparent",
+    borderRadius: 23,
+    margin: 15,
+    width: Metrics.screenWidth * 0.8,
+    height: 46,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  btnTxt: {
+    fontSize: 20,
+    color: "white"
+  },
+  backgroundImg: {
+    width: Metrics.screenWidth,
+    height: Metrics.screenHeight,
+    resizeMode: "cover",
+    position: "absolute",
+    top: 0,
+    left: 0
+  }
 });
+
+const state = state => {
+  return {};
+};
+
+const dispatchProp = dispatch => {
+  return {
+    setPortal: payload => {
+      dispatch(setPortal(payload));
+    }
+  };
+};
+
+export default connect(
+  state,
+  dispatchProp
+)(SelectPortalScreen);

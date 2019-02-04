@@ -6,6 +6,7 @@ import * as firebase from 'firebase'
 import ResourceBlock from '../components/resourceBlock';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import Metrics from '../Themes/Metrics';
+import Colors from '../Themes/Colors'
 
 //image, name, navigationPath
 const dataTimes =
@@ -21,21 +22,21 @@ const dataTimes =
 export default class Resources extends React.Component {
 
   static navigationOptions = ({ navigation }) => {
-  const params = navigation.state.params || {};
-  const { navigate } = navigation;
-  return {
-    headerTitle: 'Resources',
-    title: 'Resources',
-    headerLeft: (
-      <Feather style={styles.icon}
-        name="menu"
-        size={Metrics.icons.medium}
-        color={'lightblue'}
-        onPress={() => navigate('DrawerToggle')}
-      />
-      )
-    }
-};
+    const params = navigation.state.params || {};
+    const { navigate } = navigation;
+    return {
+      headerTitle: 'Resources',
+      title: 'Resources',
+      headerLeft: (
+        <Feather style={{marginLeft: 15}}
+          name="menu"
+          size={Metrics.icons.medium}
+          color={Colors.lightPurple}
+          onPress={() => navigate('DrawerToggle')}
+        />
+        )
+      }
+  };
 
   constructor(props) {
      super(props);
@@ -43,7 +44,7 @@ export default class Resources extends React.Component {
        jedisSectioned: [{title: 'Jedis',data:[]}],
        refreshing: false,
      }
-     console.log("resource screen props " + JSON.stringify(props));
+     //console.log("resource screen props " + JSON.stringify(props));
    }
 
    _keyExtractor = (item, index) => item.key;
@@ -60,38 +61,15 @@ export default class Resources extends React.Component {
      );
    }
 
-  // _onPressBack(){
-  //   const {goBack} = this.props.navigation
-  //   goBack()
-  // }
-  //
-  // _bookSlot(status,key,value) {
-  //   const month = this.state.bookingDate.month
-  //   const date = this.state.bookingDate.day
-  //   const user = firebase.auth().currentUser
-  //   const uid = user.uid
-  //   let userDataJson = {}
-  //   if(status)
-  //   userDataJson[key] = uid
-  //   else
-  //   userDataJson[key] = null
-  //
-  //   firebase.database().ref('users').child(uid).child("availabilities").child(month).child(date).update(userDataJson)
-  // }
-
   render() {
-
     return (
       <View style={styles.container}>
-        <View>
-                      <Text></Text>
-        </View>
           <FlatList
             data={dataTimes}
             extraData={this.state}
             keyExtractor={this._keyExtractor}
             renderItem={this.listItemRenderer}
-            ItemSeparatorComponent = {() => (<View style={{height: 15}}/>)}
+            ItemSeparatorComponent = {() => (<View style={{height: 10}}/>)}
           />
       </View>
     );

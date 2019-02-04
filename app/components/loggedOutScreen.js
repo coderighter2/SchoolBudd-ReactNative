@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 import Metrics from '../Themes/Metrics';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-
+import Colors from '../Themes/Colors'
 
 
 export default class LoggedOut extends React.Component {
@@ -13,7 +13,8 @@ export default class LoggedOut extends React.Component {
             <View style={styles.container}>
               <View style={styles.feedbackBox}>
               <Text style={styles.textStyles}>Please login to access full app functionality.
-              After you login, if something does not load, come back to the Login Screen and Try Again!
+              After you login, if something does not load, make sure that you verify your email.
+              Login, verify your email, come back to the Login Screen and Try Again!
               </Text>
                 </View>
             </View>
@@ -25,7 +26,7 @@ export default class LoggedOut extends React.Component {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: 'powderblue',
+      backgroundColor: Colors.lightPurple,
       alignItems: 'center',
       justifyContent: 'center'
     },
@@ -37,17 +38,13 @@ const styles = StyleSheet.create({
       padding: 10,
       borderStyle: 'solid',
       borderWidth: 0.5,
-      borderTopLeftRadius: Metrics.screenWidth*.05,
-      borderTopRightRadius: Metrics.screenWidth*.05,
-      borderBottomLeftRadius: Metrics.screenWidth*.05,
-      borderBottomRightRadius: Metrics.screenWidth*.05,
+      borderRadius: Metrics.screenWidth*.05,
       backgroundColor: 'white',
     },
     textStyles: {
       fontStyle: 'italic',
       alignItems: 'center',
       textAlign: 'center',
-      // color: 'white',
     },
     icon: {
       marginLeft: 15,

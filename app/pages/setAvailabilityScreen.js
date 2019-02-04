@@ -10,11 +10,13 @@
 import React from 'react';
 import {
   AppRegistry, StyleSheet, Text, View, TouchableOpacity, StatusBar, Button,
-  SectionList, ActivityIndicator, FlatList} from 'react-native';
+  SectionList, ActivityIndicator, FlatList, Alert, AsyncStorage} from 'react-native';
 import * as firebase from 'firebase'
 import AvailabilityBlock from '../components/availabilityBlock';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import Metrics from '../Themes/Metrics';
+import Modal from "react-native-modal";
+import Colors from '../Themes/Colors'
 
 const dataTimes =
 [
@@ -69,7 +71,7 @@ export default class SetAvailabilityScreen extends React.Component {
       <Feather style={styles.icon}
         name="menu"
         size={Metrics.icons.medium}
-        color={'lightblue'}
+        color={Colors.lightPurple}
         onPress={() => navigate('DrawerToggle')}
       />
       )
@@ -82,17 +84,44 @@ export default class SetAvailabilityScreen extends React.Component {
        bookingDate: this.props.navigation.state.params.bookingDate,
        jedisSectioned: [{title: 'Jedis',data:[]}],
        refreshing: false,
+       showAgain: true,
      }
+     //console.log("set availability screen props " + JSON.stringify(props));
    }
 
    _keyExtractor = (item, index) => item.key;
 
-   componentWillMount =async() => {
-     console.log(JSON.stringify(this.props.navigation.state.params.bookingDate.dateString));
-     console.log("book date prop " + this.state.bookingDate);
-     
+   componentDidMount =async() => {
+     //console.log(JSON.stringify(this.props.navigation.state.params.bookingDate.dateString));
+     //console.log("book date prop " + this.state.bookingDate);
+     var that = this;
+     await AsyncStorage.getItem('showAgain', (err, result) => {
+      //console.log("result show again " + result);
+      if (result == "true") {
+        that.setState({showAgain: false});
+      }
+    });
+     if (that.state.showAgain == true) {
+     Alert.alert(
+      'Set Availibility',
+      'Clicking a time period saves it as available. Students will be able to book this timeslot for an appointment!',
+      [
+        {text: 'Do not show again', onPress: () => {that.doNotShowAgain()}},
+        {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ],
+      { cancelable: false }
+    )
+    }
 
-     // this.setState({ bookingDate: this.props.navigation.state.params.bookingDate })
+   }
+
+   doNotShowAgain = async() => {
+    await AsyncStorage.setItem('showAgain', 'true');
+    await AsyncStorage.getItem('showAgain', (err, result) => {
+      //console.log('show again test ' + result);
+    });
+    //console.log("do not show again entered");
    }
 
    listItemRenderer =(item) => {
@@ -103,41 +132,28 @@ export default class SetAvailabilityScreen extends React.Component {
      );
    }
 
-  // _onPressBack(){
-  //   const {goBack} = this.props.navigation
-  //   goBack()
-  // }
-  //
-  // _bookSlot(status,key,value) {
-  //   const month = this.state.bookingDate.month
-  //   const date = this.state.bookingDate.day
-  //   const user = firebase.auth().currentUser
-  //   const uid = user.uid
-  //   let userDataJson = {}
-  //   if(status)
-  //   userDataJson[key] = uid
-  //   else
-  //   userDataJson[key] = null
-  //
-  //   firebase.database().ref('users').child(uid).child("availabilities").child(month).child(date).update(userDataJson)
-  // }
+  _onPressBack(){
+    const {goBack} = this.props.navigation
+    goBack()
+  }
+
 
   render() {
-
     return (
       <View style={styles.container}>
-      <StatusBar barStyle="light-content"/>
-      <View>
-        <TouchableOpacity onPress={() => this._onPressBack() }><Text>Back</Text></TouchableOpacity>
-                    <Text>{this.state.bookingDate.dateString}</Text>
-                    <Text></Text>
-      </View>
-        <FlatList
-          data={dataTimes}
-          extraData={this.state}
-          keyExtractor={this._keyExtractor}
-          renderItem={this.listItemRenderer}
-        />
+        <StatusBar barStyle="light-content"/>
+        <View>
+          <TouchableOpacity onPress={() => this._onPressBack() }><Text>Back</Text></TouchableOpacity>
+                      <Text>{this.state.bookingDate.dateString}</Text>
+                      <Text></Text>
+        </View>
+          <FlatList
+            data={dataTimes}
+            extraData={this.state}
+            keyExtractor={this._keyExtractor}
+            renderItem={this.listItemRenderer}
+          />
+
       </View>
     );
   }

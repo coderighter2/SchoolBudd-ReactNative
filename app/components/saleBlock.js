@@ -3,17 +3,13 @@ import { StyleSheet, Text, View, Image, ActivityIndicator, TouchableOpacity, Asy
 import Metrics from '../Themes/Metrics';
 import Colors from '../Themes/Colors';
 import Images from '../Themes/Images';
-import { Card, ListItem, Button, Slider, CheckBox, SearchBar } from 'react-native-elements'
+import { Card, ListItem, Button, Slider, CheckBox, SearchBar, Avatar } from 'react-native-elements'
 import firebase from 'firebase';
 import { WebBrowser } from 'expo';
 import { AppInstalledChecker, CheckPackageInstallation } from 'react-native-check-app-install';
+import metrics from '../Themes/Metrics';
 
-/*
-  Displays a Jedi ID Card
 
-  start at
-  load more
-*/
 export default class SaleBlock extends React.Component {
 
   constructor(props){
@@ -35,17 +31,21 @@ export default class SaleBlock extends React.Component {
       cityState: '',
       schoolName: '',
       skypeUsername: '',
+      getHeight: '',
+      getWidth: '',
+      ration: null,
     }
 
-    console.log(JSON.stringify("saleblock props " + JSON.stringify(props)));
+    //console.log(JSON.stringify("saleblock props " + JSON.stringify(props)));
   }
 
   openConsultantScreen() {
-    console.log('pressed ');
+    //console.log('pressed ');
     this.props.selectConsultant(this.props.jedi);
   }
 
   componentWillMount =async() => {
+    //console.log("SaleBlock page open");
     var that = this;
     await firebase.database().ref('users').child(this.props.jedi.key).on('value', (snapshot) => {
       var childKey = snapshot.key;
@@ -53,26 +53,19 @@ export default class SaleBlock extends React.Component {
       childData.key = childKey;
       that.setState({ name: childData.name, cityState: childData.cityState, profilePicture: childData.profilePicture,
         schoolName: childData.schoolName, skypeUsername: childData.skypeUsername});
+      if(childData.profilePicture) {
+        Image.getSize(childData.profilePicture, (width, height) => {this.setState({getWidth: width, getHeight:height, ration: width/Metrics.screenWidth})});
+      }
     });
   }
 
   onPressMessageSeller = async () => {
-    console.log('testing message seller');
+    //console.log('testing message seller');
 
-    //if has skype get consultant skype name
-    //else prompt to download skype
     var url;
     if (this.state.skypeUsername !== "") {
       url = 'skype://' + this.state.skypeUsername + '?chat';
-      // console.log("url " + url);
 
-      //actual check for existing url
-      // Linking.canOpenURL(url).then(supported => {
-      // if (!supported) {
-      //   console.log('Can\'t handle url: ' + url);
-      // } else {
-      //   return Linking.openURL(url);
-      // }
       Linking.canOpenURL(url).then(supported => {
       if (supported) {
         alert("Consultant has not set up skype account yet");
@@ -86,44 +79,51 @@ export default class SaleBlock extends React.Component {
   }
 
   onPressBookAppointment(){
-    console.log('testing book appointment');
+    //console.log('testing book appointment');
     this.props.bookAppointment(this.props.jedi);
   }
 
   openMessageScreen() {
-    console.log("pressed message: ");
+    //console.log("pressed message: ");
     this.props.messageBlock(this.state.convoKey);
   }
 
-
   render() {
     return (
-      <TouchableOpacity onPress={() => this.openConsultantScreen()}>
+      <TouchableOpacity 
+      // onPress={() => this.openConsultantScreen()}
+      >
         <View style={styles.cardView}>
           <Card style={styles.card}
-              title={this.state.name}
               image={{uri: this.state.profilePicture}}
-              imageStyle={{ flex: 1}}
-              imageProps={{ resizeMode: 'contain'}}>
-              <Text style={styles.textStyles}>
-              Hometown: {this.state.cityState}
-              </Text>
-              <Text style={styles.textStyles}>
-              Affiliation: {this.state.schoolName}
-              </Text>
-              <Text style={styles.textStyles}>
-              Price: ${this.props.jedi.price}/hr
-              </Text>
+              imageStyle={{flex: 1, width: this.state.getWidth/this.state.ration*.92, height: this.state.getHeight/this.state.ration*.92}}
+              imageProps={{ resizeMode: 'contain'}}
+              >
+              <View style={{flexDirection :'row'}}>
+                <View style={{flexDirection :'column'}}>
+                  <Text style={styles.textStyles}>
+                    Name: {this.state.name}
+                  </Text>
+                  <Text style={styles.textStyles}>
+                    Hometown: {this.state.cityState}
+                  </Text>
+                  <Text style={styles.textStyles}>
+                    Affiliation: {this.state.schoolName}
+                  </Text>
+                  <Text style={styles.textStyles}>
+                    Price: ${this.props.jedi.price}/hr
+                  </Text>
+                </View>
+              </View>
+              
               <Button
                 icon={{name: 'code'}}
-                backgroundColor='#03A9F4'
-                buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
+                buttonStyle={{backgroundColor : Colors.lightPurple, borderColor : 'transparent', borderWidth : 0, borderRadius : 20, margin : 10}}
                 title='Book Appointment'
                 onPress={() => this.onPressBookAppointment()}/>
               <Button
                 icon={{name: 'code'}}
-                backgroundColor='#03A9F4'
-                buttonStyle={{borderRadius: 0, marginLeft: 0, marginRight: 0, marginBottom: 5, marginTop: 5}}
+                buttonStyle={{backgroundColor : Colors.lightPurple, borderColor : 'transparent', borderWidth : 0, borderRadius : 20, margin : 10}}
                 title='Message Consultant'
                 onPress={() => this.onPressMessageSeller()}/>
               </Card>
@@ -140,28 +140,12 @@ const styles = StyleSheet.create({
     width: Metrics.screenWidth,
     borderRadius: Metrics.buttonRadius,
   },
-  pictureView: {
-    marginLeft: Metrics.marginHorizontal,
-    marginRight: Metrics.marginHorizontal,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center'
+  card: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   picture: {
-    height: Metrics.images.large,
-    width: Metrics.images.large,
-    borderRadius: Metrics.images.large * 0.5
-  },
-  pictureDetails: {
-    flexDirection: 'column',
-    marginLeft: Metrics.marginHorizontal,
-    marginRight: Metrics.marginHorizontal,
-  },
-  jediRowItem: {
-    marginTop: Metrics.marginVertical,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center'
+    flex: 1, 
   },
   textStyles: {
     justifyContent: 'center',
@@ -169,6 +153,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     fontWeight: 'bold',
-    fontSize: 12,
+    fontSize: 13,
   },
 });

@@ -5,76 +5,65 @@ import { Button } from 'react-native-elements';
 import Metrics from '../Themes/Metrics';
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import Stripe from 'firebase';
-
+import Colors from '../Themes/Colors'
 
 export default class Feedback extends React.Component {
 
   static navigationOptions = ({ navigation }) => {
-    const {navigate} =  navigation;
+    const { navigate } = navigation;
     return {
-    headerTitle: 'Feedback',
-    headerLeft: (
-      <Feather style={styles.icon}
-        name="menu"
-        size={Metrics.icons.medium}
-        color={'lightblue'}
-        onPress={() => navigate('DrawerToggle')}
-      />
+      headerTitle: 'Feedback',
+      headerLeft: (
+        <Feather style={styles.icon}
+          name="menu"
+          size={Metrics.icons.medium}
+          color={Colors.lightPurple}
+          onPress={() => navigate('DrawerToggle')}
+        />
       )
     }
   };
 
-    render() {
-        return (
-            <View style={styles.container}>
-              <View style={styles.feedbackBox}>
-              <Text style={styles.textStyles}>Here at MoveItMoveIt, we love to improve. Your input can help us do that. :)</Text>
-                  <Button
-                  title="Give Feedback"
-                  onPress={this.handleEmail}
-                  backgroundColor="skyblue"/>
-                </View>
-            </View>
-        )
-    }
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.feedbackBox}>
+          <Text style={styles.textStyles}>Here at MoveItMoveIt, we love to improve. Your input can help us do that. :)</Text>
+          <Button
+            title="Give Feedback"
+            onPress={this.handleEmail}
+            backgroundColor={Colors.lightPurple} />
+        </View>
+      </View>
+    )
+  }
 
-    // handleEmail = () => {
-    //     const to = ['moveitmoveitco@gmail.com'] // string or array of email addresses
-    //     email(to, {
-    //         subject: 'How to Improve',
-    //         body: 'You guys should...'
-    //     }).catch(console.error)
-    // }
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: 'powderblue',
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-    feedbackBox: {
-      width: Metrics.screenWidth*.9,
-      height: Metrics.screenHeight*.2,
-      alignItems: 'center',
-      justifyContent: 'space-around',
-      padding: 10,
-      borderStyle: 'solid',
-      borderWidth: 0.5,
-      borderTopLeftRadius: Metrics.screenWidth*.05,
-      borderTopRightRadius: Metrics.screenWidth*.05,
-      borderBottomLeftRadius: Metrics.screenWidth*.05,
-      borderBottomRightRadius: Metrics.screenWidth*.05,
-      backgroundColor: 'white',
-    },
-    textStyles: {
-      fontStyle: 'italic',
-      alignItems: 'center',
-      textAlign: 'center',
-      // color: 'white',
-    },
-    icon: {
-      marginLeft: 15,
-    }
+  container: {
+    flex: 1,
+    backgroundColor: Colors.lightPurple,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  feedbackBox: {
+    width: Metrics.screenWidth * .9,
+    height: Metrics.screenHeight * .2,
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    padding: 10,
+    borderStyle: 'solid',
+    borderWidth: 0.5,
+    borderRadius: Metrics.screenWidth * .05,
+    backgroundColor: 'white',
+  },
+  textStyles: {
+    fontStyle: 'italic',
+    alignItems: 'center',
+    textAlign: 'center',
+  },
+  icon: {
+    marginLeft: 15,
+  }
 })

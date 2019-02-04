@@ -8,27 +8,25 @@ import {
 } from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import Metrics from '../Themes/Metrics';
-
+import Colors from '../Themes/Colors'
 
 export default class CalendarScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
     this.onDayPress = this.onDayPress.bind(this);
-    console.log("calendar screen props " + JSON.stringify(props));
-
   }
 
   onDayPress(day) {
-    this.setState({
-      selected: day.dateString
-    });
-    console.log("pressed " + JSON.stringify(this.state));
-    this.props.navigation.navigate('MakeAppointmentsScreen', { 
-      propsCalendar: this.props.navigation.state.params.item.key, 
-      bookingDate : day 
-    });
-    // this.props.navigation.navigate('MakeAppointmentsScreen', { bookingDate : day })
+    
+      this.setState({
+        selected: day.dateString
+      });
+      //console.log("pressed " + JSON.stringify(this.state));
+      return this.props.navigation.navigate('MakeAppointmentsScreen', { 
+        propsCalendar: this.props.navigation.state.params.item.key, 
+        bookingDate : day 
+      });
   }
 
   _onPressBack(){
@@ -38,23 +36,20 @@ export default class CalendarScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-      <StatusBar barStyle="light-content"/>
-      <View>
-        <TouchableOpacity onPress={() => this._onPressBack() }><Text>Back</Text></TouchableOpacity>
-                    <Text></Text>
-                    <Text></Text>
-      </View>
-        <Calendar
-          onDayPress={this.onDayPress}
-          style={styles.calendar}
-          hideExtraDays
-          markedDates={{[this.state.selected]: {selected: true}}}
-          theme={{
-            selectedDayBackgroundColor: 'green',
-            todayTextColor: 'green',
-            arrowColor: 'green',
-          }}
-        />
+        <StatusBar barStyle="light-content"/>
+        <View style = {styles.calendarView}>
+          <Calendar
+            onDayPress={day => this.onDayPress(day)}
+            style={styles.calendar}
+            minDate={new Date()}
+            markedDates={{[this.state.selected]: {selected: true}}}
+            theme={{
+              selectedDayBackgroundColor: 'purple',
+              todayTextColor: 'purple',
+              arrowColor: 'purple',
+            }}
+          />
+        </View>
       </View>
     );
   }
@@ -62,13 +57,18 @@ export default class CalendarScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   calendar: {
-    borderTopWidth: 1,
+    borderWidth: 1,
+    borderColor: Colors.lightPurple,
     paddingTop: 5,
-    borderBottomWidth: 1,
-    borderColor: '#eee',
     height: 350
-  }
+  },
+  calendarView: {
+    marginTop: 50,
+    width: Metrics.screenWidth*.9,
+    flex: 1,
+    marginLeft: Metrics.screenWidth*.05
+  },
 });

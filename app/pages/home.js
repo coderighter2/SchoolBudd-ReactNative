@@ -1,20 +1,20 @@
 import React, { Component} from 'react';
 import { StyleSheet, Text, View, Platform, TouchableHighlight} from 'react-native';
 import { StackNavigator } from 'react-navigation';
-
+import Colors from '../Themes/Colors'
 
 export default class Home extends React.Component {
 
 
-static navigationOptions = {
-  title: 'MoveItMoveIt',
-};
+  static navigationOptions = {
+    title: 'MoveItMoveIt',
+  };
 
   onPressMoving() {
-    console.log("Moving");
+    //console.log("Moving");
   }
   onPressSelling() {
-    console.log("selling");
+    //console.log("selling");
   }
 
   render() {
@@ -30,7 +30,7 @@ static navigationOptions = {
               <View>
               <Text style = {styles.movingText}>Moving</Text>
               </View>
-            </TouchableHighlight>
+          </TouchableHighlight>
 
           <TouchableHighlight
             style={styles.buyingView}
@@ -48,8 +48,7 @@ static navigationOptions = {
               </View>
           </TouchableHighlight>
 
-
-          </View>
+        </View>
      </View>
     );
   }
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
   },
   movingView: {
     flex: 1,
-    backgroundColor: 'powderblue',
+    backgroundColor: Colors.lightPurple,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -75,14 +74,13 @@ const styles = StyleSheet.create({
   },
   buyingView: {
     flex: 1,
-    backgroundColor: 'skyblue',
+    backgroundColor: Colors.lightPurple,
     justifyContent: 'center',
     alignItems: 'center',
   },
   buyingText: {
     color: 'white',
     fontSize: 40,
-    //fontFamily: 'lucida grande',
     padding: 26,
   },
   sellingView: {
