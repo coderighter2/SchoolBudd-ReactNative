@@ -78,7 +78,7 @@ export default class TimelineSheet extends React.Component {
      } else {
        var indexWord = goals.indexOf(this.state.placeholder);
        console.log("indexWord " + indexWord);
-       await goals.splice(indexWord,indexWord);
+       await goals.splice(indexWord,1);
        console.log("goals array spliced " + goals);
        goals.push(this.state.goalText);
        console.log("goals spliced post/'" + JSON.stringify(this.state.goalsArray));
