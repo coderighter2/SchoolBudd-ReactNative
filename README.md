@@ -1,1 +1,1 @@
-# MoveItMoveIt
+# SchoolBud React native App
